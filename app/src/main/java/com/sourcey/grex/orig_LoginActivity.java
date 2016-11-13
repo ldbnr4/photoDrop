@@ -22,8 +22,6 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-import static com.example.lorenzo.photodrop.orig_LoginActivity.RET_STATUS.NONE;
-
 /**
  * A login screen that offers login via email/password.
  */
@@ -60,7 +58,7 @@ public class orig_LoginActivity extends AppCompatActivity{
         }
     }
 
-    private static RET_STATUS loggedInStatus = NONE;
+    private static RET_STATUS loggedInStatus = RET_STATUS.NONE;
     private static final Object loggedInLock = new Object();
     private boolean registering = false;
 
@@ -101,7 +99,7 @@ public class orig_LoginActivity extends AppCompatActivity{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showConfirmPassword(mFirstTimeButton.getText().equals(getString(R.string.action_first_time)));
+                        //showConfirmPassword(mFirstTimeButton.getText().equals(getString(R.string.action_first_time)));
                     }
                 });
             }
@@ -131,8 +129,8 @@ public class orig_LoginActivity extends AppCompatActivity{
         });
         mConfirmPasswordView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
-        mLoginFormView = findViewById(R.id.username_form);
-        mProgressView = findViewById(R.id.textView);
+        //mLoginFormView = findViewById(R.id.username_form);
+        //mProgressView = findViewById(R.id.textView);
     }
 
     /**
@@ -167,23 +165,23 @@ public class orig_LoginActivity extends AppCompatActivity{
 
         // Check for a valid password.
         if(TextUtils.isEmpty(password)){
-            mPasswordView.setError(getString(R.string.error_field_required));
+            //mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
         }
         else if (!isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+            //mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
+            //mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
+            //mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }
@@ -249,8 +247,8 @@ public class orig_LoginActivity extends AppCompatActivity{
 
     private void showConfirmPassword(final boolean show){
         mConfirmPasswordView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mEmailSignInButton.setText(show ? R.string.action_register : R.string.action_sign_in);
-        mFirstTimeButton.setText(show ? R.string.action_returning : R.string.action_first_time);
+        //mEmailSignInButton.setText(show ? R.string.action_register : R.string.action_sign_in);
+        //mFirstTimeButton.setText(show ? R.string.action_returning : R.string.action_first_time);
         mPasswordView.setImeOptions(show ? EditorInfo.IME_ACTION_NEXT : EditorInfo.IME_ACTION_DONE);
         mEmailView.requestFocus();
         registering = show;
@@ -287,7 +285,7 @@ public class orig_LoginActivity extends AppCompatActivity{
             //long diff = d2.getTime() - d1.getTime();
 
             //long diffSeconds = diff / 1000 % 60;
-            while(loggedInStatus == NONE);
+            while(loggedInStatus == RET_STATUS.NONE);
             switch (loggedInStatus){
                 case VERIFIED:
                     return true;
@@ -308,7 +306,7 @@ public class orig_LoginActivity extends AppCompatActivity{
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                //mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
         }
