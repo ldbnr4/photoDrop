@@ -9,8 +9,15 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                LoginActivity.mSocket.emit("disconnect");
+                LoginActivity.mSocket.disconnect();
+            }
+        });
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

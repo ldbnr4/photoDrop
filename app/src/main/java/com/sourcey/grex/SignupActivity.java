@@ -2,6 +2,7 @@ package com.sourcey.grex;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,12 +12,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.ButterKnife;
+import com.sourcey.grex.LoginActivity.RET_STATUS;
+
 import butterknife.Bind;
+import butterknife.ButterKnife;
+
+import static com.sourcey.grex.LoginActivity.RET_STATUS.NONE;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
-
+    private static RET_STATUS signUpStatus = NONE;
+    private static ProgressDialog progressDialog;
     @Bind(R.id.input_name) EditText _nameText;
     @Bind(R.id.input_address) EditText _addressText;
     @Bind(R.id.input_email) EditText _emailText;
@@ -25,7 +31,8 @@ public class SignupActivity extends AppCompatActivity {
     @Bind(R.id.input_reEnterPassword) EditText _reEnterPasswordText;
     @Bind(R.id.btn_signup) Button _signupButton;
     @Bind(R.id.link_login) TextView _loginLink;
-    
+    private UserLoginTask mAuthTask = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +68,7 @@ public class SignupActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
+        progressDialog = new ProgressDialog(SignupActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
@@ -75,7 +82,10 @@ public class SignupActivity extends AppCompatActivity {
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
         // TODO: Implement your own signup logic here.
+        mAuthTask = new UserLoginTask(email, password);
+        mAuthTask.execute((Void) null);
 
+        /*
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
@@ -86,6 +96,7 @@ public class SignupActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);
+                */
     }
 
 
@@ -155,5 +166,58 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final String mEmail;
+        private final String mPassword;
+
+        UserLoginTask(String email, String password) {
+            mEmail = email;
+            mPassword = password;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            LoginActivity.mSocket.emit("register", mEmail.trim(), mPassword.trim());
+
+            while (signUpStatus == NONE) ;
+            switch (signUpStatus) {
+                case VERIFIED:
+                case INSERTED:
+                    return true;
+                case WRONG_PASSWORD:
+                    return false;
+                default:
+                    return false;
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            progressDialog.dismiss();
+
+            if (success) {
+                finish();
+            } else {
+                _passwordText.setError("Wrong Password");
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            progressDialog.dismiss();
+        }
     }
 }

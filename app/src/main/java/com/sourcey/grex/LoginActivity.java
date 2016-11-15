@@ -1,12 +1,11 @@
 package com.sourcey.grex;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,8 +14,8 @@ import android.widget.Toast;
 
 import java.net.URISyntaxException;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -25,25 +24,19 @@ import io.socket.emitter.Emitter;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-
+    private static final Object loggedInLock = new Object();
+    static Socket mSocket;
+    private static ProgressDialog progressDialog;
+    private static RET_STATUS loggedInStatus = RET_STATUS.NONE;
     @Bind(R.id.input_email) EditText _emailText;
     @Bind(R.id.input_password) EditText _passwordText;
     @Bind(R.id.btn_login) Button _loginButton;
     @Bind(R.id.link_signup) TextView _signupLink;
-
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
-    public enum RET_STATUS{
-        NONE,
-        VERIFIED,
-        NO_ACCOUNT,
-        WRONG_PASSWORD
-    }
-
-    private Socket mSocket;
     {
         try {
             mSocket = IO.socket("http://zotime.ddns.net:3000");
@@ -52,15 +45,15 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private static RET_STATUS loggedInStatus = RET_STATUS.NONE;
-    private static final Object loggedInLock = new Object();
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        
+
+        progressDialog = new ProgressDialog(LoginActivity.this,
+                R.style.AppTheme_Dark_Dialog);
+
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -102,8 +95,6 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
@@ -111,8 +102,12 @@ public class LoginActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
+        //showProgress(true);
+        mAuthTask = new LoginActivity.UserLoginTask(email, password);
+        mAuthTask.execute((Void) null);
         // TODO: Implement your own authentication logic here.
 
+        /*
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
@@ -122,8 +117,9 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);
-    }
 
+        */
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -180,8 +176,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
+        //mSocket.disconnect();
+    }
 
-        mSocket.disconnect();
+    public enum RET_STATUS {
+        NONE,
+        VERIFIED,
+        NO_ACCOUNT,
+        WRONG_PASSWORD,
+        INSERTED,
     }
 
     /**
@@ -192,22 +195,18 @@ public class LoginActivity extends AppCompatActivity {
 
         private final String mEmail;
         private final String mPassword;
-        private boolean mregister;
 
-        UserLoginTask(String email, String password, boolean register) {
+        UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
-            mregister = register;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            mSocket.emit(mregister ? "register" : "login", mEmail.trim(), mPassword.trim());
-            //long diff = d2.getTime() - d1.getTime();
+            mSocket.emit("login", mEmail.trim(), mPassword.trim());
 
-            //long diffSeconds = diff / 1000 % 60;
             while(loggedInStatus == RET_STATUS.NONE);
             switch (loggedInStatus){
                 case VERIFIED:
@@ -224,20 +223,19 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            //showProgress(false);
+            progressDialog.dismiss();
 
             if (success) {
                 finish();
             } else {
-                //mPasswordView.setError(getString(R.string.error_incorrect_password));
-                //mPasswordView.requestFocus();
+                _passwordText.setError("Wrong Password");
             }
         }
 
         @Override
         protected void onCancelled() {
             mAuthTask = null;
-            //showProgress(false);
+            progressDialog.dismiss();
         }
     }
 }
