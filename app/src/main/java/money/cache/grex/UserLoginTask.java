@@ -1,24 +1,18 @@
 package money.cache.grex;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.widget.EditText;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import enums.RET_STATUS;
 
-import static enums.RET_STATUS.NONE;
 import static enums.RET_STATUS.NO_ACCOUNT;
 import static money.cache.grex.GrexSocket.loggedInStatus;
 import static money.cache.grex.GrexSocket.login_emit;
 
 /**
  * Created by Lorenzo on 11/15/2016.
- *
  */
 
 class UserLoginTask extends AsyncTask<Void, Void, RET_STATUS> {
@@ -71,15 +65,15 @@ class UserLoginTask extends AsyncTask<Void, Void, RET_STATUS> {
     @Override
     protected void onPostExecute(final RET_STATUS success) {
         progressDialog.dismiss();
-        switch (success){
-            case VERIFIED :
+        switch (success) {
+            case VERIFIED:
                 this.callingActivity.finish();
                 break;
 
-            case WRONG_PASSWORD :
+            case WRONG_PASSWORD:
                 _passwordText.setError("Wrong Password");
-            case NO_ACCOUNT :
-                if(success == NO_ACCOUNT)
+            case NO_ACCOUNT:
+                if (success == NO_ACCOUNT)
                     _emailText.setError("No account found for this user.");
             default:
                 callingActivity.onLoginFailed();

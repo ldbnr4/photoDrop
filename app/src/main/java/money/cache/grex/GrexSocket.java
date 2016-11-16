@@ -12,13 +12,12 @@ import static enums.RET_STATUS.NONE;
 
 /**
  * Created by Lorenzo on 11/15/2016.
- *
  */
 class GrexSocket {
 
-    private static Socket mSocket;
     private static final Object lock = new Object();
     static RET_STATUS loggedInStatus = NONE;
+    private static Socket mSocket;
 
     static {
         try {
@@ -26,7 +25,7 @@ class GrexSocket {
             mSocket.on("login_status", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    synchronized (lock){
+                    synchronized (lock) {
                         loggedInStatus = RET_STATUS.valueOf((String) args[0]);
                     }
                 }
@@ -38,15 +37,15 @@ class GrexSocket {
         }
     }
 
-    static void login_emit(String email, String password){
+    static void login_emit(String email, String password) {
         mSocket.emit("login", email.trim(), password.trim());
     }
 
-    static void register_emit(String email, String password){
+    static void register_emit(String email, String password) {
         mSocket.emit("register", email.trim(), password.trim());
     }
 
-    static void disconnect(){
+    static void disconnect() {
         mSocket.emit("disconnect");
         mSocket.disconnect();
     }

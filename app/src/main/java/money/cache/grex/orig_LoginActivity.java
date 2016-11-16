@@ -25,43 +25,32 @@ import io.socket.emitter.Emitter;
 /**
  * A login screen that offers login via email/password.
  */
-public class orig_LoginActivity extends AppCompatActivity{
+public class orig_LoginActivity extends AppCompatActivity {
 
+    private static final Object loggedInLock = new Object();
+    private static RET_STATUS loggedInStatus = RET_STATUS.NONE;
+    Button mFirstTimeButton;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
-    public enum RET_STATUS{
-        NONE,
-        VERIFIED,
-        NO_ACCOUNT,
-        WRONG_PASSWORD
-    }
-
     // UI references.
     private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
     private EditText mConfirmPasswordView;
-
     private Button mEmailSignInButton;
-    Button mFirstTimeButton;
-
     private Socket mSocket;
+    private boolean registering = false;
+
     {
         try {
             mSocket = IO.socket("http://zotime.ddns.net:3000");
-        }catch (URISyntaxException e) {
+        } catch (URISyntaxException e) {
             throw new RuntimeException();
         }
     }
-
-    private static RET_STATUS loggedInStatus = RET_STATUS.NONE;
-    private static final Object loggedInLock = new Object();
-    private boolean registering = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +67,7 @@ public class orig_LoginActivity extends AppCompatActivity{
         mSocket.on("login_status", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                synchronized (loggedInLock){
+                synchronized (loggedInLock) {
                     loggedInStatus = RET_STATUS.valueOf((String) args[0]);
                 }
             }
@@ -109,7 +98,7 @@ public class orig_LoginActivity extends AppCompatActivity{
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handle = false;
-                if (actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     attemptLogin();
                     handle = true;
                 }
@@ -120,7 +109,7 @@ public class orig_LoginActivity extends AppCompatActivity{
         mConfirmPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     attemptLogin();
                     return true;
                 }
@@ -157,19 +146,18 @@ public class orig_LoginActivity extends AppCompatActivity{
         View focusView = null;
 
         // Check for a confirmation password.
-        if(mConfirmPasswordView.getVisibility() == View.VISIBLE && !confPassword.equals(password)){
+        if (mConfirmPasswordView.getVisibility() == View.VISIBLE && !confPassword.equals(password)) {
             mConfirmPasswordView.setError("Your passwords do not match");
             focusView = mConfirmPasswordView;
             cancel = true;
         }
 
         // Check for a valid password.
-        if(TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             //mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        }
-        else if (!isPasswordValid(password)) {
+        } else if (!isPasswordValid(password)) {
             //mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -245,7 +233,7 @@ public class orig_LoginActivity extends AppCompatActivity{
         }
     }
 
-    private void showConfirmPassword(final boolean show){
+    private void showConfirmPassword(final boolean show) {
         mConfirmPasswordView.setVisibility(show ? View.VISIBLE : View.GONE);
         //mEmailSignInButton.setText(show ? R.string.action_register : R.string.action_sign_in);
         //mFirstTimeButton.setText(show ? R.string.action_returning : R.string.action_first_time);
@@ -255,10 +243,17 @@ public class orig_LoginActivity extends AppCompatActivity{
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
 
         mSocket.disconnect();
+    }
+
+    public enum RET_STATUS {
+        NONE,
+        VERIFIED,
+        NO_ACCOUNT,
+        WRONG_PASSWORD
     }
 
     /**
@@ -285,8 +280,8 @@ public class orig_LoginActivity extends AppCompatActivity{
             //long diff = d2.getTime() - d1.getTime();
 
             //long diffSeconds = diff / 1000 % 60;
-            while(loggedInStatus == RET_STATUS.NONE);
-            switch (loggedInStatus){
+            while (loggedInStatus == RET_STATUS.NONE) ;
+            switch (loggedInStatus) {
                 case VERIFIED:
                     return true;
                 case WRONG_PASSWORD:
