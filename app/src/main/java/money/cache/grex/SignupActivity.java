@@ -2,7 +2,6 @@ package money.cache.grex;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +14,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import enums.RET_STATUS;
+import tasks.UserLoginTask;
 
 import static enums.RET_STATUS.NONE;
 
@@ -39,7 +39,6 @@ public class SignupActivity extends AppCompatActivity {
     Button _signupButton;
     @Bind(R.id.link_login)
     TextView _loginLink;
-    private UserLoginTask mAuthTask = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +89,7 @@ public class SignupActivity extends AppCompatActivity {
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
         // TODO: Implement your own signup logic here.
-        mAuthTask = new UserLoginTask(email, password);
+        UserLoginTask mAuthTask = new UserLoginTask(email, password);
         mAuthTask.execute((Void) null);
 
         /*
@@ -180,51 +179,4 @@ public class SignupActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            GrexSocket.register_emit(mEmail, mPassword);
-
-            while (signUpStatus == NONE) ;
-            switch (signUpStatus) {
-                case VERIFIED:
-                case INSERTED:
-                    return true;
-                case WRONG_PASSWORD:
-                    return false;
-                default:
-                    return false;
-            }
-
-
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            progressDialog.dismiss();
-
-            if (success) {
-                finish();
-            } else {
-                _passwordText.setError("Wrong Password");
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            progressDialog.dismiss();
-        }
-    }
 }

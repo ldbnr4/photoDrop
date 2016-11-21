@@ -1,4 +1,4 @@
-package money.cache.grex;
+package tasks;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.widget.EditText;
 
 import enums.RET_STATUS;
+import money.cache.grex.LoginActivity;
+import money.cache.grex.R;
 
 import static enums.RET_STATUS.NO_ACCOUNT;
 import static money.cache.grex.GrexSocket.loggedInStatus;
@@ -13,9 +15,10 @@ import static money.cache.grex.GrexSocket.login_emit;
 
 /**
  * Created by Lorenzo on 11/15/2016.
+ *
  */
 
-class UserLoginTask extends AsyncTask<Void, Void, RET_STATUS> {
+public class UserLoginTask extends AsyncTask<Void, Void, RET_STATUS> {
 
     private final LoginActivity callingActivity;
     private String mPassword;
@@ -25,7 +28,7 @@ class UserLoginTask extends AsyncTask<Void, Void, RET_STATUS> {
     private EditText _emailText;
 
 
-    UserLoginTask(String email, String password, final LoginActivity callingActivity, EditText emailText, EditText passwordText) {
+    public UserLoginTask(String email, String password, final LoginActivity callingActivity, EditText emailText, EditText passwordText) {
         this.mEmail = email;
         this.mPassword = password;
         this.callingActivity = callingActivity;

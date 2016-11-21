@@ -12,21 +12,34 @@ import static enums.RET_STATUS.NONE;
 
 /**
  * Created by Lorenzo on 11/15/2016.
+ *
  */
-class GrexSocket {
+public class GrexSocket {
 
-    private static final Object lock = new Object();
-    static RET_STATUS loggedInStatus = NONE;
+    private static final Object loginLock = new Object();
+    private static final Object registerLock = new Object();
+    public static RET_STATUS loggedInStatus = NONE;
+    private static RET_STATUS signUpStatus = NONE;
     private static Socket mSocket;
 
     static {
         try {
             mSocket = IO.socket("http://zotime.ddns.net:3000");
+
             mSocket.on("login_status", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    synchronized (lock) {
+                    synchronized (loginLock) {
                         loggedInStatus = RET_STATUS.valueOf((String) args[0]);
+                    }
+                }
+            });
+
+            mSocket.on("register_status", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    synchronized (registerLock) {
+                        signUpStatus = RET_STATUS.valueOf((String) args[0]);
                     }
                 }
             });
@@ -37,7 +50,7 @@ class GrexSocket {
         }
     }
 
-    static void login_emit(String email, String password) {
+    public static void login_emit(String email, String password) {
         mSocket.emit("login", email.trim(), password.trim());
     }
 
