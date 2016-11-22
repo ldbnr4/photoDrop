@@ -27,7 +27,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText _passwordText;
     @Bind(R.id.input_reEnterPassword)
     EditText _reEnterPasswordText;
-    @Bind(R.id.btn_signup)
+    @Bind(R.id.btn_upload)
     Button _signupButton;
     @Bind(R.id.link_login)
     TextView _loginLink;
@@ -80,7 +80,6 @@ public class SignupActivity extends AppCompatActivity {
 
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
         finish();
     }
 
@@ -135,5 +134,11 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
+
     }
 }
