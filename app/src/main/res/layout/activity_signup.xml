@@ -30,8 +30,9 @@
             <EditText android:id="@+id/input_name"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:hint="Name"
-                      android:inputType="textPersonName"/>
+                      android:hint="Username"
+                      android:inputType="text"
+                      android:maxLines="1"/>
         </android.support.design.widget.TextInputLayout>
 
         <!--  Email Label -->
@@ -58,7 +59,7 @@
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:hint="Mobile Number"
-                      android:inputType="number"/>
+                      android:inputType="phone"/>
         </android.support.design.widget.TextInputLayout>
 
         <!-- Password Label -->

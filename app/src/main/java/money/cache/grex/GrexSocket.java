@@ -19,7 +19,7 @@ public class GrexSocket {
     private static final Object loginLock = new Object();
     private static final Object registerLock = new Object();
     public static RET_STATUS loggedInStatus = NONE;
-    private static RET_STATUS signUpStatus = NONE;
+    public static RET_STATUS signUpStatus = NONE;
     private static Socket mSocket;
 
     static {
@@ -54,8 +54,8 @@ public class GrexSocket {
         mSocket.emit("login", email.trim(), password.trim());
     }
 
-    static void register_emit(String email, String password) {
-        mSocket.emit("register", email.trim(), password.trim());
+    public static void register_emit(String username, String email, String mobile, String password) {
+        mSocket.emit("register", username.trim(), email.trim(), mobile.trim(), password.trim());
     }
 
     static void disconnect() {

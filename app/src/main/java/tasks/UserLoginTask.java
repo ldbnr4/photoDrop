@@ -9,6 +9,7 @@ import enums.RET_STATUS;
 import money.cache.grex.LoginActivity;
 import money.cache.grex.R;
 
+import static enums.RET_STATUS.NONE;
 import static enums.RET_STATUS.NO_ACCOUNT;
 import static money.cache.grex.GrexSocket.loggedInStatus;
 import static money.cache.grex.GrexSocket.login_emit;
@@ -34,35 +35,40 @@ public class UserLoginTask extends AsyncTask<Void, Void, RET_STATUS> {
         this.callingActivity = callingActivity;
         this._passwordText = passwordText;
         this._emailText = emailText;
-
-        progressDialog = new ProgressDialog(callingActivity,
-                R.style.AppTheme_Dark_Dialog);
-
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                progressDialog.dismiss();
-                callingActivity.onLoginFailed();
-            }
-        });
     }
 
     @Override
     protected RET_STATUS doInBackground(Void... params) {
+        callingActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog = new ProgressDialog(callingActivity,
+                        R.style.AppTheme_Dark_Dialog);
+
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Authenticating...");
+                progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        progressDialog.dismiss();
+                        callingActivity.onLoginFailed();
+                        UserLoginTask.this.cancel(true);
+                    }
+                });
+                progressDialog.show();
+            }
+        });
+
         login_emit(mEmail, mPassword);
 
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        long totalTime = 3000;
+        long startTime = System.currentTimeMillis();
+        boolean toFinish = false;
+
+        while (!toFinish && loggedInStatus == NONE) {
+            toFinish = (System.currentTimeMillis() - startTime >= totalTime);
         }
-
         return loggedInStatus;
-
-
     }
 
     @Override
@@ -70,7 +76,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, RET_STATUS> {
         progressDialog.dismiss();
         switch (success) {
             case VERIFIED:
-                this.callingActivity.finish();
+                callingActivity.onLoginSuccess();
                 break;
 
             case WRONG_PASSWORD:
@@ -80,14 +86,16 @@ public class UserLoginTask extends AsyncTask<Void, Void, RET_STATUS> {
                     _emailText.setError("No account found for this user.");
             default:
                 callingActivity.onLoginFailed();
-
+                break;
         }
+        loggedInStatus = NONE;
     }
 
     @Override
     protected void onCancelled() {
         progressDialog.dismiss();
-        this.callingActivity.onLoginFailed();
+        callingActivity.onLoginFailed();
+        loggedInStatus = NONE;
     }
 
 }
