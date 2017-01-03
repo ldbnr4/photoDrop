@@ -1,8 +1,7 @@
-package money.cache.grex;
+package money.cache.grexActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,10 +11,11 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import tasks.UserRegisterTask;
+import grexClasses.ProgressBarActvity;
+import tasks.InsertUserTask;
 
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends ProgressBarActvity {
     private static final String TAG = "SignupActivity";
     @Bind(R.id.input_name)
     EditText _usernameText;
@@ -49,7 +49,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CaptureMediaActivity.LoginActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -61,7 +61,7 @@ public class SignupActivity extends AppCompatActivity {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
-            onSignupFailed();
+            onFail();
             return;
         }
 
@@ -72,21 +72,8 @@ public class SignupActivity extends AppCompatActivity {
         String mobile = _mobileText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        // TODO: Implement your own signup logic here.
-        UserRegisterTask mAuthTask = new UserRegisterTask(username, email, mobile, password, this);
+        InsertUserTask mAuthTask = new InsertUserTask(username, email, mobile, password, this);
         mAuthTask.execute((Void) null);
-    }
-
-
-    public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        finish();
-    }
-
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Registering failed", Toast.LENGTH_LONG).show();
-
-        _signupButton.setEnabled(true);
     }
 
     public boolean validate() {
@@ -140,5 +127,17 @@ public class SignupActivity extends AppCompatActivity {
     public void onBackPressed() {
         this.finish();
 
+    }
+
+    @Override
+    public void onFail() {
+        Toast.makeText(getBaseContext(), "Registering failed", Toast.LENGTH_LONG).show();
+        _signupButton.setEnabled(true);
+    }
+
+    @Override
+    public void onSuccess() {
+        _signupButton.setEnabled(true);
+        finish();
     }
 }

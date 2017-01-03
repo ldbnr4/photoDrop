@@ -1,4 +1,4 @@
-package enums;
+package grexEnums;
 
 /**
  * Created by Lorenzo on 11/15/2016.

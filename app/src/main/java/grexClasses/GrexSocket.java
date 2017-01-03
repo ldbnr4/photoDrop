@@ -1,13 +1,13 @@
-package money.cache.grex;
+package grexClasses;
 
 import java.net.URISyntaxException;
 
-import enums.RET_STATUS;
+import grexEnums.RET_STATUS;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-import static enums.RET_STATUS.NONE;
+import static grexEnums.RET_STATUS.NONE;
 
 
 /**
@@ -58,7 +58,11 @@ public class GrexSocket {
         mSocket.emit("register", username.trim(), email.trim(), mobile.trim(), password.trim());
     }
 
-    static void disconnect() {
+    public static void image_emit(String username, String photoName, String image) {
+        mSocket.emit("image_upload", username, photoName, image);
+    }
+
+    public static void disconnect() {
         mSocket.emit("disconnect");
         mSocket.disconnect();
     }

@@ -4,20 +4,20 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 
-import enums.RET_STATUS;
-import money.cache.grex.R;
-import money.cache.grex.SignupActivity;
+import grexEnums.RET_STATUS;
+import money.cache.grexActivities.R;
+import money.cache.grexActivities.SignupActivity;
 
-import static enums.RET_STATUS.NONE;
-import static money.cache.grex.GrexSocket.register_emit;
-import static money.cache.grex.GrexSocket.signUpStatus;
+import static grexClasses.GrexSocket.register_emit;
+import static grexClasses.GrexSocket.signUpStatus;
+import static grexEnums.RET_STATUS.NONE;
 
 /**
  * Created by Lorenzo on 11/20/2016.
  *
  */
 
-public class UserRegisterTask extends AsyncTask<Void, Void, RET_STATUS> {
+public class InsertUserTask extends AsyncTask<Void, Void, RET_STATUS> {
     private final String username;
     private final String email;
     private final String mobile;
@@ -25,7 +25,7 @@ public class UserRegisterTask extends AsyncTask<Void, Void, RET_STATUS> {
     private SignupActivity signupActivity;
     private ProgressDialog progressDialog;
 
-    public UserRegisterTask(String username, String email, String mobile, String password, final SignupActivity signupActivity) {
+    public InsertUserTask(String username, String email, String mobile, String password, final SignupActivity signupActivity) {
         this.username = username;
         this.email = email;
         this.mobile = mobile;
@@ -47,9 +47,9 @@ public class UserRegisterTask extends AsyncTask<Void, Void, RET_STATUS> {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         progressDialog.dismiss();
-                        signupActivity.onSignupFailed();
+                        signupActivity.onFail();
                         signUpStatus = NONE;
-                        UserRegisterTask.this.cancel(true);
+                        InsertUserTask.this.cancel(true);
                     }
                 });
                 progressDialog.show();
@@ -73,11 +73,11 @@ public class UserRegisterTask extends AsyncTask<Void, Void, RET_STATUS> {
         progressDialog.dismiss();
         switch (success) {
             case INSERTED:
-                signupActivity.onSignupSuccess();
+                signupActivity.onSuccess();
                 break;
 
             default:
-                signupActivity.onSignupFailed();
+                signupActivity.onFail();
                 break;
         }
         signUpStatus = NONE;
@@ -86,7 +86,7 @@ public class UserRegisterTask extends AsyncTask<Void, Void, RET_STATUS> {
     @Override
     protected void onCancelled() {
         progressDialog.dismiss();
-        signupActivity.onSignupFailed();
+        signupActivity.onFail();
         signUpStatus = NONE;
     }
 }

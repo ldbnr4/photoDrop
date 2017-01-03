@@ -1,4 +1,4 @@
-package money.cache.grex;
+package money.cache.grexActivities;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

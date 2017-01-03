@@ -1,9 +1,11 @@
-package money.cache.grex;
+package money.cache.grexActivities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import grexClasses.GrexSocket;
 
 
 public class MainActivity extends AppCompatActivity {

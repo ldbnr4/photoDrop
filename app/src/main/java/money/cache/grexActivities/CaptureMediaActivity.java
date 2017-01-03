@@ -1,4 +1,4 @@
-package money.cache.grex;
+package money.cache.grexActivities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,17 +8,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -27,8 +32,11 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import grexClasses.GrexSocket;
+import grexClasses.ProgressBarActvity;
+import tasks.GetUserTask;
 
-public class LandingPage extends AppCompatActivity {
+public class CaptureMediaActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final String TAG = "LandingActivity";
     private static final int REQUEST_TAKE_PHOTO = 1;
@@ -36,6 +44,8 @@ public class LandingPage extends AppCompatActivity {
     Button _captureButton;
     @Bind(R.id.imgv_captured)
     ImageView _capturedImage;
+    @Bind(R.id.btn_upload)
+    Button _uploadButton;
     String mCurrentPhotoPath;
     Uri photoURI;
     /**
@@ -43,12 +53,17 @@ public class LandingPage extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private Bitmap rotateBitmap;
+    private String username;
+    private File photoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
+        setContentView(R.layout.activity_capture_media);
         ButterKnife.bind(this);
+        Bundle bundle = getIntent().getExtras();
+        username = (bundle != null) ? bundle.getString("user_name") : "bad_user";
 
         _captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,15 +71,28 @@ public class LandingPage extends AppCompatActivity {
                 dispatchTakePictureIntent();
             }
         });
+
+        _uploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                rotateBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] b = baos.toByteArray();
+                String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+                //Base64.de
+                GrexSocket.image_emit(username, mCurrentPhotoPath, encImage);
+            }
+        });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        _capturedImage.setImageResource(R.drawable.no_image);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-
             //Getting the Bitmap from Gallery
             Bitmap bitmap;
             try {
@@ -99,9 +127,10 @@ public class LandingPage extends AppCompatActivity {
 
                 Matrix matrix = new Matrix();
                 matrix.postRotate(rotate);
-                Bitmap rotateBitmap = Bitmap.createBitmap(scale, 0, 0, scale.getWidth(),
+                rotateBitmap = Bitmap.createBitmap(scale, 0, 0, scale.getWidth(),
                         scale.getHeight(), matrix, true);
                 _capturedImage.setImageBitmap(rotateBitmap);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -114,7 +143,7 @@ public class LandingPage extends AppCompatActivity {
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
+            photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
@@ -123,20 +152,20 @@ public class LandingPage extends AppCompatActivity {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                photoURI = FileProvider.getUriForFile(this,
+                /*photoURI = FileProvider.getUriForFile(this,
                         "money.cache.android.fileprovider",
-                        photoFile);
+                        photoFile);*/
+                photoURI = Uri.fromFile(photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-
             }
         }
     }
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String timeStamp = new SimpleDateFormat("MMddyyyy_HHmmss", Locale.US).format(new Date());
+        String imageFileName = username + "-" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -155,7 +184,7 @@ public class LandingPage extends AppCompatActivity {
      */
     public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
-                .setName("LandingPage Page") // TODO: Define a title for the content shown.
+                .setName("CaptureMediaActivity Page") // TODO: Define a title for the content shown.
                 // TODO: Make sure this auto-generated URL is correct.
                 .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
                 .build();
@@ -178,10 +207,116 @@ public class LandingPage extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+
+
+    }
+
+    public static class LoginActivity extends ProgressBarActvity {
+        private static final String TAG = "LoginActivity";
+        @Bind(R.id.input_username)
+        EditText _usernameText;
+        @Bind(R.id.input_password)
+        EditText _passwordText;
+        @Bind(R.id.btn_login)
+        Button _loginButton;
+        @Bind(R.id.link_signup)
+        TextView _signupLink;
+
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_login);
+            ButterKnife.bind(this);
+
+
+            _loginButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    login();
+                }
+            });
+
+            _signupLink.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    // Start the Signup activity
+                    Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                    startActivity(intent);
+                    finish();
+                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                }
+            });
+        }
+
+        public void login() {
+            Log.d(TAG, "Login");
+
+            _loginButton.setEnabled(false);
+
+            _usernameText.setError(null);
+            _passwordText.setError(null);
+
+            if (!validate()) {
+                onFail();
+                return;
+            }
+
+            String email = _usernameText.getText().toString();
+            String password = _passwordText.getText().toString();
+
+            GetUserTask mAuthTask = new GetUserTask(email, password, this, _usernameText, _passwordText);
+            mAuthTask.execute((Void) null);
+
+        }
+
+        @Override
+        public void onBackPressed() {
+            // Disable going back to the MainActivity
+            moveTaskToBack(true);
+        }
+
+        public boolean validate() {
+            boolean valid = true;
+
+            String email = _usernameText.getText().toString();
+            String password = _passwordText.getText().toString();
+
+            if (email.isEmpty()) {
+                _usernameText.setError("what do we call you?");
+                valid = false;
+            } else {
+                _usernameText.setError(null);
+            }
+
+            if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
+                _passwordText.setError("between 4 and 10 alphanumeric characters");
+                valid = false;
+            } else {
+                _passwordText.setError(null);
+            }
+
+            return valid;
+        }
+
+        @Override
+        public void onFail() {
+            Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+            _loginButton.setEnabled(true);
+        }
+
+        @Override
+        public void onSuccess() {
+            Intent intent = new Intent(getApplicationContext(), CaptureMediaActivity.class);
+            intent.putExtra("user_name", _usernameText.getText().toString().trim());
+            startActivity(intent);
+            finish();
+        }
     }
 }
