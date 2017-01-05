@@ -1,5 +1,7 @@
 package grexClasses;
 
+import com.google.gson.Gson;
+
 import java.net.URISyntaxException;
 
 import grexEnums.RET_STATUS;
@@ -22,6 +24,7 @@ public class GrexSocket {
     public static RET_STATUS loggedInStatus = NONE;
     public static RET_STATUS signUpStatus = NONE;
     private static Socket mSocket;
+    private static Gson gson = GSON.getInstance();
 
     static {
         try {
@@ -50,7 +53,7 @@ public class GrexSocket {
                 public void call(Object... args) {
                     synchronized (roomUpdateLock) {
                         for (Object room : args) {
-                            User.getUser().roomSet.add((String) room);
+                            User.getUser().roomSet.add(gson.fromJson((String) room, Room.class));
                         }
                     }
                 }
@@ -75,8 +78,7 @@ public class GrexSocket {
     }
 
     public static void emit_newRoom(Room room) {
-        //TODO: convert "room" into a string and emit to the server
-        //mSocket.emit("new_room", );
+        mSocket.emit("new_room", gson.toJson(room));
     }
 
     public static void disconnect() {

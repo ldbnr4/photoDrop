@@ -9,7 +9,7 @@ import java.util.Set;
 public final class User {
     private static final User user = new User();
     String name;
-    Set<String> roomSet;
+    Set<Room> roomSet;
 
     private User() {
         roomSet = new HashSet<>();
