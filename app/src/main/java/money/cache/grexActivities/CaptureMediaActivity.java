@@ -10,13 +10,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -33,8 +29,6 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.GrexSocket;
-import grexClasses.ProgressBarActvity;
-import tasks.GetUserTask;
 
 public class CaptureMediaActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -79,15 +73,14 @@ public class CaptureMediaActivity extends AppCompatActivity {
                 rotateBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] b = baos.toByteArray();
                 String encImage = Base64.encodeToString(b, Base64.DEFAULT);
-                //Base64.de
-                GrexSocket.image_emit(username, mCurrentPhotoPath, encImage);
+                GrexSocket.emit_image(username, mCurrentPhotoPath, encImage);
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        _capturedImage.setImageResource(R.drawable.no_image);
+        _capturedImage.setImageResource(R.drawable._no_image_captured);
     }
 
     @Override
@@ -102,7 +95,6 @@ public class CaptureMediaActivity extends AppCompatActivity {
                 try {
                     exif = new ExifInterface(mCurrentPhotoPath);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 int orientation = exif != null ? exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
@@ -213,110 +205,5 @@ public class CaptureMediaActivity extends AppCompatActivity {
         client.disconnect();
 
 
-    }
-
-    public static class LoginActivity extends ProgressBarActvity {
-        private static final String TAG = "LoginActivity";
-        @Bind(R.id.input_username)
-        EditText _usernameText;
-        @Bind(R.id.input_password)
-        EditText _passwordText;
-        @Bind(R.id.btn_login)
-        Button _loginButton;
-        @Bind(R.id.link_signup)
-        TextView _signupLink;
-
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_login);
-            ButterKnife.bind(this);
-
-
-            _loginButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    login();
-                }
-            });
-
-            _signupLink.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    // Start the Signup activity
-                    Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                    startActivity(intent);
-                    finish();
-                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                }
-            });
-        }
-
-        public void login() {
-            Log.d(TAG, "Login");
-
-            _loginButton.setEnabled(false);
-
-            _usernameText.setError(null);
-            _passwordText.setError(null);
-
-            if (!validate()) {
-                onFail();
-                return;
-            }
-
-            String email = _usernameText.getText().toString();
-            String password = _passwordText.getText().toString();
-
-            GetUserTask mAuthTask = new GetUserTask(email, password, this, _usernameText, _passwordText);
-            mAuthTask.execute((Void) null);
-
-        }
-
-        @Override
-        public void onBackPressed() {
-            // Disable going back to the MainActivity
-            moveTaskToBack(true);
-        }
-
-        public boolean validate() {
-            boolean valid = true;
-
-            String email = _usernameText.getText().toString();
-            String password = _passwordText.getText().toString();
-
-            if (email.isEmpty()) {
-                _usernameText.setError("what do we call you?");
-                valid = false;
-            } else {
-                _usernameText.setError(null);
-            }
-
-            if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-                _passwordText.setError("between 4 and 10 alphanumeric characters");
-                valid = false;
-            } else {
-                _passwordText.setError(null);
-            }
-
-            return valid;
-        }
-
-        @Override
-        public void onFail() {
-            Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-            _loginButton.setEnabled(true);
-        }
-
-        @Override
-        public void onSuccess() {
-            Intent intent = new Intent(getApplicationContext(), CaptureMediaActivity.class);
-            intent.putExtra("user_name", _usernameText.getText().toString().trim());
-            startActivity(intent);
-            finish();
-        }
     }
 }

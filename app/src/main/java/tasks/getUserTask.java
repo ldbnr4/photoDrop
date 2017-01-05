@@ -9,8 +9,8 @@ import grexClasses.ProgressBarActvity;
 import grexEnums.RET_STATUS;
 import money.cache.grexActivities.R;
 
+import static grexClasses.GrexSocket.emit_login;
 import static grexClasses.GrexSocket.loggedInStatus;
-import static grexClasses.GrexSocket.login_emit;
 import static grexEnums.RET_STATUS.NONE;
 import static grexEnums.RET_STATUS.NO_ACCOUNT;
 
@@ -68,7 +68,7 @@ public class GetUserTask extends AsyncTask<Void, Void, RET_STATUS> {
             });
         }
 
-        login_emit(mUsername, mPassword);
+        emit_login(mUsername, mPassword);
 
         long totalTime = 3000;
         long startTime = System.currentTimeMillis();
@@ -87,7 +87,6 @@ public class GetUserTask extends AsyncTask<Void, Void, RET_STATUS> {
             case VERIFIED:
                 if(callingActivity != null)
                     callingActivity.onSuccess();
-
                 break;
 
             case WRONG_PASSWORD:

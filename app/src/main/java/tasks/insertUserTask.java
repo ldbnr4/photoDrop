@@ -8,7 +8,7 @@ import grexEnums.RET_STATUS;
 import money.cache.grexActivities.R;
 import money.cache.grexActivities.SignupActivity;
 
-import static grexClasses.GrexSocket.register_emit;
+import static grexClasses.GrexSocket.emit_register;
 import static grexClasses.GrexSocket.signUpStatus;
 import static grexEnums.RET_STATUS.NONE;
 
@@ -56,7 +56,7 @@ public class InsertUserTask extends AsyncTask<Void, Void, RET_STATUS> {
             }
         });
 
-        register_emit(username, email, mobile, password);
+        emit_register(username, email, mobile, password);
 
         long totalTime = 3000;
         long startTime = System.currentTimeMillis();

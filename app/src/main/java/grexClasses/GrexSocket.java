@@ -18,6 +18,7 @@ public class GrexSocket {
 
     private static final Object loginLock = new Object();
     private static final Object registerLock = new Object();
+    private static final Object roomUpdateLock = new Object();
     public static RET_STATUS loggedInStatus = NONE;
     public static RET_STATUS signUpStatus = NONE;
     private static Socket mSocket;
@@ -35,11 +36,22 @@ public class GrexSocket {
                 }
             });
 
+
             mSocket.on("register_status", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
                     synchronized (registerLock) {
                         signUpStatus = RET_STATUS.valueOf((String) args[0]);
+                    }
+                }
+            });
+            mSocket.on("room_update", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    synchronized (roomUpdateLock) {
+                        for (Object room : args) {
+                            User.getUser().roomSet.add((String) room);
+                        }
                     }
                 }
             });
@@ -50,16 +62,21 @@ public class GrexSocket {
         }
     }
 
-    public static void login_emit(String email, String password) {
+    public static void emit_login(String email, String password) {
         mSocket.emit("login", email.trim(), password.trim());
     }
 
-    public static void register_emit(String username, String email, String mobile, String password) {
+    public static void emit_register(String username, String email, String mobile, String password) {
         mSocket.emit("register", username.trim(), email.trim(), mobile.trim(), password.trim());
     }
 
-    public static void image_emit(String username, String photoName, String image) {
+    public static void emit_image(String username, String photoName, String image) {
         mSocket.emit("image_upload", username, photoName, image);
+    }
+
+    public static void emit_newRoom(Room room) {
+        //TODO: convert "room" into a string and emit to the server
+        //mSocket.emit("new_room", );
     }
 
     public static void disconnect() {

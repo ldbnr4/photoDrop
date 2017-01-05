@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
             android:contentDescription="main logo"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/_logo"/>
 
         <!-- Name Label -->
         <android.support.design.widget.TextInputLayout

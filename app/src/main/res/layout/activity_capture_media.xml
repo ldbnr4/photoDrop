@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO: change upload and capture icons https://icons8.com/web-app/category/all/User-Interface -->
 <LinearLayout
     android:id="@+id/activity_landing_page"
     xmlns:android="http://schemas.android.com/apk/res/android"
