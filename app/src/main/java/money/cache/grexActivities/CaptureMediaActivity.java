@@ -144,9 +144,6 @@ public class CaptureMediaActivity extends AppCompatActivity {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                /*photoURI = FileProvider.getUriForFile(this,
-                        "money.cache.android.fileprovider",
-                        photoFile);*/
                 photoURI = Uri.fromFile(photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);

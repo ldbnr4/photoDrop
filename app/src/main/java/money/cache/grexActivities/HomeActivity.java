@@ -30,7 +30,7 @@ public class HomeActivity extends AppCompatActivity {
         _createRoomBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: send message to server to create a new Room with the user as the host
+                // TODO: Open a new page to create a room to emit to the server
             }
         });
     }

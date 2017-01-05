@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO: change upload and capture icons https://icons8.com/web-app/category/all/User-Interface -->
-<LinearLayout
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_landing_page"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -32,21 +31,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_capture"
-                    android:layout_width="match_parent"
+                <ImageButton
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="26dp"
-                    android:text="Capture"/>
+                    app:srcCompat="@drawable/_cam"
+                    android:id="@+id/btn_capture" />
 
-                <android.support.v7.widget.AppCompatButton
+                <ImageButton
                     android:id="@+id/btn_upload"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upload"/>
+                    app:srcCompat="@drawable/_upload" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
