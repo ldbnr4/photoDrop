@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     android:id="@+id/activity_home"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,44 +9,34 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="money.cache.grexActivities.HomeActivity">
+    tools:context="money.cache.grexActivities.HomeActivity"
+    android:orientation="vertical">
 
-    <ScrollView
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_createRoom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/button_material_dark"
+            android:drawableTop="@drawable/_create_room"
+            android:padding="10dp"
+            android:text="Open a New Room"
+            android:textSize="22sp"
+            android:visibility="visible"
+            />
+
+    </TableRow>
+
+    <View style="@style/Divider"/>
+
+    <ListView
+        android:id="@+id/list_listOfUserRooms"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
+        android:layout_marginTop="10dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp">
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_createRoom"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/button_material_dark"
-                    android:drawableTop="@drawable/_create_room"
-                    android:padding="10dp"
-                    android:text="Open a New Room"
-                    android:textSize="22sp"
-                    android:visibility="visible"
-                    />
-
-            </TableRow>
-
-            <View style="@style/Divider"/>
-
-            <ListView
-                android:id="@+id/list_listOfUserRooms"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+</LinearLayout>
