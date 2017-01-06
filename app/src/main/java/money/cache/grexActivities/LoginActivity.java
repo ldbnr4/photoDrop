@@ -12,6 +12,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.ProgressBarActvity;
+import grexClasses.User;
 import tasks.GetUserTask;
 
 /**
@@ -116,7 +117,7 @@ public class LoginActivity extends ProgressBarActvity {
 
     @Override
     public void onSuccess() {
-        //TODO: set Uset.getUser().name with _usernameText
+        User.getUser().name = _usernameText.getText().toString();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         finish();
     }
