@@ -22,173 +22,179 @@
         android:scaleType="centerCrop"
         app:srcCompat="@drawable/_gas_pump"/>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-
-        <TableRow
-            android:id="@+id/tRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            >
-
-            <EditText
-                android:id="@+id/txt_mom_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:gravity="center"
-                android:hint="Moment name"
-                android:inputType="textUri|textPersonName"
-                android:textSize="30sp"
-                />
-
-            <ImageButton
-                android:id="@+id/btn_add_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2.5"
-                android:adjustViewBounds="false"
-                android:background="@android:drawable/menuitem_background"
-                android:cropToPadding="false"
-                app:srcCompat="@drawable/_add_image"
-                />
-        </TableRow>
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:background="@color/gas_pump_light"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:orientation="vertical" >
 
             <TableRow
+                android:id="@+id/tRow"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="15dp">
+                android:background="?attr/colorPrimary"
+                >
 
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".5"
-                    app:srcCompat="@drawable/_vis"/>
-
-                <Switch
-                    android:id="@+id/switch_public"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".5"
-                    android:checked="true"
-                    android:textColor="@color/faded_black"
-                    android:textSize="24sp"
-                    tools:text="Public"/>
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="15dp">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/_dt"/>
-
-                <LinearLayout
+                <EditText
+                    android:id="@+id/txt_mom_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:layout_weight=".5"
+                    android:gravity="center"
+                    android:hint="Moment name"
+                    android:inputType="textUri|textPersonName"
+                    android:textSize="30sp"
+                    />
+
+                <ImageButton
+                    android:id="@+id/btn_add_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:adjustViewBounds="false"
+                    android:background="@android:drawable/menuitem_background"
+                    android:cropToPadding="false"
+                    app:srcCompat="@drawable/_add_image"
+                    />
+            </TableRow>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:background="@color/gas_pump_light"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="15dp">
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        app:srcCompat="@drawable/_vis"/>
+
+                    <Switch
+                        android:id="@+id/switch_public"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".5"
+                        android:checked="true"
+                        android:textColor="@color/faded_black"
+                        android:textSize="24sp"
+                        tools:text="Public"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="15dp">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/_dt"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".5"
-                        android:orientation="vertical">
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
 
-                        <TextView
-                            android:id="@+id/textView"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="From"
-                            android:textColor="@color/faded_black"
-                            android:textSize="24sp"/>
+                            android:layout_weight=".5"
+                            android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/btn_begin"
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="From"
+                                android:textColor="@color/faded_black"
+                                android:textSize="24sp"/>
+
+                            <Button
+                                android:id="@+id/btn_begin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Now"
+                                />
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Now"
-                            />
+                            android:layout_height="match_parent"
+                            android:layout_weight=".5"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Untill"
+                                android:textColor="@color/faded_black"
+                                android:textSize="24sp"/>
+
+                            <Button
+                                android:id="@+id/btn_end"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Never"/>
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight=".5"
-                        android:orientation="vertical">
+                </TableRow>
 
-                        <TextView
-                            android:id="@+id/textView2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="Untill"
-                            android:textColor="@color/faded_black"
-                            android:textSize="24sp"/>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="15dp">
 
-                        <Button
-                            android:id="@+id/btn_end"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="Never"/>
-                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/_edit"/>
 
-                </LinearLayout>
+                    <EditText
+                        android:id="@+id/editText3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="textMultiLine"/>
+                </TableRow>
 
-            </TableRow>
+            </LinearLayout>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="15dp">
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/_edit"/>
-
-                <EditText
-                    android:id="@+id/editText3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textMultiLine"/>
-            </TableRow>
+            <Button
+                android:id="@+id/btn_mom_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Done"/>
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_mom_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Done"/>
-
-    </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

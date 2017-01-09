@@ -26,6 +26,7 @@ import static android.content.ContentValues.TAG;
 public class DatePicker extends android.support.v4.app.Fragment implements BottomSheetTimePickerDialog.OnTimeSetListener {
 
     private OnFragmentInteractionListener mListener;
+    boolean isStart = true;
 
     public DatePicker() {
         // Required empty public constructor
@@ -35,6 +36,10 @@ public class DatePicker extends android.support.v4.app.Fragment implements Botto
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Calendar now = Calendar.getInstance();
+
+        if(!isStart){
+            now.add(Calendar.HOUR, 1);
+        }
         /*BottomSheetDatePickerDialog date = BottomSheetDatePickerDialog.newInstance(
             DatePicker.this,
             now.get(Calendar.YEAR),
