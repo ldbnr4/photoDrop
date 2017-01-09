@@ -1,5 +1,6 @@
 package money.cache.grexActivities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,6 +10,10 @@ import android.widget.ListView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.User;
+
+//TODO: make a splash screen for whatever page is the home page like 'splash screens -> down ken burns' from UI app
+
+//TODO: the apps home page should be like 'tabs' from the app
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -30,7 +35,9 @@ public class HomeActivity extends AppCompatActivity {
         _createRoomBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Open a new page to create a room to emit to the server
+                Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

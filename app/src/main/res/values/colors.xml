@@ -3,7 +3,7 @@
   <color name="primary">#4caf50</color>
   <color name="primary_dark">#036100</color>
   <color name="primary_darker">#1dccac</color>
-  <color name="accent">#ffffff</color>
+  <color name="accent">#cbffffff</color>
 
   <color name="black">#000000</color>
   <color name="jet">#222222</color>
@@ -12,6 +12,8 @@
   <color name="jumbo">#888888</color>
   <color name="aluminum">#999999</color>
   <color name="base">#AAAAAA</color>
-  <color name="iron">#CCCCCC</color>
+  <color name="iron">#b3cccccc</color>
   <color name="white">#FFFFFF</color>
+  <color name="gas_pump_light">#e2f8f8f5</color>
+  <color name="faded_black">#d0282828</color>
 </resources>

@@ -5,14 +5,17 @@ import java.util.Set;
 
 /**
  * Created by Lorenzo on 1/4/2017.
+ *
  */
 public final class User {
     private static final User user = new User();
     public String name;
-    Set<Room> roomSet;
+    Set<Room> roomsIn;
+    Set<User> friends;
 
     private User() {
-        roomSet = new HashSet<>();
+        roomsIn = new HashSet<>();
+        friends = new HashSet<>();
     }
 
     public static User getUser() {

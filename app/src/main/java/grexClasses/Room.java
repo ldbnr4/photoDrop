@@ -1,39 +1,49 @@
 package grexClasses;
 
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Created by Lorenzo on 1/4/2017.
+ *
  */
 
-class Room {
-    public String id;
+public class Room {
     String host;
-    private Set<User> userSet;
-    private Set<String> mediaSet;
+    String name;
+    boolean isPubic;
+    Calendar birth;
+    Calendar death;
+    String image;
+    private Set<User> guests;
+    private Set<String> photoRoll;
+    private Set<String> videoRoll;
 
-    public Room(String host) {
-        id = UUID.randomUUID().toString();
-        userSet = new HashSet<>();
-        mediaSet = new HashSet<>();
-        this.host = host;
+    public Room(String name, boolean isPub, String host, Calendar birth, Calendar death) {
+        guests = new HashSet<>();
+        photoRoll = new HashSet<>();
+        videoRoll = new HashSet<>();
+        this.host = host = User.getUser().name;
+        this.name = name;
+        this.isPubic = isPub;
+        this.birth = birth;
+        this.death = death;
     }
 
     public boolean addPerson(User guest) {
-        return userSet.add(guest);
+        return this.guests.add(guest);
     }
 
     public void addMedia(String media) {
-        mediaSet.add(media);
+        photoRoll.add(media);
     }
 
     public Set<String> getRoomMedia() {
-        return mediaSet;
+        return photoRoll;
     }
 
     public Set<User> getUsers() {
-        return userSet;
+        return guests;
     }
 }

@@ -53,7 +53,7 @@ public class GrexSocket {
                 public void call(Object... args) {
                     synchronized (roomUpdateLock) {
                         for (Object room : args) {
-                            User.getUser().roomSet.add(gson.fromJson((String) room, Room.class));
+                            User.getUser().roomsIn.add(gson.fromJson((String) room, Room.class));
                         }
                     }
                 }

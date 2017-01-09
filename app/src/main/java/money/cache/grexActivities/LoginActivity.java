@@ -1,5 +1,6 @@
 package money.cache.grexActivities;
 
+//TODO: Allow third party login like Facebook, Instagram or Twitter
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import tasks.GetUserTask;
 
 /**
  * Created by Lorenzo on 1/4/2017.
+ *
  */
 
 public class LoginActivity extends ProgressBarActvity {
