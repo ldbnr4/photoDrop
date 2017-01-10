@@ -7,13 +7,13 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
-        <item name="android:colorForeground">@color/accent_material_light</item>
+        <item name="android:colorForeground">?android:attr/colorForeground</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
@@ -35,6 +35,7 @@
 
         <item name="colorButtonNormal">@color/primary_darker</item>
         <item name="android:colorButtonNormal">@color/primary_darker</item>
+        <item name="colorAccent">?android:attr/colorButtonNormal</item>
     </style>
 
     <style name="AppTheme.Dark2" parent="Theme.AppCompat.NoActionBar">

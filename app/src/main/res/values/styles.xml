@@ -1,9 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
         <!-- Customize your theme here. -->
-        <item name="android:colorForeground">@color/accent_material_light</item>
+        <item name="android:colorForeground">?android:attr/colorForeground</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">

@@ -17,8 +17,13 @@ import butterknife.ButterKnife;
 
 public class CreateRoomActivity extends AppCompatActivity implements DatePicker.OnFragmentInteractionListener {
 
-    //TODO: Make switch text "switch" ;) back and forth from 'Public' to 'Private' (maybe add an image that switches back and forth too)
+    //TODO: maybe add an image that switches back and forth as public/private switch chnages
     //TODO: Make this look like 'Dialog social' from UI app
+
+    //TODO: Gather inputs to create Room object to send to DB (make _btnMomDone work)
+
+    @Bind(R.id.btn_mom_done)
+    Button _btnMomDone;
 
     @Bind(R.id.btn_begin)
     Button _btnBegin;
@@ -68,6 +73,13 @@ public class CreateRoomActivity extends AppCompatActivity implements DatePicker.
                 else{
                     _switchPublic.setText("Private");
                 }
+            }
+        });
+
+        _btnMomDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 

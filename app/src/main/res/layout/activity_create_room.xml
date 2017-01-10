@@ -35,7 +35,7 @@
                 android:id="@+id/tRow"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/colorPrimary"
+                android:background="@color/text_color_primary_light"
                 >
 
                 <EditText
@@ -65,12 +65,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginTop="40dp"
-                android:background="@color/gas_pump_light"
-                android:orientation="vertical"
-                android:padding="10dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@color/text_color_primary_light"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -90,9 +90,10 @@
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
                         android:checked="true"
-                        android:textColor="@color/faded_black"
-                        android:textSize="24sp"
-                        tools:text="Public"/>
+                        android:textColor="?android:attr/editTextColor"
+                        android:textOff="Private"
+                        android:textOn="Public"
+                        />
 
                 </TableRow>
 
@@ -127,7 +128,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="From"
-                                android:textColor="@color/faded_black"
+                                android:textColor="?android:attr/actionMenuTextColor"
                                 android:textSize="24sp"/>
 
                             <Button
@@ -151,7 +152,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="Untill"
-                                android:textColor="@color/faded_black"
+                                android:textColor="?android:attr/actionMenuTextColor"
                                 android:textSize="24sp"/>
 
                             <Button
@@ -182,17 +183,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textMultiLine"/>
+                        android:hint="Details\n"
+                        android:inputType="textMultiLine"
+                        android:textColor="@color/faded_black"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/btn_mom_done"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="false"
+                        app:srcCompat="@drawable/_ok_hand100"/>
+
                 </TableRow>
 
             </LinearLayout>
-
-            <Button
-                android:id="@+id/btn_mom_done"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Done"/>
 
         </LinearLayout>
     </ScrollView>
