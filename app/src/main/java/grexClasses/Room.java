@@ -1,6 +1,5 @@
 package grexClasses;
 
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,17 +9,18 @@ import java.util.Set;
  */
 
 public class Room {
-    String host;
-    String name;
-    boolean isPubic;
-    Calendar birth;
-    Calendar death;
-    String image;
+    private String host;
+    private String name;
+    private boolean isPubic;
+    private String birth;
+    private String death;
+    private String image;
+    private String description;
     private Set<User> guests;
     private Set<String> photoRoll;
     private Set<String> videoRoll;
 
-    public Room(String name, boolean isPub, String host, Calendar birth, Calendar death) {
+    public Room(String name, boolean isPub, String host, String birth, String death, String description) {
         guests = new HashSet<>();
         photoRoll = new HashSet<>();
         videoRoll = new HashSet<>();
@@ -29,6 +29,11 @@ public class Room {
         this.isPubic = isPub;
         this.birth = birth;
         this.death = death;
+        this.description = description;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public boolean addPerson(User guest) {

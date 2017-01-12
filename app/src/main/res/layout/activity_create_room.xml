@@ -16,7 +16,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/room_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
@@ -97,13 +97,14 @@
 
                 </TableRow>
 
+                <View style="@style/Divider"/>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="15dp">
 
                     <ImageView
-                        android:id="@+id/imageView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -167,6 +168,8 @@
 
                 </TableRow>
 
+                <View style="@style/Divider"/>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -179,15 +182,17 @@
                         app:srcCompat="@drawable/_edit"/>
 
                     <EditText
-                        android:id="@+id/editText3"
+                        android:id="@+id/txt_details"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="Details\n"
+                        android:hint="Details\n\n"
                         android:inputType="textMultiLine"
                         android:textColor="@color/faded_black"/>
 
                 </TableRow>
+
+                <View style="@style/Divider"/>
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -199,7 +204,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="false"
-                        app:srcCompat="@drawable/_ok_hand100"/>
+                        app:srcCompat="@drawable/_ok"/>
 
                 </TableRow>
 
