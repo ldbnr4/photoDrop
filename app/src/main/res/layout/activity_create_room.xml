@@ -90,10 +90,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight=".5"
                         android:checked="true"
-                        android:textColor="?android:attr/editTextColor"
                         android:textOff="Private"
-                        android:textOn="Public"
-                        />
+                        android:textOn="Public" />
 
                 </TableRow>
 
@@ -188,7 +186,7 @@
                         android:ems="10"
                         android:hint="Details\n\n"
                         android:inputType="textMultiLine"
-                        android:textColor="@color/faded_black"/>
+                        android:gravity="top|left" />
 
                 </TableRow>
 
