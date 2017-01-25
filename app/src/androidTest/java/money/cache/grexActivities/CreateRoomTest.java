@@ -25,9 +25,12 @@ public class CreateRoomTest {
     public ActivityTestRule<CreateRoomActivity> mActivityRule = new ActivityTestRule<>(CreateRoomActivity.class);
 
     @Test
-    public void listGoesOverTheFold() {
+    public void testCreateRoom() {
         onView(withId(R.id.txt_mom_name)).perform(typeText("My New Moment"));
         closeSoftKeyboard();
         onView(withId(R.id.btn_mom_done)).perform(click());
+        //TODO: Verify the room was added to the database
     }
+
+
 }

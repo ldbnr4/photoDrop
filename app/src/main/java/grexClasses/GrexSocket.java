@@ -2,6 +2,8 @@ package grexClasses;
 
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+
 import java.net.URISyntaxException;
 
 import grexEnums.RET_STATUS;
@@ -26,6 +28,10 @@ public class GrexSocket {
     private static Socket mSocket;
     private static Gson gson = GSON.getInstance();
 
+    //TODO: Make sure the device has internet connection
+    //TODO: Check that the device connected to the server via mSocket.connected
+    //TODO: look into getting an ACK after emmitting https://github.com/socketio/socket.io-client-java
+
     static {
         try {
             mSocket = IO.socket("http://zotime.ddns.net:3000");
@@ -48,14 +54,18 @@ public class GrexSocket {
                     }
                 }
             });
-            mSocket.on("room_update", new Emitter.Listener() {
+            mSocket.on("rooms_fromDB", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    synchronized (roomUpdateLock) {
-                        for (Object room : args) {
-                            User.getUser().roomsIn.add(gson.fromJson((String) room, Room.class));
+                    System.out.println("HELLO FRED");
+                    System.out.println(args);
+                    JSONArray array = (JSONArray) args[0];
+                    //TODO: Fix this
+                    //synchronized (roomUpdateLock) {
+                        for(int i = 0; i < array.length(); i++){
+                            //User.addToRoomsIn(gson.fromJson((String) room, Room.class));
                         }
-                    }
+                    //}
                 }
             });
 
@@ -78,7 +88,18 @@ public class GrexSocket {
     }
 
     public static void emit_newRoom(Room room) {
+        if(room.host == null)
+            room.host = "GREX_ORPHAN";
+
         mSocket.emit("new_room", gson.toJson(room));
+    }
+
+    public static void emit_getRooms(){
+        String name = User.getUser().name;
+        if(name == null)
+            name = "GREX_ORPHAN";
+
+        mSocket.emit("get_rooms", name);
     }
 
     public static void disconnect() {

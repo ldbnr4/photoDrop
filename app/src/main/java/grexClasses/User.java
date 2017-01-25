@@ -10,7 +10,7 @@ import java.util.Set;
 public final class User {
     private static final User user = new User();
     public String name;
-    Set<Room> roomsIn;
+    private static Set<Room> roomsIn;
     Set<User> friends;
 
     private User() {
@@ -20,5 +20,9 @@ public final class User {
 
     public static User getUser() {
         return user;
+    }
+
+    public static void addToRoomsIn(Room room){
+        roomsIn.add(room);
     }
 }

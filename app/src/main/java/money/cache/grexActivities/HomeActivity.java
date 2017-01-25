@@ -9,6 +9,7 @@ import android.widget.ListView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import grexClasses.GrexSocket;
 import grexClasses.User;
 
 //TODO: make a splash screen for whatever page is the home page like 'splash screens -> down ken burns' from UI app
@@ -40,5 +41,7 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        GrexSocket.emit_getRooms();
     }
 }

@@ -9,7 +9,7 @@ import java.util.Set;
  */
 
 public class Room {
-    private String host;
+    String host;
     private String name;
     private boolean isPubic;
     private String birth;

@@ -33,6 +33,8 @@ public class CreateRoomActivity extends AppCompatActivity implements DatePicker.
 
     //TODO: maybe add an image that switches back and forth as public/private switch chnages
     //TODO: Make this look like 'Dialog social' from UI app
+    //TODO: Allow 'Now' and 'Never' to be options again after user changes the times
+    //TODO: If start is 'Now' convert to the actual time
 
     @Bind(R.id.btn_add_image)
     ImageButton _btnAddImg;
