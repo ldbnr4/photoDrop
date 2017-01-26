@@ -3,6 +3,7 @@ package grexClasses;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.net.URISyntaxException;
 
@@ -25,8 +26,11 @@ public class GrexSocket {
     private static final Object roomUpdateLock = new Object();
     public static RET_STATUS loggedInStatus = NONE;
     public static RET_STATUS signUpStatus = NONE;
+    //TODO: convert to RET_STATUS
+    public static boolean roomUpdate = false;
     private static Socket mSocket;
     private static Gson gson = GSON.getInstance();
+    public static User user = User.getUser();
 
     //TODO: Make sure the device has internet connection
     //TODO: Check that the device connected to the server via mSocket.connected
@@ -44,8 +48,6 @@ public class GrexSocket {
                     }
                 }
             });
-
-
             mSocket.on("register_status", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -57,15 +59,17 @@ public class GrexSocket {
             mSocket.on("rooms_fromDB", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    System.out.println("HELLO FRED");
-                    System.out.println(args);
-                    JSONArray array = (JSONArray) args[0];
-                    //TODO: Fix this
-                    //synchronized (roomUpdateLock) {
+                    synchronized (roomUpdateLock) {
+                        JSONArray array = (JSONArray) args[0];
                         for(int i = 0; i < array.length(); i++){
-                            //User.addToRoomsIn(gson.fromJson((String) room, Room.class));
+                            try {
+                                user.addToRoomsIn(gson.fromJson(array.get(i).toString(), Room.class));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    //}
+                        roomUpdate = true;
+                    }
                 }
             });
 
@@ -95,11 +99,12 @@ public class GrexSocket {
     }
 
     public static void emit_getRooms(){
-        String name = User.getUser().name;
-        if(name == null)
-            name = "GREX_ORPHAN";
+        //TODO: force user.name to be set
+        if(User.getUser().name == null)
+            User.getUser().name = "GREX_ORPHAN";
 
-        mSocket.emit("get_rooms", name);
+        roomUpdate = false;
+        mSocket.emit("get_rooms", User.getUser().name);
     }
 
     public static void disconnect() {

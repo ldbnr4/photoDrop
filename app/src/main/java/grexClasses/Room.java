@@ -20,6 +20,8 @@ public class Room {
     private Set<String> photoRoll;
     private Set<String> videoRoll;
 
+    public Room(){}
+
     public Room(String name, boolean isPub, String host, String birth, String death, String description) {
         guests = new HashSet<>();
         photoRoll = new HashSet<>();

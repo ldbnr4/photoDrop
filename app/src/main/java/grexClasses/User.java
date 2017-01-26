@@ -1,5 +1,6 @@
 package grexClasses;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,19 +11,28 @@ import java.util.Set;
 public final class User {
     private static final User user = new User();
     public String name;
-    private static Set<Room> roomsIn;
-    Set<User> friends;
+    private Set<Room> roomsIn = Collections.synchronizedSet(new HashSet<Room>());
+    private Set<User> friends = Collections.synchronizedSet(new HashSet<User>());
 
-    private User() {
-        roomsIn = new HashSet<>();
-        friends = new HashSet<>();
-    }
+    private User() {}
 
-    public static User getUser() {
+    public static synchronized User getUser() {
         return user;
     }
 
-    public static void addToRoomsIn(Room room){
+    void addToRoomsIn(Room room){
         roomsIn.add(room);
+    }
+
+    public Set<Room> getRoomsIn() {
+        return roomsIn;
+    }
+
+    public Set<User> getFriends() {
+        return friends;
+    }
+
+    void addToFriends(User user){
+        friends.add(user);
     }
 }

@@ -21,5 +21,6 @@ public class ViewRoomsTest {
     @Test
     public void testViewRooms(){
         mActivityRule.launchActivity(new Intent());
+        System.out.println("DONE!");
     }
 }

@@ -25,7 +25,7 @@ public class HomeActivity extends AppCompatActivity {
     @Bind(R.id.list_listOfUserRooms)
     ListView _listView;
 
-    User user = User.getUser();
+    public static User user = User.getUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,5 +43,9 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         GrexSocket.emit_getRooms();
+        //TODO: add timeout element
+        while(!GrexSocket.roomUpdate);
+        System.out.println(user.getRoomsIn().size());
+        System.out.println("GOT EM");
     }
 }
