@@ -3,6 +3,6 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:colorForeground">?android:attr/colorForeground</item>
+        <item name="android:colorForeground">?android:attr/colorForegroundInverse</item>
     </style>
 </resources>

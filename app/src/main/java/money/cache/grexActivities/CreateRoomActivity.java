@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -119,7 +120,7 @@ public class CreateRoomActivity extends AppCompatActivity implements DatePicker.
                 byte[] b = baos.toByteArray();
 
                 Room newRoom = new Room(rmName, pub, User.getUser().name, begin, end, desc);
-                //newRoom.setImage(Base64.encodeToString(b, Base64.DEFAULT));
+                newRoom.setImage(Base64.encodeToString(b, Base64.DEFAULT));
                 GrexSocket.emit_newRoom(newRoom);
 
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
