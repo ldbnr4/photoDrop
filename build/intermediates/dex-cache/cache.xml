@@ -3,264 +3,282 @@
 
     <item
         is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="0a0ef86b7fa568a52bf6214a0326ca1f1d618da7">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-25.1.0_48726019ec086192bc2c25cb8e7a9373c79f25eb\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="67b231d3271c5febd9a318c074558da6586bfbf1">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_927d8076323623ca33ef7054c562a40cca40a6fe\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\boyice\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\7.0.1\d5d13ea991eab0252e3710e5df3d6a9d4b21d461\butterknife-7.0.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\butterknife-7.0.1_c819b73f388e7147cf960de9193ee3d4de1d5cff\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\9.8.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="e3234cd25e23069abd48ecd2117bc0e8011bf45a">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-appindexing-9.8.0_dd3c3fdfbe54c2eab3eea39580702555b97e9786\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.philliphsu\bottomsheetpickers\2.1.1\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="98394d93323a3a487efbcc9282e8161d96289b62">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.philliphsu-bottomsheetpickers-2.1.1_746db862160f1d3e3c8f7239a3062af30801a4d3\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\boyice\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp-ws\3.4.1\8ace66ef7002d98f633377c9e67daeeb196d8c3b\okhttp-ws-3.4.1.jar"
+        jar="C:\Users\Lorenzo\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp-ws\3.4.1\8ace66ef7002d98f633377c9e67daeeb196d8c3b\okhttp-ws-3.4.1.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="8ace66ef7002d98f633377c9e67daeeb196d8c3b">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\okhttp-ws-3.4.1_94871ea0f49cea4401cf39c7231e7c989520fd77\classes.dex" />
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\okhttp-ws-3.4.1_cec467384d297af2db5d8cab9d7f28c97d08c275\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="b266c8faa5af72e579b9da36ef35053ffed6ac64">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-25.1.0_af4c2558ed9bf300e047c70abcce44c830791ee6\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="aee64634871d88a419d59eb743c1258a60f19700">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.1.0_297bf087cbd4ad27f9c9c841e40fc29dddf804d3\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\boyice\.gradle\caches\modules-2\files-2.1\io.socket\socket.io-client\0.8.2\96fd0e4a99e71d688b7267e12d2a5a137519d92e\socket.io-client-0.8.2.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="96fd0e4a99e71d688b7267e12d2a5a137519d92e">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\socket.io-client-0.8.2_5900c13effaeb827ad04fa32fdc5c33c2a9e0464\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.1.0_8a827d816a095d35653df347516d01dd06626d98\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="f02263e35e52668dd17b73bf961437e3d562b35f">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-25.1.0_d46817322bdfe8705384a3b37e4d866cae5a2905\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\boyice\.gradle\caches\modules-2\files-2.1\io.socket\engine.io-client\0.8.2\2b23f3e731f21c2009ab0a10da8254a69693767d\engine.io-client-0.8.2.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="2b23f3e731f21c2009ab0a10da8254a69693767d">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\engine.io-client-0.8.2_b14bf4588c939acedbd5a0817325ab40ecc67846\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.1.0_3ca7ca5eb987f21ec57269774ade3f99a3eb9ce4\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.8.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="bf2e1838e4428616c1aa26edf43de72b5b99bf84">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-tasks-9.8.0_2f76fbb95eaaf4433f69111eeb25b97ba05a452f\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\boyice\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.0\c4ba5371a29ac9b2ad6129b1d39ea38750043eff\gson-2.8.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c4ba5371a29ac9b2ad6129b1d39ea38750043eff">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\gson-2.8.0_bb6eca9480aaf1007cf45f0d102980d8187dd6e1\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\gridlayout-v7\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c83fbde55c05bc186002d7ce3570d619c3d6ee1f">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-gridlayout-v7-25.1.0_6bafb47642783060329e51a02bcd8b9f78170357\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.8.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c61641e333fa88da21758bab8cc28ee16604b05f">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-common-9.8.0_be7633dfd1ead829e1ed55721d3424636b2b0a16\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="9786221ef57bbf2b0e2e6db9b1e3091037aaf134">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_a59c87badb1d2d9c00ee837b27ce0cf00d92df4f\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-25.1.0_3ec04389586c240b3837c14af72f119650f2e5f3\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.8.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="9f6d236bac26d02b410e4ee186ba517ace5ee661">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-basement-9.8.0_9fea382cd23a19cc0e545f4dc1fe78b8c6d9d631\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\boyice\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.9.0\f824591a0016efbaeddb8300bee54832a1398cfa\okio-1.9.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="f824591a0016efbaeddb8300bee54832a1398cfa">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\okio-1.9.0_409f848920f847db9a9cb5da9d6344d1e8ad9414\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.1.0\jars\classes.jar"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="ca3c7aa31e2726a400a6e552b93cb9f63c9a1e6d">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.1.0_c3e126928a99ad38c8463691f45bf913443e466b\classes.dex" />
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-25.1.0_8906ec5d6aacf730d430c1d1c4f1651e2907a1cc\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\design\25.1.0\jars\classes.jar"
+        jar="C:\Users\Lorenzo\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\picasso-2.5.2_a687b5667a1eee6fdc816d404435dbc534ad4c71\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\gridlayout-v7\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c83fbde55c05bc186002d7ce3570d619c3d6ee1f">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-gridlayout-v7-25.1.0_9157daf30250b722dacd2ee2be7c3175271dbdf5\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7f2420506110902f033406b25697cf97ee8c38b2">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-cardview-v7-25.1.0_e3007079947cb1b9a0b8d8a148c7c77ba9ceeb75\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\9.8.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e3234cd25e23069abd48ecd2117bc0e8011bf45a">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-appindexing-9.8.0_75e839e4912d12f5d2ee159d27f25524ccfd132a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f02263e35e52668dd17b73bf961437e3d562b35f">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-25.1.0_cc0b17c1b48eac2af2092f56c80de04b719afdfb\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\design\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="30103d98fa5ed824b54af839c85e2111f9bde8ec">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-25.1.0_9879df4c8e63329283fd12788730d7f81c940aa4\classes.dex" />
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-25.1.0_8ff39d4480ed2e24f16b35f812241ca0b3ac54e7\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\transition\25.1.0\jars\classes.jar"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b266c8faa5af72e579b9da36ef35053ffed6ac64">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-25.1.0_d11e7707e29e7514d392d958454a0faf822506e4\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e79aa3d9a16f8c9f16377c0608de70a8f31e5d80">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-25.1.0_8eb84e1e69016df77da1d7f45fea095ce4c7beca\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.philliphsu\bottomsheetpickers\2.1.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="98394d93323a3a487efbcc9282e8161d96289b62">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.philliphsu-bottomsheetpickers-2.1.1_f25755dbb02080c47808547c349d93ed15b2f27c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="0a0ef86b7fa568a52bf6214a0326ca1f1d618da7">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-25.1.0_6a5cc753467783fcd34ff267d763ce1d4a0524a6\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\.gradle\caches\modules-2\files-2.1\io.socket\engine.io-client\0.8.2\2b23f3e731f21c2009ab0a10da8254a69693767d\engine.io-client-0.8.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2b23f3e731f21c2009ab0a10da8254a69693767d">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\engine.io-client-0.8.2_c315ac901d853d02593d04c45c103dd5193f7ed0\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.1.0_8c3cc6b15e17c5bc930d9fc50f7587c0c4078ee6\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\transition\25.1.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="d38084015027549951cbaea5d5f6fb795cc81151">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-transition-25.1.0_5b0381f44370cfe3b7361da8341c32531381cddb\classes.dex" />
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-transition-25.1.0_db115fff140869023fd77008bd6e6513a1f17a79\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\boyice\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.4.1\c7c4f9e35c2fd5900da24f9872e3971801f08ce0\okhttp-3.4.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c7c4f9e35c2fd5900da24f9872e3971801f08ce0">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\okhttp-3.4.1_11824f3e0db7a75b8caaeba27ba3eb6358527516\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.1.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.2"
-        sha1="2a53c4f3518116b8c6aee0e477233f0f7da8616f">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-25.1.0_5070343ac744e32061e24efcca7aaffe3ea3ee76\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\9.8.0\jars\classes.jar"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\9.8.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="7e92aadd0697922316d1395c1887a23aebec640a">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-base-9.8.0_d361a8e32967e6049229fb8ef34f25e57f7bb0b1\classes.dex" />
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-base-9.8.0_44c93fc18e06d971f36d64ad3f565961ca86909a\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.1.0\jars\classes.jar"
+        jar="C:\Users\Lorenzo\.gradle\caches\modules-2\files-2.1\io.socket\socket.io-client\0.8.2\96fd0e4a99e71d688b7267e12d2a5a137519d92e\socket.io-client-0.8.2.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="6fb6ac3e8d3b9013819920d9ea11f3803c4c0033">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.1.0_9b8347de2caa9959bc0404033c4926c6e1b213a7\classes.dex" />
+        sha1="96fd0e4a99e71d688b7267e12d2a5a137519d92e">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\socket.io-client-0.8.2_f5dcd3b2c6e5ebc50ff337b82dcae4185fd4e428\classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\boyice\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\25.1.0\support-annotations-25.1.0.jar"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2a53c4f3518116b8c6aee0e477233f0f7da8616f">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-25.1.0_a3650f681f95ac956faa944e010bf6972ec53065\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.4.1\c7c4f9e35c2fd5900da24f9872e3971801f08ce0\okhttp-3.4.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c7c4f9e35c2fd5900da24f9872e3971801f08ce0">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\okhttp-3.4.1_6dd5be58eb1864dfe4111ba8b835bc18701f0735\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\7.0.1\d5d13ea991eab0252e3710e5df3d6a9d4b21d461\butterknife-7.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\butterknife-7.0.1_402c0dad4a4d9b2f02e413d8fbac573c4fc5f739\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e222cb00b0017b617b4d170088caa2a4b57d8781">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_1db48e98dad2ef0b7bfa92a772997b47afe49390\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8ec0ff46d85cbddce44d6e70eeb2cb19e496b202">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_ab4871b15a15b487c034270ff183c7bdcb97e284\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.8.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="bf2e1838e4428616c1aa26edf43de72b5b99bf84">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-tasks-9.8.0_00c781ed9cbee77c9290e290cb9ff7979a3ab574\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.0\c4ba5371a29ac9b2ad6129b1d39ea38750043eff\gson-2.8.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c4ba5371a29ac9b2ad6129b1d39ea38750043eff">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\gson-2.8.0_1abc731acddefc95624bd5a0173ad53f391a945d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.9.0\f824591a0016efbaeddb8300bee54832a1398cfa\okio-1.9.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f824591a0016efbaeddb8300bee54832a1398cfa">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\okio-1.9.0_16d48de2ef995b1d6df313669f67086aeb9e7d5f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="aee64634871d88a419d59eb743c1258a60f19700">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.1.0_53904dfbe8ca78873d284061186865118343fc9d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="1630658fbc2d222b988603c27b4a4249586fbfe7">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.1.0_370d8694e804e1da6a9e30f8873e8a416a5fc78b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.8.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c61641e333fa88da21758bab8cc28ee16604b05f">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-common-9.8.0_f2d001b267804305209817a9a320c17038c937ee\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\25.1.0\support-annotations-25.1.0.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
         sha1="64cb6b229a8bdfd907bc8dd46839a0053e4c018d">
-        <dex dex="D:\Users\boyice\StudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.1.0_c07965b716a87f527486d14280f3dcd0b3d1e9e3\classes.dex" />
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-25.1.0_c9452f524cf223897067c5be846e338f66617d82\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6fb6ac3e8d3b9013819920d9ea11f3803c4c0033">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.1.0_14aed798c61a10a184f2ab67b9e880582b9857e3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.8.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="9f6d236bac26d02b410e4ee186ba517ace5ee661">
+        <dex dex="C:\Users\Lorenzo\AndroidStudioProjects\grex\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-basement-9.8.0_7d4a047966e02d525c7d85b9b6f9a6a547757fb7\classes.dex" />
     </item>
 
 </items>

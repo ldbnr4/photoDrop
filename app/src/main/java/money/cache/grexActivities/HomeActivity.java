@@ -1,40 +1,50 @@
 package money.cache.grexActivities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.Tab;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 
-import java.util.ArrayList;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.GrexSocket;
 import grexClasses.Room;
+import grexClasses.RoomAdapter;
 import grexClasses.User;
 
 //TODO: make a splash screen for whatever page is the home page like 'splash screens -> down ken burns' from UI app
 
 //TODO: the apps home page should be like 'tabs' from the app
 
+//TODO: communication of data from the server is not in sync with GSON fortmat. Needs to be the same as sent
+
 public class HomeActivity extends AppCompatActivity {
 
+    public static User mUser = User.getUser();
     @Bind(R.id.btn_createRoom)
-    Button _createRoomBtn;
-
+    Button mBtnCreateRoom;
     @Bind(R.id.tab_layout)
-    TabLayout _tabLayout;
-
-    //TODO: convert listview to cards
-    @Bind(R.id.list_listOfUserRooms)
-    ListView _listView;
-
-    public static User user = User.getUser();
+    TabLayout mTabLayout;
+    @Bind(R.id.my_recycler_view)
+    RecyclerView mRecyclerView;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +52,36 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        final Tab _pastTab = _tabLayout.newTab().setText("Past");
-        final Tab _liveTab = _tabLayout.newTab().setText("Live!");
-        final Tab _futureTab = _tabLayout.newTab().setText("Future");
+        setUpTabs();
 
-        _tabLayout.addTab(_pastTab);
-        _tabLayout.addTab(_liveTab);
-        _tabLayout.addTab(_futureTab);
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
 
-        _createRoomBtn.setOnClickListener(new View.OnClickListener() {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //
+        Set<Room> roomsIn = mUser.getRoomsIn();
+
+        // specify an adapter (see also next example)
+        RecyclerView.Adapter mAdapter = new RoomAdapter(HomeActivity.this, roomsIn);
+        mRecyclerView.setAdapter(mAdapter);
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    private void setUpTabs() {
+        final Tab _pastTab = mTabLayout.newTab().setText("Past");
+        final Tab _liveTab = mTabLayout.newTab().setText("Live!");
+        final Tab _futureTab = mTabLayout.newTab().setText("Future");
+
+        mTabLayout.addTab(_pastTab);
+        mTabLayout.addTab(_liveTab);
+        mTabLayout.addTab(_futureTab);
+
+        mBtnCreateRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
@@ -61,25 +92,17 @@ public class HomeActivity extends AppCompatActivity {
 
         //TODO: create a new task to get rooms
         GrexSocket.emit_getRooms();
-        //while(!GrexSocket.roomUpdate);
-        ArrayAdapter<Room> arrayAdapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                new ArrayList<>(new ArrayList<>(user.getRoomsIn()))
-        );
-        _listView.setAdapter(arrayAdapter);
+        while (!GrexSocket.roomUpdate) ;
 
         //TODO: each tab should load a google cards travel like page
-        _tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(Tab tab) {
-                if(tab.equals(_pastTab)){
+                if (tab.equals(_pastTab)) {
                     System.out.println("PAST");
-                }
-                else if(tab.equals(_liveTab)){
+                } else if (tab.equals(_liveTab)) {
                     System.out.println("LIVE");
-                }
-                else if(tab.equals(_futureTab)){
+                } else if (tab.equals(_futureTab)) {
                     System.out.println("FUTURE");
                 }
             }
@@ -94,6 +117,41 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Home Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }

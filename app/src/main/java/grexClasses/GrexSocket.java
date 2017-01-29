@@ -28,9 +28,9 @@ public class GrexSocket {
     public static RET_STATUS signUpStatus = NONE;
     //TODO: convert to RET_STATUS
     public static boolean roomUpdate = false;
+    public static User user = User.getUser();
     private static Socket mSocket;
     private static Gson gson = GSON.getInstance();
-    public static User user = User.getUser();
 
     //TODO: Make sure the device has internet connection
     //TODO: Check that the device connected to the server via mSocket.connected
@@ -92,14 +92,14 @@ public class GrexSocket {
     }
 
     public static void emit_newRoom(Room room) {
-        if(room.host == null)
-            room.host = "GREX_ORPHAN";
+        if (room.getHost() == null)
+            room.setHost("GREX_ORPHAN");
 
         mSocket.emit("new_room", gson.toJson(room));
     }
 
     public static void emit_getRooms(){
-        //TODO: force user.name to be set
+        //TODO: force mUser.name to be set
         if(User.getUser().name == null)
             User.getUser().name = "GREX_ORPHAN";
 

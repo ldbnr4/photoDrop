@@ -93,7 +93,7 @@ public class GetUserTask extends AsyncTask<Void, Void, RET_STATUS> {
                 _passwordText.setError("Wrong Password");
             case NO_ACCOUNT:
                 if (success == NO_ACCOUNT)
-                    _emailText.setError("No account found for this user.");
+                    _emailText.setError("No account found for this mUser.");
             default:
                 callingActivity.onFail();
                 break;

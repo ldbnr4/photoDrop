@@ -9,7 +9,7 @@ import java.util.Set;
  */
 
 public class Room {
-    String host;
+    private String host;
     private String name;
     private boolean isPubic;
     private String birth;
@@ -34,6 +34,10 @@ public class Room {
         this.description = description;
     }
 
+    public String getImage() {
+        return image;
+    }
+
     public void setImage(String image) {
         this.image = image;
     }
@@ -52,5 +56,45 @@ public class Room {
 
     public Set<User> getUsers() {
         return guests;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isPubic() {
+        return isPubic;
+    }
+
+    public String getBirth() {
+        return birth;
+    }
+
+    public String getDeath() {
+        return death;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Set<User> getGuests() {
+        return guests;
+    }
+
+    public Set<String> getPhotoRoll() {
+        return photoRoll;
+    }
+
+    public Set<String> getVideoRoll() {
+        return videoRoll;
     }
 }

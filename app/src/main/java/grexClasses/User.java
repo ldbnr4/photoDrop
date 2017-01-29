@@ -8,6 +8,8 @@ import java.util.Set;
  * Created by Lorenzo on 1/4/2017.
  *
  */
+
+//TODO: Add image field
 public final class User {
     private static final User user = new User();
     public String name;
