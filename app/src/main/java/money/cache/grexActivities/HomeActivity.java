@@ -92,7 +92,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //TODO: create a new task to get rooms
         GrexSocket.emit_getRooms();
-        while (!GrexSocket.roomUpdate) ;
+        //while (!GrexSocket.roomUpdate) ;
 
         //TODO: each tab should load a google cards travel like page
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

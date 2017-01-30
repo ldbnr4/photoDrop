@@ -1,5 +1,9 @@
 package grexClasses;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -12,6 +16,8 @@ import grexEnums.RET_STATUS;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import money.cache.grexActivities.HomeActivity;
+import money.cache.grexActivities.R;
 
 import static grexEnums.RET_STATUS.NONE;
 
@@ -20,7 +26,7 @@ import static grexEnums.RET_STATUS.NONE;
  * Created by Lorenzo on 11/15/2016.
  *
  */
-public class GrexSocket {
+public class GrexSocket extends AppCompatActivity {
 
     private static final Object loginLock = new Object();
     private static final Object registerLock = new Object();
@@ -39,7 +45,10 @@ public class GrexSocket {
     //TODO: look into getting an ACK after emmitting https://github.com/socketio/socket.io-client-java
     //TODO: keep a local database
 
-    static {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         try {
             mSocket = IO.socket("http://zotime.ddns.net:3000");
 
@@ -80,9 +89,13 @@ public class GrexSocket {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+
+        startActivity(new Intent(this, HomeActivity.class));
+        finish();
+        overridePendingTransition( R.anim.push_left_in, R.anim.push_left_out );
     }
 
-    public static void emit_login(String email, String password) {
+        public static void emit_login(String email, String password) {
         mSocket.emit("login", email.trim(), password.trim());
     }
 
