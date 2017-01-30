@@ -11,11 +11,11 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.ProgressBarActvity;
-import tasks.InsertUserTask;
+import tasks.InsertUserActivityTask;
+import tasks.SocketActivityTask;
 
 
-public class SignupActivity extends ProgressBarActvity {
+public class SignupActivity extends SocketActivity {
     private static final String TAG = "SignupActivity";
     @Bind(R.id.input_name)
     EditText _usernameText;
@@ -27,7 +27,7 @@ public class SignupActivity extends ProgressBarActvity {
     EditText _passwordText;
     @Bind(R.id.input_reEnterPassword)
     EditText _reEnterPasswordText;
-    @Bind(R.id.btn_upload)
+    @Bind(R.id.btn_signUp)
     Button _signupButton;
     @Bind(R.id.link_login)
     TextView _loginLink;
@@ -40,14 +40,14 @@ public class SignupActivity extends ProgressBarActvity {
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 signup();
             }
         });
 
         _loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 // Finish the registration screen and return to the Login activity
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
@@ -72,8 +72,8 @@ public class SignupActivity extends ProgressBarActvity {
         String mobile = _mobileText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        InsertUserTask mAuthTask = new InsertUserTask(username, email, mobile, password, this);
-        mAuthTask.execute((Void) null);
+        SocketActivityTask mAuthTask = new InsertUserActivityTask(this);
+        mAuthTask.execute(username, email, mobile, password);
     }
 
     public boolean validate() {
@@ -121,12 +121,6 @@ public class SignupActivity extends ProgressBarActvity {
         }
 
         return valid;
-    }
-
-    @Override
-    public void onBackPressed() {
-        this.finish();
-
     }
 
     @Override

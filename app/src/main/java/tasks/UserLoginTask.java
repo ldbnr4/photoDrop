@@ -16,10 +16,9 @@ import static grexEnums.RET_STATUS.NO_ACCOUNT;
 
 /**
  * Created by Lorenzo on 11/15/2016.
- *
  */
 
-public class GetUserTask extends AsyncTask<Void, Void, RET_STATUS> {
+public class UserLoginTask extends AsyncTask<Void, Void, RET_STATUS> {
 
     private final ProgressBarActvity callingActivity;
     private String mPassword;
@@ -29,7 +28,7 @@ public class GetUserTask extends AsyncTask<Void, Void, RET_STATUS> {
     private EditText _emailText;
 
 
-    public GetUserTask(String username, String password, final ProgressBarActvity callingActivity, EditText emailText, EditText passwordText) {
+    public UserLoginTask(String username, String password, final ProgressBarActvity callingActivity, EditText emailText, EditText passwordText) {
         this.mUsername = username;
         this.mPassword = password;
         this.callingActivity = callingActivity;
@@ -37,7 +36,7 @@ public class GetUserTask extends AsyncTask<Void, Void, RET_STATUS> {
         this._emailText = emailText;
     }
 
-    public GetUserTask(String username, String password, final ProgressBarActvity callingActivity){
+    public UserLoginTask(String username, String password, final ProgressBarActvity callingActivity) {
         this.mUsername = username;
         this.mPassword = password;
         this.callingActivity = callingActivity;
@@ -46,7 +45,7 @@ public class GetUserTask extends AsyncTask<Void, Void, RET_STATUS> {
     @Override
     protected RET_STATUS doInBackground(Void... params) {
 
-        if(callingActivity != null){
+        if (callingActivity != null) {
             callingActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -60,7 +59,7 @@ public class GetUserTask extends AsyncTask<Void, Void, RET_STATUS> {
                         public void onCancel(DialogInterface dialog) {
                             progressDialog.dismiss();
                             callingActivity.onFail();
-                            GetUserTask.this.cancel(true);
+                            UserLoginTask.this.cancel(true);
                         }
                     });
                     progressDialog.show();
@@ -85,7 +84,7 @@ public class GetUserTask extends AsyncTask<Void, Void, RET_STATUS> {
         progressDialog.dismiss();
         switch (success) {
             case VERIFIED:
-                if(callingActivity != null)
+                if (callingActivity != null)
                     callingActivity.onSuccess();
                 break;
 

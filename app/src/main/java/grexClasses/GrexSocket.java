@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import grexEnums.RET_STATUS;
 import io.socket.client.IO;
@@ -26,6 +27,7 @@ public class GrexSocket {
     private static final Object roomUpdateLock = new Object();
     public static RET_STATUS loggedInStatus = NONE;
     public static RET_STATUS signUpStatus = NONE;
+    public static ArrayList<String> statuses;
     //TODO: convert to RET_STATUS
     public static boolean roomUpdate = false;
     public static User user = User.getUser();
@@ -35,6 +37,7 @@ public class GrexSocket {
     //TODO: Make sure the device has internet connection
     //TODO: Check that the device connected to the server via mSocket.connected
     //TODO: look into getting an ACK after emmitting https://github.com/socketio/socket.io-client-java
+    //TODO: keep a local database
 
     static {
         try {

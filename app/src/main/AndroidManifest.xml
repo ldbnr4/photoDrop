@@ -33,7 +33,11 @@
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".SignupActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".CaptureMediaActivity"
             android:theme="@style/AppTheme">

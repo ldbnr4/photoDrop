@@ -109,6 +109,7 @@ public class CreateRoomActivity extends AppCompatActivity implements DatePicker.
         _btnMomDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: create a new task to talk to database
                 _btnMomDone.setClickable(false);
                 String rmName = _txtMomName.getText().toString();
                 boolean pub = _switchPublic.isChecked();

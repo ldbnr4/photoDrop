@@ -12,16 +12,15 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.ProgressBarActvity;
 import grexClasses.User;
-import tasks.GetUserTask;
+import tasks.UserLoginTask;
 
 /**
  * Created by Lorenzo on 1/4/2017.
  *
  */
 
-public class LoginActivity extends ProgressBarActvity {
+public class LoginActivity extends SocketActivity {
     private static final String TAG = "LoginActivity";
     @Bind(R.id.input_username)
     EditText _usernameText;
@@ -77,7 +76,7 @@ public class LoginActivity extends ProgressBarActvity {
         String email = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        GetUserTask mAuthTask = new GetUserTask(email, password, this, _usernameText, _passwordText);
+        UserLoginTask mAuthTask = new UserLoginTask(email, password, this, _usernameText, _passwordText);
         mAuthTask.execute((Void) null);
 
     }
@@ -86,6 +85,7 @@ public class LoginActivity extends ProgressBarActvity {
     public void onBackPressed() {
         // Disable going back to the MainActivity
         moveTaskToBack(true);
+        super.onBackPressed();
     }
 
     public boolean validate() {
