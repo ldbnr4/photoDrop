@@ -1,8 +1,12 @@
 package grexClasses;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -17,7 +21,6 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import money.cache.grexActivities.HomeActivity;
-import money.cache.grexActivities.R;
 
 import static grexEnums.RET_STATUS.NONE;
 
@@ -40,66 +43,22 @@ public class GrexSocket extends AppCompatActivity {
     private static Socket mSocket;
     private static Gson gson = GSON.getInstance();
 
-    //TODO: Make sure the device has internet connection
     //TODO: Check that the device connected to the server via mSocket.connected
     //TODO: look into getting an ACK after emmitting https://github.com/socketio/socket.io-client-java
     //TODO: keep a local database
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        try {
-            mSocket = IO.socket("http://zotime.ddns.net:3000");
-
-            mSocket.on("login_status", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    synchronized (loginLock) {
-                        loggedInStatus = RET_STATUS.valueOf((String) args[0]);
-                    }
-                }
-            });
-            mSocket.on("register_status", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    synchronized (registerLock) {
-                        signUpStatus = RET_STATUS.valueOf((String) args[0]);
-                    }
-                }
-            });
-            mSocket.on("rooms_fromDB", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    synchronized (roomUpdateLock) {
-                        JSONArray array = (JSONArray) args[0];
-                        for(int i = 0; i < array.length(); i++){
-                            try {
-                                user.addToRoomsIn(gson.fromJson(array.get(i).toString(), Room.class));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        roomUpdate = true;
-                    }
-                }
-            });
-
-            mSocket.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        startActivity(new Intent(this, HomeActivity.class));
-        finish();
-        overridePendingTransition( R.anim.push_left_in, R.anim.push_left_out );
+    private static boolean isConnectedToServer() {
+        return (mSocket == null || !mSocket.connected());
     }
 
-        public static void emit_login(String email, String password) {
-        mSocket.emit("login", email.trim(), password.trim());
+    public static void emit_login(String email, String password) {
+        if (mSocket.connected()) {
+            mSocket.emit("login", email.trim(), password.trim());
+        }
     }
 
     public static void emit_register(String username, String email, String mobile, String password) {
+
         mSocket.emit("register", username.trim(), email.trim(), mobile.trim(), password.trim());
     }
 
@@ -118,7 +77,6 @@ public class GrexSocket extends AppCompatActivity {
         //TODO: force mUser.name to be set
         if(User.getUser().name == null)
             User.getUser().name = "GREX_ORPHAN";
-
         roomUpdate = false;
         mSocket.emit("get_rooms", User.getUser().name);
     }
@@ -126,6 +84,100 @@ public class GrexSocket extends AppCompatActivity {
     public static void disconnect() {
         mSocket.emit("disconnect");
         mSocket.disconnect();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (isNetworkAvailable()) {
+            try {
+                mSocket = IO.socket("http://zotime.ddns.net:3000");
+
+                mSocket.on("login_status", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        synchronized (loginLock) {
+                            loggedInStatus = RET_STATUS.valueOf((String) args[0]);
+                        }
+                    }
+                });
+                mSocket.on("register_status", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        synchronized (registerLock) {
+                            signUpStatus = RET_STATUS.valueOf((String) args[0]);
+                        }
+                    }
+                });
+                mSocket.on("rooms_fromDB", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        synchronized (roomUpdateLock) {
+                            JSONArray array = (JSONArray) args[0];
+                            for (int i = 0; i < array.length(); i++) {
+                                try {
+                                    user.addToRoomsIn(gson.fromJson(array.get(i).toString(), Room.class));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            roomUpdate = true;
+                        }
+                    }
+                });
+
+                mSocket.connect();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        } else {
+            noInternet();
+        }
+        startActivity(new Intent(this, HomeActivity.class));
+        finish();
+    }
+
+    private void showErrorToast(String msg) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    private boolean hasConnection() {
+        boolean status = isNetworkAvailable() && isConnectedToServer();
+        if (!status) {
+            checkConnections();
+        }
+        return status;
+    }
+
+    private void checkConnections() {
+        if (!isNetworkAvailable())
+            noInternet();
+        else if (!isConnectedToServer()) {
+            noServer();
+        }
+    }
+
+    private void noInternet() {
+        showErrorToast("Unable to connect to the Internet");
+    }
+
+    private void noServer() {
+        showErrorToast("Our servers are down :(");
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        //String answer;
+        if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+        }
+        //answer="You are connected to a WiFi Network";
+        if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+        }
+        //answer="You are connected to a Mobile Network";
+
+        return activeNetworkInfo.isConnected();
     }
 
 }
