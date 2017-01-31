@@ -11,7 +11,8 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import tasks.InsertUserActivityTask;
+import grexEnums.RET_STATUS;
+import tasks.SignUpActivityTask;
 import tasks.SocketActivityTask;
 
 
@@ -72,7 +73,7 @@ public class SignupActivity extends SocketActivity {
         String mobile = _mobileText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        SocketActivityTask mAuthTask = new InsertUserActivityTask(this);
+        SocketActivityTask mAuthTask = new SignUpActivityTask(this);
         mAuthTask.execute(username, email, mobile, password);
     }
 
@@ -133,5 +134,11 @@ public class SignupActivity extends SocketActivity {
     public void onSuccess() {
         _signupButton.setEnabled(true);
         finish();
+    }
+
+    @Override
+    public void onPostExecute(RET_STATUS retStatResults) {
+        //TODO: implement logic based on server response
+
     }
 }
