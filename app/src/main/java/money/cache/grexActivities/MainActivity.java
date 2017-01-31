@@ -1,5 +1,7 @@
 package money.cache.grexActivities;
 
+import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -10,16 +12,25 @@ import grexClasses.GrexSocket;
 
 public class MainActivity extends AppCompatActivity {
 
+    private GrexSocket grexSocket;
+
+    public static Application getApplicationUsingReflection() throws Exception {
+        return (Application) Class.forName("android.app.AppGlobals")
+                .getMethod("getInitialApplication").invoke(null, (Object[]) null);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        grexSocket = GrexSocket.getGrexSocket();
+        grexSocket.initConnection(getApplicationContext());
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                GrexSocket.disconnect();
+                grexSocket.disconnect();
             }
         });
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        startActivity(new Intent(this, HomeActivity.class));
+        finish();
     }
 
     @Override

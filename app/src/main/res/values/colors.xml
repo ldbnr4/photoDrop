@@ -16,4 +16,6 @@
   <color name="white">#FFFFFF</color>
   <color name="gas_pump_light">#e2f8f8f5</color>
   <color name="faded_black">#d0282828</color>
+  <color name="icon_background">#2D4452</color>
+  <color name="dark_background">#FF303030</color>
 </resources>

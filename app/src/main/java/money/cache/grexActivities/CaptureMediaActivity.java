@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -28,9 +27,10 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.GrexSocket;
+import grexEnums.RET_STATUS;
 
-public class CaptureMediaActivity extends AppCompatActivity {
+//TODO: maske task to emit
+public class CaptureMediaActivity extends SocketActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final String TAG = "LandingActivity";
     private static final int REQUEST_TAKE_PHOTO = 1;
@@ -73,7 +73,7 @@ public class CaptureMediaActivity extends AppCompatActivity {
                 rotateBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] b = baos.toByteArray();
                 String encImage = Base64.encodeToString(b, Base64.DEFAULT);
-                GrexSocket.emit_image(username, mCurrentPhotoPath, encImage);
+                grexSocket.emitImage(username, mCurrentPhotoPath, encImage);
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -81,6 +81,21 @@ public class CaptureMediaActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
         _capturedImage.setImageResource(R.drawable._no_image_captured);
+    }
+
+    @Override
+    public void onFail() {
+        //TODO: implement logic for failure
+    }
+
+    @Override
+    public void onSuccess() {
+        //TODO: implement logic for success
+    }
+
+    @Override
+    public void onPostExecute(RET_STATUS success) {
+        //TODO: implement logic based on server response
     }
 
     @Override

@@ -1,20 +1,19 @@
 package tasks;
 
-import grexClasses.GrexSocket;
 import grexEnums.RET_STATUS;
 import money.cache.grexActivities.SocketActivity;
 
-import static grexClasses.GrexSocket.emit_register;
 import static grexClasses.GrexSocket.signUpStatus;
 
 /**
  * Created by Lorenzo on 11/20/2016.
+ *
  */
 
-public class InsertUserActivityTask extends SocketActivityTask {
+public class SignUpActivityTask extends SocketActivityTask {
 
-    public InsertUserActivityTask(SocketActivity socketActivity) {
-        super(socketActivity, GrexSocket.signUpStatus);
+    public SignUpActivityTask(SocketActivity socketActivity) {
+        super(socketActivity, signUpStatus);
     }
 
     @Override
@@ -23,12 +22,13 @@ public class InsertUserActivityTask extends SocketActivityTask {
             Runnable function = new Runnable() {
                 @Override
                 public void run() {
-                    emit_register(params[0], params[1], params[2], params[3]);
+                    grexSocket.emitRegister(params[0], params[1], params[2], params[3]);
                 }
             };
             return super.doInBackground("Registering...", function);
         }
-        return signUpStatus;
+        else
+            return signUpStatus;
     }
 
 }

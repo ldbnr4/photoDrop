@@ -21,6 +21,15 @@
             android:orientation="vertical"
             android:padding="8dp">
 
+            <TextView
+                android:id="@+id/txt_feed_event_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="TextView"
+                android:textSize="24sp"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -31,22 +40,14 @@
                     android:id="@+id/img_feed_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/_xlarge_icons_100"/>
+                    app:srcCompat="@drawable/_xlarge_icons_100"
+                    android:maxHeight="50dp"
+                    android:maxWidth="50dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_feed_event_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:paddingTop="10dp"
-                    android:text="TextView"
-                    android:textSize="24sp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

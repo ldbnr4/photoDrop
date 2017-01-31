@@ -1,8 +1,10 @@
 package grexClasses;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Set;
 
@@ -21,6 +27,7 @@ import static android.support.v7.widget.RecyclerView.Adapter;
 /**
  * Created by Lorenzo on 1/28/2017.
  * TODO: load all images with Picasso
+ * TODO: give cards a dropdown option
  */
 public class RoomAdapter extends Adapter<RoomAdapter.ViewHolder> {
     private Set<Room> mDataSet;
@@ -37,13 +44,36 @@ public class RoomAdapter extends Adapter<RoomAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
+    private File createImageFile() throws IOException {
+        File storageDir = RoomAdapter.this.mContext.getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                "tmp",  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        return image;
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Room room = (Room) Array.get(mDataSet.toArray(), position);
         String img = room.getImage();
+        byte[] decode = Base64.decode(img, Base64.DEFAULT);
+        File file = null;
+        try {
+            file = createImageFile();
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            bos.write(decode);
+            bos.flush();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        holder.mImage.getLayoutParams().height = 400;
+        holder.mImage.getLayoutParams().width = 400;
         //Render image using Picasso library
         if (!TextUtils.isEmpty(img)) {
-            Picasso.with(mContext).load(img)
+            Picasso.with(mContext).load(file)
                     .error(R.drawable._xlarge_icons_100)
                     .placeholder(R.drawable._xlarge_icons_100)
                     .into(holder.mImage);

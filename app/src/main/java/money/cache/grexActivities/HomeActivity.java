@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.Tab;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,10 +19,10 @@ import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.GrexSocket;
 import grexClasses.Room;
 import grexClasses.RoomAdapter;
 import grexClasses.User;
+import grexEnums.RET_STATUS;
 
 //TODO: make a splash screen for whatever page is the home page like 'splash screens -> down ken burns' from UI app
 
@@ -31,7 +30,7 @@ import grexClasses.User;
 
 //TODO: communication of data from the server is not in sync with GSON fortmat. Needs to be the same as sent
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends SocketActivity {
 
     public static User mUser = User.getUser();
     @Bind(R.id.btn_createRoom)
@@ -52,8 +51,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        setUpTabs();
-
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -72,6 +69,27 @@ public class HomeActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    @Override
+    protected void onPostCreate(Bundle bundle){
+        super.onPostCreate(bundle);
+        setUpTabs();
+    }
+
+    @Override
+    public void onFail() {
+        //TODO: implement logic for failure
+    }
+
+    @Override
+    public void onSuccess() {
+        //TODO: implement logic for success
+    }
+
+    @Override
+    public void onPostExecute(RET_STATUS retStatResult) {
+        //TODO: implement logic based on server response
+    }
+
     private void setUpTabs() {
         final Tab _pastTab = mTabLayout.newTab().setText("Past");
         final Tab _liveTab = mTabLayout.newTab().setText("Live!");
@@ -86,13 +104,12 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
         //TODO: create a new task to get rooms
-        GrexSocket.emit_getRooms();
-        //while (!GrexSocket.roomUpdate) ;
+        grexSocket.emitGetRooms();
+        while (!grexSocket.roomUpdate) ;
 
         //TODO: each tab should load a google cards travel like page
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

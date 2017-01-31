@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@color/white"/>
+        android:drawable="@color/dark_background"/>
 
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/_dino_footprint"/>
+            android:src="@drawable/_dinosaur"/>
     </item>
 
 </layer-list>

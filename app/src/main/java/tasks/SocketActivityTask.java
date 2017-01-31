@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 
+import grexClasses.GrexSocket;
 import grexEnums.RET_STATUS;
 import money.cache.grexActivities.R;
 import money.cache.grexActivities.SocketActivity;
@@ -12,11 +13,13 @@ import static grexEnums.RET_STATUS.NONE;
 
 /**
  * Created by Lorenzo on 1/29/2017.
+ *
  */
 public abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STATUS> {
     private SocketActivity socketActivity;
     private ProgressDialog progressDialog;
     private RET_STATUS ret_status;
+    GrexSocket grexSocket = GrexSocket.getGrexSocket();
 
     SocketActivityTask(SocketActivity socketActivity, RET_STATUS ret_status) {
         this.socketActivity = socketActivity;
@@ -58,17 +61,9 @@ public abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STA
     }
 
     @Override
-    protected void onPostExecute(RET_STATUS success) {
+    protected void onPostExecute(RET_STATUS retStatResult) {
         progressDialog.dismiss();
-        switch (success) {
-            case INSERTED:
-                socketActivity.onSuccess();
-                break;
-
-            default:
-                socketActivity.onFail();
-                break;
-        }
+        socketActivity.onPostExecute(retStatResult);
         ret_status = NONE;
     }
 

@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -25,11 +24,11 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.GrexSocket;
 import grexClasses.Room;
 import grexClasses.User;
+import grexEnums.RET_STATUS;
 
-public class CreateRoomActivity extends AppCompatActivity implements DatePicker.OnFragmentInteractionListener {
+public class CreateRoomActivity extends SocketActivity implements DatePicker.OnFragmentInteractionListener {
     private static final int PICK_IMAGE_REQUEST = 2;
 
     //TODO: maybe add an image that switches back and forth as public/private switch chnages
@@ -123,7 +122,7 @@ public class CreateRoomActivity extends AppCompatActivity implements DatePicker.
 
                 Room newRoom = new Room(rmName, pub, User.getUser().name, begin, end, desc);
                 newRoom.setImage(Base64.encodeToString(b, Base64.DEFAULT));
-                GrexSocket.emit_newRoom(newRoom);
+                grexSocket.emitRoom(newRoom);
 
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
@@ -143,6 +142,21 @@ public class CreateRoomActivity extends AppCompatActivity implements DatePicker.
             }
         });
 
+    }
+
+    @Override
+    public void onFail() {
+        //TODO: implement logic for failure
+    }
+
+    @Override
+    public void onSuccess() {
+        //TODO: implement logic for success
+    }
+
+    @Override
+    public void onPostExecute(RET_STATUS success) {
+        //TODO: implement logic based on server response
     }
 
     @Override

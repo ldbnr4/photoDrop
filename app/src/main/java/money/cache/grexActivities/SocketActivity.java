@@ -1,26 +1,21 @@
 package money.cache.grexActivities;
 
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import grexClasses.ProgressBarActvity;
+import grexClasses.GrexSocket;
+import grexEnums.RET_STATUS;
 
 /**
  * Created by Lorenzo on 1/29/2017.
+ *
  */
-public abstract class SocketActivity extends ProgressBarActvity {
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+public abstract class SocketActivity extends AppCompatActivity {
 
-    @Override
-    public void onBackPressed() {
-        this.finish();
-    }
+    GrexSocket grexSocket = GrexSocket.getGrexSocket();
 
-    @Override
     public abstract void onFail();
 
-    @Override
     public abstract void onSuccess();
+
+    public abstract void onPostExecute(RET_STATUS success);
 }

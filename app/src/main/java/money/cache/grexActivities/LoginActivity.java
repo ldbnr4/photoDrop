@@ -13,7 +13,9 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.User;
-import tasks.UserLoginTask;
+import grexEnums.RET_STATUS;
+import tasks.LoginActivityTask;
+import tasks.SocketActivityTask;
 
 /**
  * Created by Lorenzo on 1/4/2017.
@@ -52,7 +54,7 @@ public class LoginActivity extends SocketActivity {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -69,15 +71,15 @@ public class LoginActivity extends SocketActivity {
         _passwordText.setError(null);
 
         if (!validate()) {
-            onFail();
+            _loginButton.setEnabled(true);
             return;
         }
 
         String email = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        UserLoginTask mAuthTask = new UserLoginTask(email, password, this, _usernameText, _passwordText);
-        mAuthTask.execute((Void) null);
+        SocketActivityTask mAuthTask = new LoginActivityTask(this);
+        mAuthTask.execute(email, password);
 
     }
 
@@ -95,14 +97,14 @@ public class LoginActivity extends SocketActivity {
         String password = _passwordText.getText().toString();
 
         if (email.isEmpty()) {
-            _usernameText.setError("what do we call you?");
+            _usernameText.setError("This is required");
             valid = false;
         } else {
             _usernameText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+        if (password.isEmpty()){
+            _passwordText.setError("This is required");
             valid = false;
         } else {
             _passwordText.setError(null);
@@ -122,5 +124,22 @@ public class LoginActivity extends SocketActivity {
         User.getUser().name = _usernameText.getText().toString();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         finish();
+    }
+
+    @Override
+    public void onPostExecute(RET_STATUS retStatResult) {
+        switch (retStatResult) {
+            case VERIFIED:
+                onSuccess();
+                break;
+
+            case WRONG_PASSWORD:
+                _passwordText.setError("Wrong password");
+            case NO_ACCOUNT:
+                _usernameText.setError("No account found for this mUser.");
+            default:
+                onFail();
+                break;
+        }
     }
 }
