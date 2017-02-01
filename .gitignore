@@ -33,5 +33,5 @@ ehthumbs.db
 Thumbs.db
 .idea/copyright/
 gen/
-build/
 /.idea/gradle.xml
+build
