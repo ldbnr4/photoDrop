@@ -23,12 +23,14 @@ import grexClasses.Room;
 import grexClasses.RoomAdapter;
 import grexClasses.User;
 import grexEnums.RET_STATUS;
+import tasks.GetRoomsTask;
+
+import static grexEnums.RET_STATUS.NONE;
+import static grexEnums.RET_STATUS.SUCCESS;
 
 //TODO: make a splash screen for whatever page is the home page like 'splash screens -> down ken burns' from UI app
 
 //TODO: the apps home page should be like 'tabs' from the app
-
-//TODO: communication of data from the server is not in sync with GSON fortmat. Needs to be the same as sent
 
 public class HomeActivity extends SocketActivity {
 
@@ -88,6 +90,13 @@ public class HomeActivity extends SocketActivity {
     @Override
     public void onPostExecute(RET_STATUS retStatResult) {
         //TODO: implement logic based on server response
+        if(retStatResult == NONE) return;
+        if(retStatResult != SUCCESS){
+            onFail();
+        }
+        else{
+            onSuccess();
+        }
     }
 
     private void setUpTabs() {
@@ -104,12 +113,12 @@ public class HomeActivity extends SocketActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
 
-        //TODO: create a new task to get rooms
-        grexSocket.emitGetRooms();
-        while (!grexSocket.roomUpdate) ;
+        GetRoomsTask getRoomsTask = new GetRoomsTask(this);
+        getRoomsTask.execute();
 
         //TODO: each tab should load a google cards travel like page
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

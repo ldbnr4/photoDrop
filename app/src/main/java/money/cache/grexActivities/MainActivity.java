@@ -1,6 +1,5 @@
 package money.cache.grexActivities;
 
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,11 +12,6 @@ import grexClasses.GrexSocket;
 public class MainActivity extends AppCompatActivity {
 
     private GrexSocket grexSocket;
-
-    public static Application getApplicationUsingReflection() throws Exception {
-        return (Application) Class.forName("android.app.AppGlobals")
-                .getMethod("getInitialApplication").invoke(null, (Object[]) null);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

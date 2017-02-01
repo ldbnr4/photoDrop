@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--TODO: '...Has been made!' should be added somewhere-->
 <!--TODO: convert submit button to be a forward facing arrow-->
 <FrameLayout
     android:id="@+id/activity_create_room"

@@ -3,7 +3,6 @@ package grexClasses;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -18,8 +17,10 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+import static grexClasses.CONNECTION_STATUS.CONNECTED;
+import static grexClasses.CONNECTION_STATUS.INTERNET_DOWN;
+import static grexClasses.CONNECTION_STATUS.SERVER_DOWN;
 import static grexEnums.RET_STATUS.NONE;
-import static money.cache.grexActivities.MainActivity.getApplicationUsingReflection;
 
 
 /**
@@ -28,19 +29,18 @@ import static money.cache.grexActivities.MainActivity.getApplicationUsingReflect
  */
 public final class GrexSocket{
     private static final GrexSocket grexSocket = new GrexSocket();
+    public static CONNECTION_STATUS connection_status;
     private final Object loginLock = new Object();
     private final Object registerLock = new Object();
     private final Object roomUpdateLock = new Object();
     public static RET_STATUS loggedInStatus = NONE;
     public static RET_STATUS signUpStatus = NONE;
-    //TODO: convert to RET_STATUS
-    public boolean roomUpdate = false;
+    public static RET_STATUS getRoomsStatus = NONE;
     private User user = User.getUser();
     private Socket mSocket;
     private Gson gson = GSON.getInstance();
     private ConnectivityManager connectivityManager;
 
-    //TODO: Check that the device connected to the server via mSocket.connected
     //TODO: look into getting an ACK after emmitting https://github.com/socketio/socket.io-client-java
     //TODO: keep a local database
 
@@ -80,7 +80,7 @@ public final class GrexSocket{
             @Override
             public void call(Object... args) {
                 synchronized (roomUpdateLock) {
-                    JSONArray array = (JSONArray) args[0];
+                    JSONArray array = (JSONArray) args[1];
                     for (int i = 0; i < array.length(); i++) {
                         try {
                             JSONObject o = (JSONObject) array.get(i);
@@ -90,18 +90,11 @@ public final class GrexSocket{
                             e.printStackTrace();
                         }
                     }
-                    roomUpdate = true;
+                    //TODO: Make server send this as first parameter
+                    getRoomsStatus = RET_STATUS.valueOf((String) args[0]);
                 }
             }
         });
-    }
-
-    private void showErrorToast(String msg) {
-        try {
-            Toast.makeText(getApplicationUsingReflection(), msg, Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private boolean isConnectedToServer() {
@@ -109,27 +102,19 @@ public final class GrexSocket{
     }
 
     private boolean hasConnection() {
-        boolean status = isNetworkAvailable() && isConnectedToServer();
-        if (!status) {
-            checkConnections();
-        }
-        return status;
+        checkConnections();
+        return isNetworkAvailable() && isConnectedToServer();
     }
 
     private void checkConnections() {
         if (!isNetworkAvailable())
-            noInternet();
+            connection_status = INTERNET_DOWN;
         else if (!isConnectedToServer()) {
-            noServer();
+            connection_status = SERVER_DOWN;
         }
-    }
-
-    private void noInternet() {
-        showErrorToast("Unable to connect to the Internet");
-    }
-
-    private void noServer() {
-        showErrorToast("Our servers are down :(");
+        else {
+            connection_status = CONNECTED;
+        }
     }
 
     private boolean isNetworkAvailable() {
@@ -149,38 +134,43 @@ public final class GrexSocket{
         return false;
     }
 
-    public void emitLogin(String email, String password) {
+    public CONNECTION_STATUS emitLogin(String email, String password) {
         if (hasConnection())
             mSocket.emit("login", email.trim(), password.trim());
+        return connection_status;
     }
 
-    public void emitRegister(String username, String email, String mobile, String password) {
+    public CONNECTION_STATUS emitRegister(String username, String email, String mobile, String password) {
         if(hasConnection())
             mSocket.emit("register", username.trim(), email.trim(), mobile.trim(), password.trim());
+        return connection_status;
     }
 
-    public void emitImage(String username, String photoName, String image) {
+    public CONNECTION_STATUS emitImage(String username, String photoName, String image) {
         if(hasConnection())
             mSocket.emit("image_upload", username, photoName, image);
+        return connection_status;
     }
 
-    public void emitRoom(Room room) {
+    public CONNECTION_STATUS emitRoom(Room room) {
         if(hasConnection()) {
             if (room.getHost() == null)
                 room.setHost("GREX_ORPHAN");
             String roomJSON = gson.toJson(room);
             mSocket.emit("new_room", roomJSON);
         }
+        return connection_status;
     }
 
-    public void emitGetRooms(){
+    public CONNECTION_STATUS emitGetRooms(){
         if(hasConnection()) {
             //TODO: force mUser.name to be set
             if (User.getUser().name == null)
                 User.getUser().name = "GREX_ORPHAN";
-            roomUpdate = false;
+            getRoomsStatus = NONE;
             mSocket.emit("get_rooms", User.getUser().name);
         }
+        return connection_status;
     }
 
     public void disconnect() {

@@ -13,7 +13,6 @@ import static grexClasses.GrexSocket.signUpStatus;
 
 public class LoginActivityTask extends SocketActivityTask {
 
-
     public LoginActivityTask(final SocketActivity callingActivity) {
         super(callingActivity, loggedInStatus);
     }

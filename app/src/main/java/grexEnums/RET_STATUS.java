@@ -11,4 +11,5 @@ public enum RET_STATUS {
     NO_ACCOUNT,
     WRONG_PASSWORD,
     INSERTED,
+    SUCCESS
 }

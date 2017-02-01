@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 import grexClasses.User;
 import grexEnums.RET_STATUS;
 import tasks.LoginActivityTask;
-import tasks.SocketActivityTask;
 
 /**
  * Created by Lorenzo on 1/4/2017.
@@ -54,7 +53,7 @@ public class LoginActivity extends SocketActivity {
             @Override
             public void onClick(View v) {
                 // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SignActivity.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -78,9 +77,41 @@ public class LoginActivity extends SocketActivity {
         String email = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        SocketActivityTask mAuthTask = new LoginActivityTask(this);
+        LoginActivityTask mAuthTask = new LoginActivityTask(this);
         mAuthTask.execute(email, password);
 
+    }
+
+    @Override
+    public void onFail() {
+        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        _loginButton.setEnabled(true);
+    }
+
+    @Override
+    public void onSuccess() {
+        User.getUser().name = _usernameText.getText().toString();
+        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onPostExecute(RET_STATUS retStatResult) {
+        switch (retStatResult) {
+            case NONE:
+                break;
+            case VERIFIED:
+                onSuccess();
+                break;
+
+            case WRONG_PASSWORD:
+                _passwordText.setError("Wrong password");
+            case NO_ACCOUNT:
+                _usernameText.setError("No account found for this mUser.");
+            default:
+                onFail();
+                break;
+        }
     }
 
     @Override
@@ -111,35 +142,5 @@ public class LoginActivity extends SocketActivity {
         }
 
         return valid;
-    }
-
-    @Override
-    public void onFail() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-        _loginButton.setEnabled(true);
-    }
-
-    @Override
-    public void onSuccess() {
-        User.getUser().name = _usernameText.getText().toString();
-        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-        finish();
-    }
-
-    @Override
-    public void onPostExecute(RET_STATUS retStatResult) {
-        switch (retStatResult) {
-            case VERIFIED:
-                onSuccess();
-                break;
-
-            case WRONG_PASSWORD:
-                _passwordText.setError("Wrong password");
-            case NO_ACCOUNT:
-                _usernameText.setError("No account found for this mUser.");
-            default:
-                onFail();
-                break;
-        }
     }
 }
