@@ -29,6 +29,7 @@ public class CreateRoomTest {
         onView(withId(R.id.txt_mom_name)).perform(typeText("My New Moment"));
         closeSoftKeyboard();
         onView(withId(R.id.btn_mom_done)).perform(click());
+        while(true);
         //TODO: Verify the room was added to the database
     }
 

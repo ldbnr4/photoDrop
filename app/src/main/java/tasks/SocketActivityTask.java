@@ -10,14 +10,15 @@ import grexEnums.RET_STATUS;
 import money.cache.grexActivities.R;
 import money.cache.grexActivities.SocketActivity;
 
+import static grexClasses.CONNECTION_STATUS.CONNECTED;
 import static grexEnums.RET_STATUS.NONE;
 
 /**
  * Created by Lorenzo on 1/29/2017.
  *
  */
-public abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STATUS> {
-    private SocketActivity socketActivity;
+abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STATUS> {
+    SocketActivity socketActivity;
     private ProgressDialog progressDialog;
     private RET_STATUS ret_status;
     GrexSocket grexSocket = GrexSocket.getGrexSocket();
@@ -106,14 +107,16 @@ public abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STA
     }
 
     private void noServer() {
-
         showErrorToast("Our servers are down :(");
     }
 
     @Override
     protected void onPostExecute(RET_STATUS retStatResult) {
         progressDialog.dismiss();
-        socketActivity.onPostExecute(retStatResult);
+
+        if(GrexSocket.connection_status == CONNECTED){
+            socketActivity.onPostExecute(retStatResult);
+        }
         ret_status = NONE;
     }
 
@@ -123,5 +126,4 @@ public abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STA
         socketActivity.onFail();
         ret_status = NONE;
     }
-
 }

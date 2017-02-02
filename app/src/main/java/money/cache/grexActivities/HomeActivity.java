@@ -53,28 +53,27 @@ public class HomeActivity extends SocketActivity {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //
         Set<Room> roomsIn = mUser.getRoomsIn();
-
-        // specify an adapter (see also next example)
         RecyclerView.Adapter mAdapter = new RoomAdapter(HomeActivity.this, roomsIn);
         mRecyclerView.setAdapter(mAdapter);
+
+        mBtnCreateRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+            }
+        });
+
+        setUpTabs();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
-
-    @Override
-    protected void onPostCreate(Bundle bundle){
-        super.onPostCreate(bundle);
-        setUpTabs();
     }
 
     @Override
@@ -107,15 +106,6 @@ public class HomeActivity extends SocketActivity {
         mTabLayout.addTab(_pastTab);
         mTabLayout.addTab(_liveTab);
         mTabLayout.addTab(_futureTab);
-
-        mBtnCreateRoom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-        });
 
         GetRoomsTask getRoomsTask = new GetRoomsTask(this);
         getRoomsTask.execute();

@@ -11,16 +11,13 @@ import grexClasses.GrexSocket;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GrexSocket grexSocket;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        grexSocket = GrexSocket.getGrexSocket();
-        grexSocket.initConnection(getApplicationContext());
+        GrexSocket.initConnection(getApplicationContext());
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                grexSocket.disconnect();
+                GrexSocket.getGrexSocket().disconnect();
             }
         });
         startActivity(new Intent(this, HomeActivity.class));

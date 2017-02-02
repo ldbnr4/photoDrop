@@ -2,12 +2,10 @@ package money.cache.grexActivities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,9 +21,8 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.Room;
-import grexClasses.User;
 import grexEnums.RET_STATUS;
+import tasks.CreateRoomActivityTask;
 
 public class CreateRoomActivity extends SocketActivity implements DatePicker.OnFragmentInteractionListener {
     private static final int PICK_IMAGE_REQUEST = 2;
@@ -36,9 +32,6 @@ public class CreateRoomActivity extends SocketActivity implements DatePicker.OnF
     //TODO: Allow 'Now' and 'Never' to be options again after mUser changes the times
     //TODO: If start is 'Now' convert to the actual time
     //TODO: Times should have dates and times (eg. Today @ Now, Tomorrow @ 2:30pm, October 10th, 2018 @ 1:15 AM)
-
-    @Bind(R.id.btn_add_image)
-    ImageButton _btnAddImg;
 
     @Bind(R.id.txt_details)
     EditText _txtMomDetails;
@@ -58,7 +51,7 @@ public class CreateRoomActivity extends SocketActivity implements DatePicker.OnF
     @Bind(R.id.switch_public)
     Switch _switchPublic;
 
-    @Bind(R.id.room_image)
+    @Bind(R.id.create_event_img)
     ImageView _imgRoomImg;
 
     private DatePicker fragment;
@@ -68,6 +61,9 @@ public class CreateRoomActivity extends SocketActivity implements DatePicker.OnF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
         ButterKnife.bind(this);
+
+        _imgRoomImg.getLayoutParams().height = 300;
+        _imgRoomImg.getLayoutParams().width = 300;
 
         _btnBegin.setOnClickListener(new View.OnClickListener() {
 
@@ -116,21 +112,12 @@ public class CreateRoomActivity extends SocketActivity implements DatePicker.OnF
                 String end = _btnEnd.getText().toString();
                 String desc = _txtMomDetails.getText().toString();
 
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ((BitmapDrawable)_imgRoomImg.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] b = baos.toByteArray();
-
-                Room newRoom = new Room(rmName, pub, User.getUser().name, begin, end, desc);
-                newRoom.setImage(Base64.encodeToString(b, Base64.DEFAULT));
-                grexSocket.emitRoom(newRoom);
-
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(intent);
-                finish();
+                CreateRoomActivityTask task = new CreateRoomActivityTask(CreateRoomActivity.this);
+                task.execute(rmName, String.valueOf(pub), begin, end, desc);
             }
         });
 
-        _btnAddImg.setOnClickListener(new View.OnClickListener() {
+        _imgRoomImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -144,14 +131,20 @@ public class CreateRoomActivity extends SocketActivity implements DatePicker.OnF
 
     }
 
+    public ImageView getImageView() {
+        return _imgRoomImg;
+    }
+
     @Override
     public void onFail() {
         //TODO: implement logic for failure
+        finish();
     }
 
     @Override
     public void onSuccess() {
         //TODO: implement logic for success
+        finish();
     }
 
     @Override
@@ -189,7 +182,6 @@ public class CreateRoomActivity extends SocketActivity implements DatePicker.OnF
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
 
-                _btnAddImg.setImageDrawable(getDrawable(R.drawable._edit_image));
                 _imgRoomImg.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
