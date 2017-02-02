@@ -46,6 +46,9 @@ public class HomeActivity extends SocketActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private Tab _pastTab;
+    private Tab _liveTab;
+    private Tab _futureTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,11 @@ public class HomeActivity extends SocketActivity {
             }
         });
 
-        setUpTabs();
+        try {
+            setUpTabs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -98,14 +105,15 @@ public class HomeActivity extends SocketActivity {
         }
     }
 
-    private void setUpTabs() {
-        final Tab _pastTab = mTabLayout.newTab().setText("Past");
-        final Tab _liveTab = mTabLayout.newTab().setText("Live!");
-        final Tab _futureTab = mTabLayout.newTab().setText("Future");
+    private void setUpTabs() throws Exception {
 
-        mTabLayout.addTab(_pastTab);
-        mTabLayout.addTab(_liveTab);
-        mTabLayout.addTab(_futureTab);
+        if (mTabLayout.getTabCount() == 3) {
+            _pastTab = mTabLayout.getTabAt(0);
+            _liveTab = mTabLayout.getTabAt(1);
+            _futureTab = mTabLayout.getTabAt(2);
+        } else
+            throw new Exception();
+
 
         GetRoomsTask getRoomsTask = new GetRoomsTask(this);
         getRoomsTask.execute();
@@ -114,13 +122,7 @@ public class HomeActivity extends SocketActivity {
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(Tab tab) {
-                if (tab.equals(_pastTab)) {
-                    System.out.println("PAST");
-                } else if (tab.equals(_liveTab)) {
-                    System.out.println("LIVE");
-                } else if (tab.equals(_futureTab)) {
-                    System.out.println("FUTURE");
-                }
+                tabSelected(tab);
             }
 
             @Override
@@ -133,6 +135,18 @@ public class HomeActivity extends SocketActivity {
 
             }
         });
+
+    }
+
+    private void tabSelected(Tab selcted) {
+
+        if (selcted.equals(_pastTab)) {
+            System.out.println("PAST");
+        } else if (selcted.equals(_liveTab)) {
+            System.out.println("LIVE");
+        } else if (selcted.equals(_futureTab)) {
+            System.out.println("FUTURE");
+        }
     }
 
     /**

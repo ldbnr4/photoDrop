@@ -33,7 +33,7 @@ public class CreateRoomActivityTask extends SocketActivityTask {
                 public void run() {
                     Bitmap bitmap = ((BitmapDrawable)((CreateRoomActivity)socketActivity).getImageView().getDrawable()).getBitmap();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    bitmap.recycle();
+                    //bitmap.recycle();
                 }
 
             });

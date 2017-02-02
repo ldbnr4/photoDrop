@@ -28,10 +28,10 @@ import static grexEnums.RET_STATUS.NONE;
  */
 public final class GrexSocket{
     private static final GrexSocket grexSocket = new GrexSocket();
-    public static CONNECTION_STATUS connection_status;
     private static final Object loginLock = new Object();
     private static final Object registerLock = new Object();
     private static final Object roomUpdateLock = new Object();
+    public static CONNECTION_STATUS connection_status;
     public static RET_STATUS loggedInStatus = NONE;
     public static RET_STATUS signUpStatus = NONE;
     public static RET_STATUS getRoomsStatus = NONE;
@@ -111,7 +111,7 @@ public final class GrexSocket{
         boolean server = isConnectedToServer();
         if(!network)
             connection_status = INTERNET_DOWN;
-        if(!server)
+        else if (!server)
             connection_status = SERVER_DOWN;
         return network & server;
     }
