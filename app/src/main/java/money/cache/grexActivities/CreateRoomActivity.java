@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import grexClasses.SocketActivity;
 import grexEnums.RET_STATUS;
 import tasks.CreateRoomActivityTask;
 

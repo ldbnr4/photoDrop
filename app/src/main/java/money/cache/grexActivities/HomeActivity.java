@@ -21,9 +21,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.Room;
 import grexClasses.RoomAdapter;
+import grexClasses.SocketActivity;
 import grexClasses.User;
 import grexEnums.RET_STATUS;
-import tasks.GetRoomsTask;
 
 import static grexEnums.RET_STATUS.NONE;
 import static grexEnums.RET_STATUS.SUCCESS;
@@ -74,9 +74,12 @@ public class HomeActivity extends SocketActivity {
 
         try {
             setUpTabs();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
+
+        //GetRoomsTask getRoomsTask = new GetRoomsTask(this);
+        //getRoomsTask.execute();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -105,18 +108,17 @@ public class HomeActivity extends SocketActivity {
         }
     }
 
-    private void setUpTabs() throws Exception {
+    private void setUpTabs() throws NullPointerException {
 
         if (mTabLayout.getTabCount() == 3) {
             _pastTab = mTabLayout.getTabAt(0);
             _liveTab = mTabLayout.getTabAt(1);
             _futureTab = mTabLayout.getTabAt(2);
         } else
-            throw new Exception();
+            throw new NullPointerException();
 
 
-        GetRoomsTask getRoomsTask = new GetRoomsTask(this);
-        getRoomsTask.execute();
+
 
         //TODO: each tab should load a google cards travel like page
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

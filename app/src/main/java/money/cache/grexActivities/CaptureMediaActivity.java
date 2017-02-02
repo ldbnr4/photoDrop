@@ -28,6 +28,7 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.GrexSocket;
+import grexClasses.SocketActivity;
 import grexEnums.RET_STATUS;
 
 //TODO: maske task to emit

@@ -1,7 +1,7 @@
 package tasks;
 
 import grexEnums.RET_STATUS;
-import money.cache.grexActivities.SocketActivity;
+import grexClasses.SocketActivity;
 
 import static grexClasses.GrexSocket.signUpStatus;
 

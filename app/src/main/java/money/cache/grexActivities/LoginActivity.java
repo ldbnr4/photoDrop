@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import grexClasses.SocketActivity;
 import grexClasses.User;
 import grexEnums.RET_STATUS;
 import tasks.LoginActivityTask;

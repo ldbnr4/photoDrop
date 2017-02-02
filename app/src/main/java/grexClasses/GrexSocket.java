@@ -12,13 +12,14 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
+import grexEnums.CONNECTION_STATUS;
 import grexEnums.RET_STATUS;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-import static grexClasses.CONNECTION_STATUS.INTERNET_DOWN;
-import static grexClasses.CONNECTION_STATUS.SERVER_DOWN;
+import static grexEnums.CONNECTION_STATUS.INTERNET_DOWN;
+import static grexEnums.CONNECTION_STATUS.SERVER_DOWN;
 import static grexEnums.RET_STATUS.NONE;
 
 
@@ -26,8 +27,8 @@ import static grexEnums.RET_STATUS.NONE;
  * Created by Lorenzo on 11/15/2016.
  *
  */
-public final class GrexSocket{
-    private static final GrexSocket grexSocket = new GrexSocket();
+public class GrexSocket{
+    private static GrexSocket grexSocket = new GrexSocket();
     private static final Object loginLock = new Object();
     private static final Object registerLock = new Object();
     private static final Object roomUpdateLock = new Object();

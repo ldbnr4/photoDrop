@@ -8,9 +8,9 @@ import android.widget.Toast;
 import grexClasses.GrexSocket;
 import grexEnums.RET_STATUS;
 import money.cache.grexActivities.R;
-import money.cache.grexActivities.SocketActivity;
+import grexClasses.SocketActivity;
 
-import static grexClasses.CONNECTION_STATUS.CONNECTED;
+import static grexEnums.CONNECTION_STATUS.CONNECTED;
 import static grexEnums.RET_STATUS.NONE;
 
 /**

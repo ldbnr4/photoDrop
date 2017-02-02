@@ -14,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GrexSocket.initConnection(getApplicationContext());
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 GrexSocket.getGrexSocket().disconnect();

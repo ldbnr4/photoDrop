@@ -1,4 +1,4 @@
-package grexClasses;
+package grexEnums;
 
 /**
  * Created by boyice on 1/31/2017.
