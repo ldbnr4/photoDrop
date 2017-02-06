@@ -50,13 +50,11 @@
             android:text="Future"/>
     </android.support.design.widget.TabLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/fragment_room_card"/>
+        android:id="@+id/home_feed_fragment"></LinearLayout>
 
 
 </LinearLayout>

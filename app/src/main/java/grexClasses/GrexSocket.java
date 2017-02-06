@@ -107,7 +107,7 @@ public class GrexSocket{
         return (mSocket == null || mSocket.connected());
     }
 
-    private boolean hasConnection() {
+    public boolean hasConnection() {
         boolean network = isNetworkAvailable();
         boolean server = isConnectedToServer();
         if(!network)

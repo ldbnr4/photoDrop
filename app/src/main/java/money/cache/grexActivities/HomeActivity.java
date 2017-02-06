@@ -1,12 +1,12 @@
 package money.cache.grexActivities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.Tab;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,15 +15,14 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.util.Set;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.Room;
-import grexClasses.RoomAdapter;
+import grexClasses.GrexSocket;
 import grexClasses.SocketActivity;
 import grexClasses.User;
+import grexEnums.CONNECTION_STATUS;
 import grexEnums.RET_STATUS;
+import layout.ConnectivityFragment;
 
 import static grexEnums.RET_STATUS.NONE;
 import static grexEnums.RET_STATUS.SUCCESS;
@@ -32,15 +31,14 @@ import static grexEnums.RET_STATUS.SUCCESS;
 
 //TODO: the apps home page should be like 'tabs' from the app
 
-public class HomeActivity extends SocketActivity {
+public class HomeActivity extends SocketActivity implements ConnectivityFragment.OnFragmentInteractionListener {
 
     public static User mUser = User.getUser();
     @Bind(R.id.btn_createRoom)
     Button mBtnCreateRoom;
     @Bind(R.id.tab_layout)
     TabLayout mTabLayout;
-    @Bind(R.id.my_recycler_view)
-    RecyclerView mRecyclerView;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -49,19 +47,13 @@ public class HomeActivity extends SocketActivity {
     private Tab _pastTab;
     private Tab _liveTab;
     private Tab _futureTab;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        Set<Room> roomsIn = mUser.getRoomsIn();
-        RecyclerView.Adapter mAdapter = new RoomAdapter(HomeActivity.this, roomsIn);
-        mRecyclerView.setAdapter(mAdapter);
 
         mBtnCreateRoom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,14 +64,34 @@ public class HomeActivity extends SocketActivity {
             }
         });
 
-        try {
-            setUpTabs();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        setUpTabs();
 
-        //GetRoomsTask getRoomsTask = new GetRoomsTask(this);
-        //getRoomsTask.execute();
+        new GetRoomsTask().execute();
+
+        if(GrexSocket.connection_status != CONNECTION_STATUS.CONNECTED){
+            // Check that the activity is using the layout version with
+            // the fragment_container FrameLayout
+            if (findViewById(R.id.home_feed_fragment) != null) {
+
+                // However, if we're being restored from a previous state,
+                // then we don't need to do anything and should return or else
+                // we could end up with overlapping fragments.
+                if (savedInstanceState != null) {
+                    return;
+                }
+
+                // Create a new Fragment to be placed in the activity layout
+                ConnectivityFragment firstFragment = ConnectivityFragment.newInstance("This is an error");
+
+                // In case this activity was started with special instructions from an
+                // Intent, pass the Intent's extras to the fragment as arguments
+                firstFragment.setArguments(getIntent().getExtras());
+
+                // Add the fragment to the 'fragment_container' FrameLayout
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.home_feed_fragment, firstFragment).commit();
+            }
+        }
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -108,17 +120,10 @@ public class HomeActivity extends SocketActivity {
         }
     }
 
-    private void setUpTabs() throws NullPointerException {
-
-        if (mTabLayout.getTabCount() == 3) {
-            _pastTab = mTabLayout.getTabAt(0);
-            _liveTab = mTabLayout.getTabAt(1);
-            _futureTab = mTabLayout.getTabAt(2);
-        } else
-            throw new NullPointerException();
-
-
-
+    private void setUpTabs() {
+        _pastTab = mTabLayout.getTabAt(0);
+        _liveTab = mTabLayout.getTabAt(1);
+        _futureTab = mTabLayout.getTabAt(2);
 
         //TODO: each tab should load a google cards travel like page
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -185,5 +190,64 @@ public class HomeActivity extends SocketActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+    }
+
+    @Override
+    public void onFragmentInteraction() {
+
+    }
+
+    class GetRoomsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(HomeActivity.this,
+                    "ProgressDialog",
+                    "Updating your rooms...");
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            GrexSocket.getGrexSocket().emitGetRooms();
+            switch (GrexSocket.connection_status){
+                case CONNECTED:
+                    int count = 0;
+                    while (count < 2) {
+                        attemptCommunication();
+                        if (GrexSocket.getRoomsStatus == NONE) {
+                            count++;
+                        } else
+                            return null;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param) {
+            // execution of result of Long time consuming operation
+            progressDialog.dismiss();
+            /*switch (GrexSocket.connection_status){
+                case INTERNET_DOWN:
+                    noInternet();
+                    break;
+                case SERVER_DOWN:
+                    noServer();
+                    break;
+            }*/
+        }
+
+        private void attemptCommunication(){
+            long totalTime = 2500;
+            long startTime = System.currentTimeMillis();
+            boolean toFinish = false;
+            while (!toFinish && GrexSocket.getRoomsStatus == NONE) {
+                toFinish = (System.currentTimeMillis() - startTime >= totalTime);
+            }
+        }
     }
 }

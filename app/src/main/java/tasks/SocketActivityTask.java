@@ -1,14 +1,11 @@
 package tasks;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
 import grexClasses.GrexSocket;
-import grexEnums.RET_STATUS;
-import money.cache.grexActivities.R;
 import grexClasses.SocketActivity;
+import grexEnums.RET_STATUS;
 
 import static grexEnums.CONNECTION_STATUS.CONNECTED;
 import static grexEnums.RET_STATUS.NONE;
@@ -17,9 +14,8 @@ import static grexEnums.RET_STATUS.NONE;
  * Created by Lorenzo on 1/29/2017.
  *
  */
-abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STATUS> {
+public abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STATUS> {
     SocketActivity socketActivity;
-    private ProgressDialog progressDialog;
     private RET_STATUS ret_status;
     GrexSocket grexSocket = GrexSocket.getGrexSocket();
 
@@ -28,25 +24,11 @@ abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STATUS> {
         this.ret_status = ret_status;
     }
 
-    RET_STATUS doInBackground(final String msg, Runnable function) {
+    RET_STATUS doInBackground(String msg, Runnable function) {
+        //publishProgress(msg);
         socketActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressDialog = new ProgressDialog(socketActivity,
-                        R.style.AppTheme_Dark_Dialog);
-
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage(msg);
-                progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                        progressDialog.dismiss();
-                        socketActivity.onFail();
-                        ret_status = NONE;
-                        SocketActivityTask.this.cancel(true);
-                    }
-                });
-                progressDialog.show();
             }
         });
         ret_status = NONE;
@@ -112,7 +94,7 @@ abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STATUS> {
 
     @Override
     protected void onPostExecute(RET_STATUS retStatResult) {
-        progressDialog.dismiss();
+        //progressDialog.dismiss();
 
         if(GrexSocket.connection_status == CONNECTED){
             socketActivity.onPostExecute(retStatResult);
@@ -122,7 +104,7 @@ abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STATUS> {
 
     @Override
     protected void onCancelled() {
-        progressDialog.dismiss();
+        //progressDialog.dismiss();
         socketActivity.onFail();
         ret_status = NONE;
     }

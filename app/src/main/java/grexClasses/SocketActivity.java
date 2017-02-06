@@ -1,7 +1,8 @@
 package grexClasses;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 
 import grexEnums.RET_STATUS;
 
@@ -9,7 +10,7 @@ import grexEnums.RET_STATUS;
  * Created by Lorenzo on 1/29/2017.
  *
  */
-public abstract class SocketActivity extends AppCompatActivity {
+public abstract class SocketActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle bundle){
@@ -30,4 +31,21 @@ public abstract class SocketActivity extends AppCompatActivity {
         super.onDestroy();
         Runtime.getRuntime().gc();
     }
+
+    public void noInternet() {
+        showErrorToast("Unable to connect to the Internet");
+    }
+
+    public void noServer() {
+        //"Our servers are down :(";
+    }
+
+    private void showErrorToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
+    public void retryConnection(){
+        GrexSocket.getGrexSocket().hasConnection();
+    }
+
 }
