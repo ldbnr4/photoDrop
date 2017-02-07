@@ -83,20 +83,17 @@ public class LoginActivity extends SocketActivity {
 
     }
 
-    @Override
     public void onFail() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
     }
 
-    @Override
     public void onSuccess() {
         User.getUser().name = _usernameText.getText().toString();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         finish();
     }
 
-    @Override
     public void onPostExecute(RET_STATUS retStatResult) {
         switch (retStatResult) {
             case NONE:

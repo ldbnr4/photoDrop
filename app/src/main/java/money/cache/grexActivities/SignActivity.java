@@ -77,19 +77,16 @@ public class SignActivity extends SocketActivity {
         mAuthTask.execute(username, email, mobile, password);
     }
 
-    @Override
     public void onFail() {
         Toast.makeText(getBaseContext(), "Registering failed", Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
     }
 
-    @Override
     public void onSuccess() {
         _signupButton.setEnabled(true);
         finish();
     }
 
-    @Override
     public void onPostExecute(RET_STATUS retStatResults) {
         //TODO: implement logic based on server response
 

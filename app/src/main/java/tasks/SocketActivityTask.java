@@ -16,8 +16,8 @@ import static grexEnums.RET_STATUS.NONE;
  */
 public abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STATUS> {
     SocketActivity socketActivity;
-    private RET_STATUS ret_status;
     GrexSocket grexSocket = GrexSocket.getGrexSocket();
+    private RET_STATUS ret_status;
 
     SocketActivityTask(SocketActivity socketActivity, RET_STATUS ret_status) {
         this.socketActivity = socketActivity;
@@ -97,7 +97,7 @@ public abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STA
         //progressDialog.dismiss();
 
         if(GrexSocket.connection_status == CONNECTED){
-            socketActivity.onPostExecute(retStatResult);
+            //socketActivity.onPostExecute(retStatResult);
         }
         ret_status = NONE;
     }
@@ -105,7 +105,7 @@ public abstract class SocketActivityTask extends AsyncTask<String, Void, RET_STA
     @Override
     protected void onCancelled() {
         //progressDialog.dismiss();
-        socketActivity.onFail();
+        //socketActivity.onFail();
         ret_status = NONE;
     }
 }

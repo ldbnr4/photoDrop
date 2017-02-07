@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import money.cache.grexActivities.R;
@@ -21,10 +22,10 @@ import money.cache.grexActivities.R;
  */
 public class ConnectivityFragment extends Fragment {
     private static final String MESSAGE = "param1";
-
     private String mMessage;
 
     private OnFragmentInteractionListener mListener;
+    private Button mRetryButton;
 
     public ConnectivityFragment() {
         // Required empty public constructor
@@ -60,10 +61,8 @@ public class ConnectivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_connectivity, container, false);
 
         TextView mMessageTView = (TextView) view.findViewById(R.id.txt_conncetivity_msg);
-        Button mRetryButton = (Button) view.findViewById(R.id.btn_retry);
-
-
-        //mMessageTView.setText(mMessage);
+        mMessageTView.setText(mMessage);
+        mRetryButton = (Button) view.findViewById(R.id.btn_retry);
         mRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +70,8 @@ public class ConnectivityFragment extends Fragment {
             }
         });
 
-
+        ImageView mImageView = (ImageView) view.findViewById(R.id.imageView);
+        mImageView.setImageResource(R.drawable._disconnected_100);
 
         return view;
     }
@@ -84,7 +84,7 @@ public class ConnectivityFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed() {
         if (mListener != null) {
-            getActivity().finish();
+            mListener.onFragmentInteraction();
         }
     }
 

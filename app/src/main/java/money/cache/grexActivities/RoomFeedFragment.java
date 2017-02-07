@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 
 import java.util.Set;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import grexClasses.Room;
 import grexClasses.RoomAdapter;
 import grexClasses.User;
@@ -24,9 +22,6 @@ import grexClasses.User;
  * create an instance of this fragment.
  */
 public class RoomFeedFragment extends Fragment {
-
-    @Bind(R.id.my_recycler_view)
-    RecyclerView mRecyclerView;
 
     public RoomFeedFragment() {
         // Required empty public constructor
@@ -45,21 +40,24 @@ public class RoomFeedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(getActivity());
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        Set<Room> roomsIn = User.getUser().getRoomsIn();
-        RecyclerView.Adapter mAdapter = new RoomAdapter(getActivity(), roomsIn);
-        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        View view = inflater.inflate(R.layout.fragment_room_feed, container, false);
+
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        Set<Room> roomsIn = User.getUser().getRoomsIn();
+        RecyclerView.Adapter mAdapter = new RoomAdapter(getActivity(), roomsIn);
+        mRecyclerView.setAdapter(mAdapter);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_room_feed, container, false);
+        return view;
     }
 
     @Override

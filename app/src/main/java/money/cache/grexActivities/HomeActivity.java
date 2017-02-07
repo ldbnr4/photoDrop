@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.Tab;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,13 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.GrexSocket;
 import grexClasses.SocketActivity;
-import grexClasses.User;
-import grexEnums.CONNECTION_STATUS;
-import grexEnums.RET_STATUS;
 import layout.ConnectivityFragment;
-
-import static grexEnums.RET_STATUS.NONE;
-import static grexEnums.RET_STATUS.SUCCESS;
 
 //TODO: make a splash screen for whatever page is the home page like 'splash screens -> down ken burns' from UI app
 
@@ -33,7 +29,6 @@ import static grexEnums.RET_STATUS.SUCCESS;
 
 public class HomeActivity extends SocketActivity implements ConnectivityFragment.OnFragmentInteractionListener {
 
-    public static User mUser = User.getUser();
     @Bind(R.id.btn_createRoom)
     Button mBtnCreateRoom;
     @Bind(R.id.tab_layout)
@@ -68,56 +63,9 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
         new GetRoomsTask().execute();
 
-        if(GrexSocket.connection_status != CONNECTION_STATUS.CONNECTED){
-            // Check that the activity is using the layout version with
-            // the fragment_container FrameLayout
-            if (findViewById(R.id.home_feed_fragment) != null) {
-
-                // However, if we're being restored from a previous state,
-                // then we don't need to do anything and should return or else
-                // we could end up with overlapping fragments.
-                if (savedInstanceState != null) {
-                    return;
-                }
-
-                // Create a new Fragment to be placed in the activity layout
-                ConnectivityFragment firstFragment = ConnectivityFragment.newInstance("This is an error");
-
-                // In case this activity was started with special instructions from an
-                // Intent, pass the Intent's extras to the fragment as arguments
-                firstFragment.setArguments(getIntent().getExtras());
-
-                // Add the fragment to the 'fragment_container' FrameLayout
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.home_feed_fragment, firstFragment).commit();
-            }
-        }
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
-
-    @Override
-    public void onFail() {
-        //TODO: implement logic for failure
-    }
-
-    @Override
-    public void onSuccess() {
-        //TODO: implement logic for success
-    }
-
-    @Override
-    public void onPostExecute(RET_STATUS retStatResult) {
-        //TODO: implement logic based on server response
-        if(retStatResult == NONE) return;
-        if(retStatResult != SUCCESS){
-            onFail();
-        }
-        else{
-            onSuccess();
-        }
     }
 
     private void setUpTabs() {
@@ -194,13 +142,14 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
     @Override
     public void onFragmentInteraction() {
-
+        new GetRoomsTask().execute();
     }
 
     class GetRoomsTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
+            //Runtime.getRuntime().gc();
             progressDialog = ProgressDialog.show(HomeActivity.this,
                     "ProgressDialog",
                     "Updating your rooms...");
@@ -209,21 +158,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         @Override
         protected Void doInBackground(Void... params) {
             GrexSocket.getGrexSocket().emitGetRooms();
-            switch (GrexSocket.connection_status){
-                case CONNECTED:
-                    int count = 0;
-                    while (count < 2) {
-                        attemptCommunication();
-                        if (GrexSocket.getRoomsStatus == NONE) {
-                            count++;
-                        } else
-                            return null;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
             return null;
         }
 
@@ -231,23 +165,28 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         protected void onPostExecute(Void param) {
             // execution of result of Long time consuming operation
             progressDialog.dismiss();
-            /*switch (GrexSocket.connection_status){
+            switch (GrexSocket.connection_status) {
+                case CONNECTED:
+                    setFragment(RoomFeedFragment.newInstance());
+                    break;
                 case INTERNET_DOWN:
-                    noInternet();
+                    setFragment(ConnectivityFragment.newInstance("Check your network connection"));
+                    cancel(true);
                     break;
                 case SERVER_DOWN:
-                    noServer();
+                    setFragment(ConnectivityFragment.newInstance("Well this is awkward..."));
+                    cancel(true);
                     break;
-            }*/
+            }
+            //Runtime.getRuntime().gc();
         }
 
-        private void attemptCommunication(){
-            long totalTime = 2500;
-            long startTime = System.currentTimeMillis();
-            boolean toFinish = false;
-            while (!toFinish && GrexSocket.getRoomsStatus == NONE) {
-                toFinish = (System.currentTimeMillis() - startTime >= totalTime);
-            }
+        private void setFragment(Fragment fragment) {
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.home_feed_fragment, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
     }
 }

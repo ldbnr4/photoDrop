@@ -29,7 +29,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.GrexSocket;
 import grexClasses.SocketActivity;
-import grexEnums.RET_STATUS;
 
 //TODO: maske task to emit
 public class CaptureMediaActivity extends SocketActivity {
@@ -83,21 +82,6 @@ public class CaptureMediaActivity extends SocketActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
         _capturedImage.setImageResource(R.drawable._no_image_captured);
-    }
-
-    @Override
-    public void onFail() {
-        //TODO: implement logic for failure
-    }
-
-    @Override
-    public void onSuccess() {
-        //TODO: implement logic for success
-    }
-
-    @Override
-    public void onPostExecute(RET_STATUS success) {
-        //TODO: implement logic based on server response
     }
 
     @Override

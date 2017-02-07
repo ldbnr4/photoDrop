@@ -18,6 +18,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
+import static grexEnums.CONNECTION_STATUS.CONNECTED;
 import static grexEnums.CONNECTION_STATUS.INTERNET_DOWN;
 import static grexEnums.CONNECTION_STATUS.SERVER_DOWN;
 import static grexEnums.RET_STATUS.NONE;
@@ -28,7 +29,6 @@ import static grexEnums.RET_STATUS.NONE;
  *
  */
 public class GrexSocket{
-    private static GrexSocket grexSocket = new GrexSocket();
     private static final Object loginLock = new Object();
     private static final Object registerLock = new Object();
     private static final Object roomUpdateLock = new Object();
@@ -36,6 +36,7 @@ public class GrexSocket{
     public static RET_STATUS loggedInStatus = NONE;
     public static RET_STATUS signUpStatus = NONE;
     public static RET_STATUS getRoomsStatus = NONE;
+    private static GrexSocket grexSocket = new GrexSocket();
     private static User user = User.getUser();
     private static Socket mSocket;
     private static Gson gson = GSON.getInstance();
@@ -55,6 +56,11 @@ public class GrexSocket{
                 mSocket = IO.socket("http://zotime.ddns.net:3000");
                 setUpListeners();
                 mSocket.connect();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -114,6 +120,8 @@ public class GrexSocket{
             connection_status = INTERNET_DOWN;
         else if (!server)
             connection_status = SERVER_DOWN;
+        else
+            connection_status = CONNECTED;
         return network & server;
     }
 
