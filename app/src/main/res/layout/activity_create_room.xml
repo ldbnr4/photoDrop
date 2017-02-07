@@ -9,149 +9,143 @@
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context="money.cache.grexActivities.CreateRoomActivity">
 
+
+    <TableRow
+        android:id="@+id/tRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/txt_mom_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:gravity="center"
+            android:hint="Event name"
+            android:inputType="textUri|textPersonName"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:textSize="30sp"/>
+
+    </TableRow>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-        <TableRow
-            android:id="@+id/tRow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/txt_mom_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:gravity="center"
-                android:hint="Event name"
-                android:inputType="textUri|textPersonName"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:textSize="30sp"/>
-
-        </TableRow>
-
-        <LinearLayout
+        <ImageView
+            android:id="@+id/create_event_img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:foregroundGravity="center"
+            app:srcCompat="@drawable/_xlarge_icons_100"/>
+
+        <View style="@style/Divider"/>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp">
 
             <ImageView
-                android:id="@+id/create_event_img"
-                android:layout_width="match_parent"
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/_vis"/>
+
+            <Switch
+                android:id="@+id/switch_public"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight=".5"
+                android:checked="true"
+                android:gravity="center"
+                android:textOff="Private"
+                android:textOn="Public"/>
+
+        </TableRow>
+
+        <View style="@style/Divider"/>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:foregroundGravity="center"
-                app:srcCompat="@drawable/_xlarge_icons_100"/>
+                app:srcCompat="@drawable/_dt"/>
 
-            <View style="@style/Divider"/>
-
-            <TableRow
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="15dp">
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
-                <ImageView
-                    android:id="@+id/imageView3"
+                <!--<com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/_vis"/>
+                    app:picker_curved="true"
+                    app:picker_cyclic="true"
+                    app:picker_visibleItemCount="4"
+                    android:id="@+id/time_picker"/>-->
 
-                <Switch
-                    android:id="@+id/switch_public"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".5"
-                    android:checked="true"
-                    android:gravity="center"
-                    android:textOff="Private"
-                    android:textOn="Public"/>
+            </LinearLayout>
 
-            </TableRow>
+        </TableRow>
 
-            <View style="@style/Divider"/>
+        <View style="@style/Divider"/>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="15dp">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/_dt"/>
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/_edit"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal"
-                    android:weightSum="1"><!--
-                    <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
-                        android:layout_width="wrap_content"
-                        android:layout_height="230dp"
-                        app:picker_curved="true"
-                        app:picker_cyclic="true"
-                        app:picker_visibleItemCount="7"
-                        android:id="@+id/time_picker"/>-->
+            <EditText
+                android:id="@+id/txt_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="top|left"
+                android:hint="Details\n\n"
+                android:inputType="textMultiLine"/>
 
-                </LinearLayout>
+        </TableRow>
 
-            </TableRow>
+        <View style="@style/Divider"/>
 
-            <View style="@style/Divider"/>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="15dp">
+            <ImageButton
+                android:id="@+id/btn_mom_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="false"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/_ok"/>
 
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/_edit"/>
-
-                <EditText
-                    android:id="@+id/txt_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:gravity="top|left"
-                    android:hint="Details\n\n"
-                    android:inputType="textMultiLine"/>
-
-            </TableRow>
-
-            <View style="@style/Divider"/>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <ImageButton
-                    android:id="@+id/btn_mom_done"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="false"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/_ok"/>
-
-            </TableRow>
-
-        </LinearLayout>
+        </TableRow>
 
     </LinearLayout>
 

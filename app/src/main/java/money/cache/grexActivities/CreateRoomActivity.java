@@ -12,13 +12,11 @@ import android.widget.ImageView;
 import android.widget.Switch;
 
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
-import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePickerDialog;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -94,7 +92,7 @@ public class CreateRoomActivity extends SocketActivity {
         _imgRoomImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DoubleDateAndTimePickerDialog.Builder(CreateRoomActivity.this)
+                /*new DoubleDateAndTimePickerDialog.Builder(CreateRoomActivity.this)
                         //.bottomSheet()
                         //.curved()
                         //.minutesStep(15)
@@ -106,13 +104,13 @@ public class CreateRoomActivity extends SocketActivity {
                             public void onDateSelected(List<Date> dates) {
 
                             }
-                        }).display();
-                /*Intent intent = new Intent();
+                        }).display();*/
+                Intent intent = new Intent();
                 // Show only images, no videos or anything else
-                intent.setType("image*//*");
+                intent.setType("image");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 // Always show the chooser (if there are multiple options available)
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);*/
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
             }
         });
 
