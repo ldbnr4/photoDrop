@@ -13,7 +13,7 @@ public abstract class SocketActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle bundle){
         super.onCreate(bundle);
-        Runtime.getRuntime().gc();
+        //Runtime.getRuntime().gc();
         if(GrexSocket.getGrexSocket().getConnectivityManager() == null){
             GrexSocket.initConnection(this);
         }
@@ -22,7 +22,7 @@ public abstract class SocketActivity extends FragmentActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Runtime.getRuntime().gc();
+        //Runtime.getRuntime().gc();
     }
 
     private void showErrorToast(String msg) {

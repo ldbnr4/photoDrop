@@ -182,7 +182,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         }
 
         private void setFragment(Fragment fragment) {
-
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.home_feed_fragment, fragment);
             transaction.addToBackStack(null);

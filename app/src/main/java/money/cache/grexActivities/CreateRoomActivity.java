@@ -2,21 +2,25 @@ package money.cache.grexActivities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 
-import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
+import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePickerDialog;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
@@ -35,20 +39,24 @@ public class CreateRoomActivity extends SocketActivity {
 
     @Bind(R.id.txt_details)
     EditText _txtMomDetails;
-
     @Bind(R.id.txt_mom_name)
     EditText _txtMomName;
-
     @Bind(R.id.btn_mom_done)
     ImageButton _btnMomDone;
-
     @Bind(R.id.switch_public)
     Switch _switchPublic;
-
     @Bind(R.id.create_event_img)
     ImageView _imgRoomImg;
-
-    SingleDateAndTimePicker picker;
+    @Bind(R.id.img_createRm_vis)
+    ImageView _imgVis;
+    @Bind(R.id.txt_createRm_from)
+    TextView _txtFrom;
+    @Bind(R.id.txt_createRm_till)
+    TextView _txtTill;
+    @Bind(R.id.img_createRm_dates)
+    ImageView _imgDates;
+    @Bind(R.id.tr_createRm_rmImg)
+    ImageView tr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,32 +64,59 @@ public class CreateRoomActivity extends SocketActivity {
         setContentView(R.layout.activity_create_room);
         ButterKnife.bind(this);
 
-        _imgRoomImg.getLayoutParams().height = 300;
-        _imgRoomImg.getLayoutParams().width = 300;
-
         _switchPublic.setText("Public");
 
-        _switchPublic.setOnClickListener(new View.OnClickListener() {
+        _switchPublic.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(_switchPublic.isChecked()){
+                if (_switchPublic.isChecked()) {
                     _switchPublic.setText("Public");
-                }
-                else{
+                } else {
                     _switchPublic.setText("Private");
                 }
+            }
+        });
+
+        _imgVis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _switchPublic.setChecked(!_switchPublic.isChecked());
+                _switchPublic.callOnClick();
+            }
+        });
+
+        _imgDates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DoubleDateAndTimePickerDialog.Builder(CreateRoomActivity.this)
+                        //.bottomSheet()
+                        .curved()
+                        //.minutesStep(15)
+                        .mainColor(ContextCompat.getColor(CreateRoomActivity.this,R.color.accent))
+                        .backgroundColor(ContextCompat.getColor(CreateRoomActivity.this, R.color.dark_background))
+                        .title("Event times")
+                        .tab0Text("From")
+                        .tab1Text("Till")
+                        .mustBeOnFuture()
+                        .listener(new DoubleDateAndTimePickerDialog.Listener() {
+                            @Override
+                            public void onDateSelected(List<Date> dates) {
+                                SimpleDateFormat df = new SimpleDateFormat("EEE, MMM d\nH:mm aa z", Locale.US);
+                                _txtFrom.setText(df.format(dates.get(0)));
+                                _txtTill.setText(df.format(dates.get(1)));
+                            }
+                        }).display();
             }
         });
 
         _btnMomDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: create a new task to talk to database
                 _btnMomDone.setClickable(false);
                 String rmName = _txtMomName.getText().toString();
                 boolean pub = _switchPublic.isChecked();
-                String begin = "BEGIN";
-                String end = "END";
+                String begin = _txtFrom.getText().toString();
+                String end = _txtTill.getText().toString();
                 String desc = _txtMomDetails.getText().toString();
 
                 CreateRoomActivityTask task = new CreateRoomActivityTask(CreateRoomActivity.this);
@@ -92,25 +127,14 @@ public class CreateRoomActivity extends SocketActivity {
         _imgRoomImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*new DoubleDateAndTimePickerDialog.Builder(CreateRoomActivity.this)
-                        //.bottomSheet()
-                        //.curved()
-                        //.minutesStep(15)
-                        .title("Double")
-                        .tab0Text("Depart")
-                        .tab1Text("Return")
-                        .listener(new DoubleDateAndTimePickerDialog.Listener() {
-                            @Override
-                            public void onDateSelected(List<Date> dates) {
-
-                            }
-                        }).display();*/
                 Intent intent = new Intent();
                 // Show only images, no videos or anything else
-                intent.setType("image");
+                intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 // Always show the chooser (if there are multiple options available)
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+                //_imgRoomImg.getLayoutParams().height = 512;
+                //_imgRoomImg.getLayoutParams().width = 512;
             }
         });
 
@@ -118,23 +142,6 @@ public class CreateRoomActivity extends SocketActivity {
 
     public ImageView getImageView() {
         return _imgRoomImg;
-    }
-
-    public void onFragmentInteraction(int hour, int min) {
-        String time = hour + ":" + min;
-        try{
-            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm", Locale.US);
-            final Date date = sdf.parse(time);
-            time = new SimpleDateFormat("K:mm a", Locale.US).format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        /*if (fragment.isStart) {
-            _btnBegin.setText(time);
-        } else {
-            _btnEnd.setText(time);
-        }
-        getSupportFragmentManager().beginTransaction().remove(fragment).commit();*/
     }
 
     @Override
@@ -148,8 +155,41 @@ public class CreateRoomActivity extends SocketActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
+                //Setting the Bitmap to ImageView
+                ExifInterface exif = null;
+                try {
+                    exif = new ExifInterface(uri.getEncodedPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                int orientation = exif != null ? exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_UNDEFINED) : 0;
+                int rotate = 0;
+                int height = (bitmap.getHeight() * 512 / bitmap.getWidth());
+                Bitmap scale = Bitmap.createScaledBitmap(bitmap, 512, height, true);
+                switch (orientation) {
+                    case ExifInterface.ORIENTATION_NORMAL:
+                        rotate = 0;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotate = 270;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotate = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_UNDEFINED:
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotate = 90;
+                        break;
+                }
 
-                _imgRoomImg.setImageBitmap(bitmap);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(rotate);
+                _imgRoomImg.setImageBitmap(Bitmap.createBitmap(scale, 0, 0, scale.getWidth(),
+                        scale.getHeight(), matrix, true));
+                //tr.invalidate();
+                //tr.requestLayout();
+                //_imgRoomImg.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
