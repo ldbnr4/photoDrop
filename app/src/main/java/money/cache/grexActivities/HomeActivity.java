@@ -149,7 +149,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
         @Override
         protected void onPreExecute() {
-            //Runtime.getRuntime().gc();
+            Runtime.getRuntime().gc();
             progressDialog = ProgressDialog.show(HomeActivity.this,
                     "ProgressDialog",
                     "Updating your rooms...");
@@ -178,7 +178,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                     cancel(true);
                     break;
             }
-            //Runtime.getRuntime().gc();
+            Runtime.getRuntime().gc();
         }
 
         private void setFragment(Fragment fragment) {

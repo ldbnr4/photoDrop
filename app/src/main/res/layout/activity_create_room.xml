@@ -88,7 +88,8 @@
                     android:checked="true"
                     android:gravity="center"
                     android:textOff="Private"
-                    android:textOn="Public"/>
+                    android:textOn="Public"
+                    android:text="Public" />
 
             </TableRow>
 

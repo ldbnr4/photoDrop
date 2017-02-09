@@ -3,11 +3,13 @@ package money.cache.grexActivities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePickerDialog;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +28,7 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import grexClasses.Room;
 import grexClasses.SocketActivity;
 import tasks.CreateRoomActivityTask;
 
@@ -112,12 +116,20 @@ public class CreateRoomActivity extends SocketActivity {
         _btnMomDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: make sure all fields are filled out
                 _btnMomDone.setClickable(false);
                 String rmName = _txtMomName.getText().toString();
                 boolean pub = _switchPublic.isChecked();
                 String begin = _txtFrom.getText().toString();
                 String end = _txtTill.getText().toString();
                 String desc = _txtMomDetails.getText().toString();
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ((BitmapDrawable)_imgRoomImg.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] b = baos.toByteArray();
+
+                Room newRoom = new Room(rmName, pub, begin, end, desc);
+                newRoom.setImage(Base64.encodeToString(b, Base64.DEFAULT));
 
                 CreateRoomActivityTask task = new CreateRoomActivityTask(CreateRoomActivity.this);
                 task.execute(rmName, String.valueOf(pub), begin, end, desc);
@@ -132,9 +144,7 @@ public class CreateRoomActivity extends SocketActivity {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 // Always show the chooser (if there are multiple options available)
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-                //_imgRoomImg.getLayoutParams().height = 512;
-                //_imgRoomImg.getLayoutParams().width = 512;
+                startActivityForResult(Intent.createChooser(intent, "Select a cover image"), PICK_IMAGE_REQUEST);
             }
         });
 
@@ -187,9 +197,6 @@ public class CreateRoomActivity extends SocketActivity {
                 matrix.postRotate(rotate);
                 _imgRoomImg.setImageBitmap(Bitmap.createBitmap(scale, 0, 0, scale.getWidth(),
                         scale.getHeight(), matrix, true));
-                //tr.invalidate();
-                //tr.requestLayout();
-                //_imgRoomImg.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }

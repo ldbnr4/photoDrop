@@ -7,7 +7,6 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 
 import grexClasses.Room;
-import grexClasses.User;
 import grexEnums.RET_STATUS;
 import money.cache.grexActivities.CreateRoomActivity;
 
@@ -39,7 +38,7 @@ public class CreateRoomActivityTask extends SocketActivityTask {
             });
             byte[] b = baos.toByteArray();
             baos.reset();
-            final Room newRoom = new Room(params[0], Boolean.valueOf(params[1]), User.getUser().name, params[2], params[3], params[4]);
+            final Room newRoom = new Room(params[0], Boolean.valueOf(params[1]), params[2], params[3], params[4]);
             newRoom.setImage(Base64.encodeToString(b, Base64.DEFAULT));
             b = null;
             Runnable function = new Runnable() {

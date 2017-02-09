@@ -22,7 +22,7 @@ public class Room {
 
     public Room(){}
 
-    public Room(String name, boolean isPub, String host, String birth, String death, String description) {
+    public Room(String name, boolean isPub, String birth, String death, String description) {
         guests = new HashSet<>();
         photoRoll = new HashSet<>();
         videoRoll = new HashSet<>();
