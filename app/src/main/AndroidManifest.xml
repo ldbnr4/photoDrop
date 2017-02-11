@@ -66,11 +66,12 @@
         </activity>
         <activity
             android:name=".CaptureMediaActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".HomeActivity"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".CreateRoomActivity"></activity>
+            android:theme="@style/AppTheme" />
+
+        <activity android:name=".CreateRoomActivity" />
     </application>
 
 </manifest>

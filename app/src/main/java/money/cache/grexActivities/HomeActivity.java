@@ -23,10 +23,6 @@ import grexClasses.GrexSocket;
 import grexClasses.SocketActivity;
 import layout.ConnectivityFragment;
 
-//TODO: make a splash screen for whatever page is the home page like 'splash screens -> down ken burns' from UI app
-
-//TODO: the apps home page should be like 'tabs' from the app
-
 public class HomeActivity extends SocketActivity implements ConnectivityFragment.OnFragmentInteractionListener {
 
     @Bind(R.id.btn_createRoom)

@@ -43,7 +43,8 @@ public class GrexSocket{
     private static ConnectivityManager connectivityManager;
 
     //TODO: look into getting an ACK after emmitting https://github.com/socketio/socket.io-client-java
-    //TODO: keep a local database
+    //TODO: keep a local database of stuff that doesn't emmit successfully aka doesn't get ack'd
+    //TODO: when connection is successfully made sync local database with remote database
 
     public static synchronized GrexSocket getGrexSocket(){
         return  grexSocket;

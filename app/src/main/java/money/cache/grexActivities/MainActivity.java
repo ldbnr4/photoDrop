@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import grexClasses.GrexSocket;
 
 
+//TODO: set up network connection with Grex Socket
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
