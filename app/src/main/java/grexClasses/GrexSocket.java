@@ -14,9 +14,9 @@ import java.net.URISyntaxException;
 
 import grexEnums.CONNECTION_STATUS;
 import grexEnums.RET_STATUS;
+import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 import static grexEnums.CONNECTION_STATUS.CONNECTED;
 import static grexEnums.CONNECTION_STATUS.INTERNET_DOWN;
@@ -29,20 +29,17 @@ import static grexEnums.RET_STATUS.NONE;
  *
  */
 public class GrexSocket{
-    private static final Object loginLock = new Object();
-    private static final Object registerLock = new Object();
-    private static final Object roomUpdateLock = new Object();
     public static CONNECTION_STATUS connection_status;
-    public static RET_STATUS loggedInStatus = NONE;
+    public static RET_STATUS loggedIn = NONE;
+    public static RET_STATUS sendRooms = NONE;
     public static RET_STATUS signUpStatus = NONE;
-    public static RET_STATUS getRoomsStatus = NONE;
+    public static RET_STATUS getRooms = NONE;
     private static GrexSocket grexSocket = new GrexSocket();
     private static User user = User.getUser();
     private static Socket mSocket;
     private static Gson gson = GSON.getInstance();
     private static ConnectivityManager connectivityManager;
 
-    //TODO: look into getting an ACK after emmitting https://github.com/socketio/socket.io-client-java
     //TODO: keep a local database of stuff that doesn't emmit successfully aka doesn't get ack'd
     //TODO: when connection is successfully made sync local database with remote database
 
@@ -55,55 +52,15 @@ public class GrexSocket{
             connectivityManager = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             try {
                 mSocket = IO.socket("http://zotime.ddns.net:3000");
-                setUpListeners();
                 mSocket.connect();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                Thread.sleep(500);
+                if (mSocket.connected()) {
+                    connection_status = CONNECTED;
                 }
-            } catch (URISyntaxException e) {
+            } catch (URISyntaxException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    private static void setUpListeners() {
-        mSocket.on("login_status", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                synchronized (loginLock) {
-                    loggedInStatus = RET_STATUS.valueOf((String) args[0]);
-                }
-            }
-        });
-        mSocket.on("register_status", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                synchronized (registerLock) {
-                    signUpStatus = RET_STATUS.valueOf((String) args[0]);
-                }
-            }
-        });
-        mSocket.on("rooms_fromDB", new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                synchronized (roomUpdateLock) {
-                    JSONArray array = (JSONArray) args[1];
-                    for (int i = 0; i < array.length(); i++) {
-                        try {
-                            JSONObject o = (JSONObject) array.get(i);
-                            String roomJSON = o.get("room").toString();
-                            user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    //TODO: Make server send this as first parameter
-                    getRoomsStatus = RET_STATUS.valueOf((String) args[0]);
-                }
-            }
-        });
     }
 
     public ConnectivityManager getConnectivityManager() {
@@ -145,12 +102,22 @@ public class GrexSocket{
 
     public void emitLogin(String email, String password) {
         if (hasConnection())
-            mSocket.emit("login", email.trim(), password.trim());
+            mSocket.emit("login", email.trim(), password.trim(), new Ack() {
+                @Override
+                public void call(Object... args) {
+                    loggedIn = RET_STATUS.valueOf((String) args[0]);
+                }
+            });
     }
 
     public void emitRegister(String username, String email, String mobile, String password) {
         if(hasConnection())
-            mSocket.emit("register", username.trim(), email.trim(), mobile.trim(), password.trim());
+            mSocket.emit("register", username.trim(), email.trim(), mobile.trim(), password.trim(), new Ack() {
+                @Override
+                public void call(Object... args) {
+                    signUpStatus = RET_STATUS.valueOf((String) args[0]);
+                }
+            });
     }
 
     public void emitImage(String username, String photoName, String image) {
@@ -163,17 +130,39 @@ public class GrexSocket{
             if (room.getHost() == null)
                 room.setHost("GREX_ORPHAN");
             String roomJSON = gson.toJson(room);
-            mSocket.emit("new_room", roomJSON);
+            mSocket.emit("new_room", roomJSON, new Ack() {
+                @Override
+                public void call(Object... args) {
+
+                }
+            });
         }
     }
 
+
+    //TODO: use acks for all emits
     public void emitGetRooms(){
         if(hasConnection()) {
             //TODO: force mUser.name to be set
             if (User.getUser().name == null)
                 User.getUser().name = "GREX_ORPHAN";
-            getRoomsStatus = NONE;
-            mSocket.emit("get_rooms", User.getUser().name);
+            getRooms = NONE;
+            mSocket.emit("get_rooms", User.getUser().name, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    JSONArray array = (JSONArray) args[1];
+                    for (int i = 0; i < array.length(); i++) {
+                        try {
+                            JSONObject o = (JSONObject) array.get(i);
+                            String roomJSON = o.get("room").toString();
+                            user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    getRooms = RET_STATUS.valueOf((String) args[0]);
+                }
+            });
         }
     }
 

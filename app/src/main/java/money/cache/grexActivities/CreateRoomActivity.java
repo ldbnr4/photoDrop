@@ -1,5 +1,6 @@
 package money.cache.grexActivities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePickerDialog;
@@ -26,11 +28,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import GrexInterfaces.SocketTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import grexClasses.GrexSocket;
 import grexClasses.Room;
 import grexClasses.SocketActivity;
-import tasks.CreateRoomActivityTask;
+
+import static grexEnums.RET_STATUS.SUCCESS;
 
 public class CreateRoomActivity extends SocketActivity {
     private static final int PICK_IMAGE_REQUEST = 2;
@@ -57,10 +62,14 @@ public class CreateRoomActivity extends SocketActivity {
     TextView _txtFrom;
     @Bind(R.id.txt_createRm_till)
     TextView _txtTill;
-    @Bind(R.id.img_createRm_dates)
-    ImageView _imgDates;
-    @Bind(R.id.tr_createRm_rmImg)
-    ImageView tr;
+    @Bind(R.id.table_row_createRm_dates)
+    TableRow _tblRw_dates;
+    private String rmName;
+    private boolean pub;
+    private String begin;
+    private String end;
+    private String desc;
+    private byte[] b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +98,7 @@ public class CreateRoomActivity extends SocketActivity {
             }
         });
 
-        _imgDates.setOnClickListener(new View.OnClickListener() {
+        _tblRw_dates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DoubleDateAndTimePickerDialog.Builder(CreateRoomActivity.this)
@@ -116,23 +125,20 @@ public class CreateRoomActivity extends SocketActivity {
         _btnMomDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: make sure all fields are filled out
                 _btnMomDone.setClickable(false);
-                String rmName = _txtMomName.getText().toString();
-                boolean pub = _switchPublic.isChecked();
-                String begin = _txtFrom.getText().toString();
-                String end = _txtTill.getText().toString();
-                String desc = _txtMomDetails.getText().toString();
+
+                //TODO: make sure all fields are filled out
+                rmName = _txtMomName.getText().toString();
+                pub = _switchPublic.isChecked();
+                begin = _txtFrom.getText().toString();
+                end = _txtTill.getText().toString();
+                desc = _txtMomDetails.getText().toString();
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ((BitmapDrawable)_imgRoomImg.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] b = baos.toByteArray();
+                b = baos.toByteArray();
 
-                Room newRoom = new Room(rmName, pub, begin, end, desc);
-                newRoom.setImage(Base64.encodeToString(b, Base64.DEFAULT));
-
-                CreateRoomActivityTask task = new CreateRoomActivityTask(CreateRoomActivity.this);
-                task.execute(rmName, String.valueOf(pub), begin, end, desc);
+                new CreateRoomTask().execute();
             }
         });
 
@@ -200,6 +206,46 @@ public class CreateRoomActivity extends SocketActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    class CreateRoomTask extends SocketTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(CreateRoomActivity.this,
+                    "Hold Up!",
+                    "Setting up the venue...");
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Room room = new Room(rmName, pub, begin, end, desc);
+            room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
+            GrexSocket.getGrexSocket().emitRoom(room);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param) {
+            progressDialog.dismiss();
+            if (GrexSocket.sendRooms == SUCCESS) {
+                //TODO: Notify user of success with green check animation
+            } else {
+                switch (GrexSocket.connection_status) {
+                    case CONNECTED:
+                        //Need to do some investigating...
+                        break;
+                    case INTERNET_DOWN:
+                    case SERVER_DOWN:
+                        //TODO: save in local database
+                        //TODO: notify user that it's saved locally and will be sent to server when it can
+                        cancel(true);
+                        break;
+                }
+            }
+            finish();
         }
     }
 }

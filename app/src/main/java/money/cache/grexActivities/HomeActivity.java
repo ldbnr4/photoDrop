@@ -3,7 +3,6 @@ package money.cache.grexActivities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.Tab;
@@ -17,11 +16,14 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import GrexInterfaces.SocketTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.GrexSocket;
 import grexClasses.SocketActivity;
 import layout.ConnectivityFragment;
+
+import static grexEnums.RET_STATUS.SUCCESS;
 
 public class HomeActivity extends SocketActivity implements ConnectivityFragment.OnFragmentInteractionListener {
 
@@ -38,7 +40,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     private Tab _pastTab;
     private Tab _liveTab;
     private Tab _futureTab;
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,13 +142,13 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         new GetRoomsTask().execute();
     }
 
-    class GetRoomsTask extends AsyncTask<Void, Void, Void> {
+    class GetRoomsTask extends SocketTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
-            Runtime.getRuntime().gc();
             progressDialog = ProgressDialog.show(HomeActivity.this,
-                    "ProgressDialog",
+                    "Hold up!",
                     "Updating your rooms...");
         }
 
@@ -161,20 +162,23 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         protected void onPostExecute(Void param) {
             // execution of result of Long time consuming operation
             progressDialog.dismiss();
-            switch (GrexSocket.connection_status) {
-                case CONNECTED:
-                    setFragment(RoomFeedFragment.newInstance());
-                    break;
-                case INTERNET_DOWN:
-                    setFragment(ConnectivityFragment.newInstance("Check your network connection"));
-                    cancel(true);
-                    break;
-                case SERVER_DOWN:
-                    setFragment(ConnectivityFragment.newInstance("Well this is awkward..."));
-                    cancel(true);
-                    break;
+            if (GrexSocket.getRooms == SUCCESS) {
+                setFragment(RoomFeedFragment.newInstance());
+            } else {
+                switch (GrexSocket.connection_status) {
+                    case CONNECTED:
+                        //Need to do some investigating...
+                        break;
+                    case INTERNET_DOWN:
+                        setFragment(ConnectivityFragment.newInstance("Check your network connection"));
+                        cancel(true);
+                        break;
+                    case SERVER_DOWN:
+                        setFragment(ConnectivityFragment.newInstance("Well this is awkward..."));
+                        cancel(true);
+                        break;
+                }
             }
-            Runtime.getRuntime().gc();
         }
 
         private void setFragment(Fragment fragment) {

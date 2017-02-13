@@ -49,12 +49,12 @@
                 android:layout_height="match_parent">
 
                 <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/tr_createRm_rmImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/_edit_image"
-                    android:id="@+id/tr_createRm_rmImg"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"/>
+                    android:layout_alignParentTop="true"
+                    app:srcCompat="@drawable/_edit_image"/>
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/create_event_img"
@@ -62,8 +62,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:foregroundGravity="center"
-                    app:srcCompat="@drawable/_xlarge_icons_100"
-                    android:paddingBottom="10dp" />
+                    android:paddingBottom="10dp"
+                    app:srcCompat="@drawable/_xlarge_icons_100"/>
 
             </RelativeLayout>
 
@@ -87,15 +87,16 @@
                     android:layout_weight=".5"
                     android:checked="true"
                     android:gravity="center"
+                    android:text="Public"
                     android:textOff="Private"
-                    android:textOn="Public"
-                    android:text="Public" />
+                    android:textOn="Public"/>
 
             </TableRow>
 
             <View style="@style/Divider"/>
 
             <TableRow
+                android:id="@+id/table_row_createRm_dates"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp">
@@ -104,57 +105,56 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:srcCompat="@drawable/_dt"
-                    android:id="@+id/img_createRm_dates" />
+                    app:srcCompat="@drawable/_dt"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:baselineAligned="false"
                     android:orientation="horizontal"
-                    android:weightSum="1"
-                    android:layout_weight="1">
+                    android:weightSum="1">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:text="From"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:id="@+id/textView"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:text="TextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="From"/>
+
+                        <TextView
                             android:id="@+id/txt_createRm_from"
-                            android:layout_weight="1" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TextView"/>
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:text="Till"
+                        android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView2" />
+                        android:text="Till"/>
 
                     <TextView
-                        android:text="TextView"
+                        android:id="@+id/txt_createRm_till"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txt_createRm_till" />
+                        android:text="TextView"/>
                 </LinearLayout>
 
             </TableRow>

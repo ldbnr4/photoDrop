@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 import grexClasses.SocketActivity;
 import grexClasses.User;
 import grexEnums.RET_STATUS;
-import tasks.LoginActivityTask;
 
 /**
  * Created by Lorenzo on 1/4/2017.
@@ -78,8 +77,8 @@ public class LoginActivity extends SocketActivity {
         String email = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        LoginActivityTask mAuthTask = new LoginActivityTask(this);
-        mAuthTask.execute(email, password);
+        //LoginActivityTask mAuthTask = new LoginActivityTask(this);
+        //mAuthTask.execute(email, password);
 
     }
 

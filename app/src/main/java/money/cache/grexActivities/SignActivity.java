@@ -13,7 +13,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.SocketActivity;
 import grexEnums.RET_STATUS;
-import tasks.SignUpActivityTask;
 
 
 public class SignActivity extends SocketActivity {
@@ -73,8 +72,8 @@ public class SignActivity extends SocketActivity {
         String mobile = _mobileText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        SignUpActivityTask mAuthTask = new SignUpActivityTask(this);
-        mAuthTask.execute(username, email, mobile, password);
+        //SignUpActivityTask mAuthTask = new SignUpActivityTask(this);
+        //mAuthTask.execute(username, email, mobile, password);
     }
 
     public void onFail() {
