@@ -23,6 +23,7 @@ import grexClasses.GrexSocket;
 import grexClasses.SocketActivity;
 import layout.ConnectivityFragment;
 
+import static grexEnums.RET_STATUS.NONE;
 import static grexEnums.RET_STATUS.SUCCESS;
 
 public class HomeActivity extends SocketActivity implements ConnectivityFragment.OnFragmentInteractionListener {
@@ -179,6 +180,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                         break;
                 }
             }
+            GrexSocket.getRooms = NONE;
         }
 
         private void setFragment(Fragment fragment) {

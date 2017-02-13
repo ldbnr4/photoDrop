@@ -11,6 +11,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import grexEnums.CONNECTION_STATUS;
 import grexEnums.RET_STATUS;
@@ -31,9 +33,10 @@ import static grexEnums.RET_STATUS.NONE;
 public class GrexSocket{
     public static CONNECTION_STATUS connection_status;
     public static RET_STATUS loggedIn = NONE;
-    public static RET_STATUS sendRooms = NONE;
+    public static RET_STATUS sendRoom = NONE;
     public static RET_STATUS signUpStatus = NONE;
     public static RET_STATUS getRooms = NONE;
+    public static SimpleDateFormat DF = new SimpleDateFormat("EEE, MMM d\nh:mm aa z", Locale.US);
     private static GrexSocket grexSocket = new GrexSocket();
     private static User user = User.getUser();
     private static Socket mSocket;
@@ -42,24 +45,27 @@ public class GrexSocket{
 
     //TODO: keep a local database of stuff that doesn't emmit successfully aka doesn't get ack'd
     //TODO: when connection is successfully made sync local database with remote database
+    //TODO: use acks for all emits
 
     public static synchronized GrexSocket getGrexSocket(){
         return  grexSocket;
     }
 
-    public static void initConnection(Context applicationContext){
+    public static void initConnection() {
+        try {
+            mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
+            while (!mSocket.connected())
+                Thread.sleep(500);
+            connection_status = CONNECTED;
+        } catch (URISyntaxException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void initConnection(Context applicationContext) {
         if(connectivityManager == null) {
             connectivityManager = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            try {
-                mSocket = IO.socket("http://zotime.ddns.net:3000");
-                mSocket.connect();
-                Thread.sleep(500);
-                if (mSocket.connected()) {
-                    connection_status = CONNECTED;
-                }
-            } catch (URISyntaxException | InterruptedException e) {
-                e.printStackTrace();
-            }
+            initConnection();
         }
     }
 
@@ -127,48 +133,62 @@ public class GrexSocket{
 
     public void emitRoom(Room room) {
         if(hasConnection()) {
-            if (room.getHost() == null)
-                room.setHost("GREX_ORPHAN");
-            String roomJSON = gson.toJson(room);
-            mSocket.emit("new_room", roomJSON, new Ack() {
-                @Override
-                public void call(Object... args) {
-
-                }
-            });
+            emitRoomCore(room);
         }
     }
 
+    public void tEmitRoom(Room room) {
+        emitRoomCore(room);
+    }
 
-    //TODO: use acks for all emits
+    private void emitRoomCore(Room room) {
+        if (room.getHost() == null)
+            room.setHost("GREX_ORPHAN");
+        String roomJSON = gson.toJson(room);
+        sendRoom = NONE;
+        mSocket.emit("new_room", roomJSON, new Ack() {
+            @Override
+            public void call(Object... args) {
+                sendRoom = RET_STATUS.valueOf((String) args[0]);
+            }
+        });
+    }
+
     public void emitGetRooms(){
         if(hasConnection()) {
-            //TODO: force mUser.name to be set
-            if (User.getUser().name == null)
-                User.getUser().name = "GREX_ORPHAN";
-            getRooms = NONE;
-            mSocket.emit("get_rooms", User.getUser().name, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    JSONArray array = (JSONArray) args[1];
-                    for (int i = 0; i < array.length(); i++) {
-                        try {
-                            JSONObject o = (JSONObject) array.get(i);
-                            String roomJSON = o.get("room").toString();
-                            user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    getRooms = RET_STATUS.valueOf((String) args[0]);
-                }
-            });
+            emitGetRoomsCore();
         }
+    }
+
+    public void tEmitGetRooms() {
+        emitGetRoomsCore();
+    }
+
+    private void emitGetRoomsCore() {
+        //TODO: force mUser.name to be set
+        if (User.getUser().name == null)
+            User.getUser().name = "GREX_ORPHAN";
+        getRooms = NONE;
+        mSocket.emit("get_rooms", User.getUser().name, new Ack() {
+            @Override
+            public void call(Object... args) {
+                JSONArray array = (JSONArray) args[1];
+                for (int i = 0; i < array.length(); i++) {
+                    try {
+                        JSONObject o = (JSONObject) array.get(i);
+                        String roomJSON = o.get("room").toString();
+                        user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                getRooms = RET_STATUS.valueOf((String) args[0]);
+            }
+        });
     }
 
     public void disconnect() {
         mSocket.emit("disconnect");
         mSocket.disconnect();
     }
-
 }

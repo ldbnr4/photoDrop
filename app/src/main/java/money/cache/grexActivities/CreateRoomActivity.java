@@ -23,10 +23,8 @@ import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePick
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import GrexInterfaces.SocketTask;
 import butterknife.Bind;
@@ -35,6 +33,7 @@ import grexClasses.GrexSocket;
 import grexClasses.Room;
 import grexClasses.SocketActivity;
 
+import static grexEnums.RET_STATUS.NONE;
 import static grexEnums.RET_STATUS.SUCCESS;
 
 public class CreateRoomActivity extends SocketActivity {
@@ -70,6 +69,7 @@ public class CreateRoomActivity extends SocketActivity {
     private String end;
     private String desc;
     private byte[] b;
+    private boolean aBoolean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +114,8 @@ public class CreateRoomActivity extends SocketActivity {
                         .listener(new DoubleDateAndTimePickerDialog.Listener() {
                             @Override
                             public void onDateSelected(List<Date> dates) {
-                                SimpleDateFormat df = new SimpleDateFormat("EEE, MMM d\nH:mm aa z", Locale.US);
-                                _txtFrom.setText(df.format(dates.get(0)));
-                                _txtTill.setText(df.format(dates.get(1)));
+                                _txtFrom.setText(GrexSocket.DF.format(dates.get(0)));
+                                _txtTill.setText(GrexSocket.DF.format(dates.get(1)));
                             }
                         }).display();
             }
@@ -134,9 +133,12 @@ public class CreateRoomActivity extends SocketActivity {
                 end = _txtTill.getText().toString();
                 desc = _txtMomDetails.getText().toString();
 
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ((BitmapDrawable)_imgRoomImg.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                b = baos.toByteArray();
+                aBoolean = !_imgRoomImg.getDrawable().equals(getDrawable(R.drawable._xlarge_icons_100));
+                if (aBoolean) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    ((BitmapDrawable) _imgRoomImg.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    b = baos.toByteArray();
+                }
 
                 new CreateRoomTask().execute();
             }
@@ -222,7 +224,9 @@ public class CreateRoomActivity extends SocketActivity {
         @Override
         protected Void doInBackground(Void... params) {
             Room room = new Room(rmName, pub, begin, end, desc);
-            room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
+            if (aBoolean) {
+                room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
+            }
             GrexSocket.getGrexSocket().emitRoom(room);
             return null;
         }
@@ -230,7 +234,7 @@ public class CreateRoomActivity extends SocketActivity {
         @Override
         protected void onPostExecute(Void param) {
             progressDialog.dismiss();
-            if (GrexSocket.sendRooms == SUCCESS) {
+            if (GrexSocket.sendRoom == SUCCESS) {
                 //TODO: Notify user of success with green check animation
             } else {
                 switch (GrexSocket.connection_status) {
@@ -245,6 +249,7 @@ public class CreateRoomActivity extends SocketActivity {
                         break;
                 }
             }
+            GrexSocket.sendRoom = NONE;
             finish();
         }
     }

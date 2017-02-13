@@ -1,19 +1,22 @@
 package money.cache.grexActivities;
 
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.closeSoftKeyboard;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.swipeDown;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
+import java.util.Calendar;
+import java.util.Date;
+
+import grexClasses.GrexSocket;
+import grexClasses.Room;
+import grexClasses.User;
+import grexEnums.CONNECTION_STATUS;
+import grexEnums.RET_STATUS;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * Created by boyice on 1/24/2017.
@@ -23,19 +26,29 @@ import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText
 @RunWith(AndroidJUnit4.class)
 public class CreateRoomTest {
 
-    @Rule
-    public ActivityTestRule<CreateRoomActivity> mActivityRule = new ActivityTestRule<>(CreateRoomActivity.class);
-
     @Test
     public void testCreateRoom() {
-        onView(withId(R.id.txt_mom_name)).perform(typeText("My New Moment"));
-        closeSoftKeyboard();
-        //onView(withId(R.id.btn_mom_done)).perform(click());
-        onView(withId(R.id.table_row_createRm_dates)).perform(click());
-        //TODO: fix this test
-        onView(withSpinnerText("today")).perform(swipeDown());
-        onView(withSpinnerText("today")).perform(swipeDown());
+        GrexSocket.initConnection();
+        if (GrexSocket.connection_status == CONNECTION_STATUS.CONNECTED) {
+            GrexSocket.getGrexSocket().tEmitGetRooms();
+            while (GrexSocket.getRooms != RET_STATUS.SUCCESS) ;
+            int before = User.getUser().getRoomsIn().size();
+            GrexSocket.getRooms = RET_STATUS.NONE;
+
+            Calendar calendar = Calendar.getInstance();
+            Date now = new Date();
+            calendar.setTime(now);
+            calendar.add(Calendar.HOUR, 1);
+            Room room = new Room("My Incredible Party", true, GrexSocket.DF.format(now), GrexSocket.DF.format(calendar.getTime()), "This is going to be the greatest celebration of all time!");
+            GrexSocket.getGrexSocket().tEmitRoom(room);
+            while (GrexSocket.sendRoom != RET_STATUS.SUCCESS) ;
+
+            GrexSocket.getGrexSocket().tEmitGetRooms();
+            while (GrexSocket.getRooms != RET_STATUS.SUCCESS) ;
+            int after = User.getUser().getRoomsIn().size();
+
+            assertThat(before < after, is(true));
+        } else
+            fail();
     }
-
-
 }
