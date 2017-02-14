@@ -26,12 +26,13 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import GrexInterfaces.SocketTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.GrexSocket;
+import grexClasses.LocalDatabase;
 import grexClasses.Room;
 import grexClasses.SocketActivity;
+import grexInterfaces.SocketTask;
 
 import static grexEnums.RET_STATUS.NONE;
 import static grexEnums.RET_STATUS.SUCCESS;
@@ -127,6 +128,7 @@ public class CreateRoomActivity extends SocketActivity {
                 _btnMomDone.setClickable(false);
 
                 //TODO: make sure all fields are filled out
+                //TODO: only send rooms to db if they are live...maybe?
                 rmName = _txtMomName.getText().toString();
                 pub = _switchPublic.isChecked();
                 begin = _txtFrom.getText().toString();
@@ -156,10 +158,6 @@ public class CreateRoomActivity extends SocketActivity {
             }
         });
 
-    }
-
-    public ImageView getImageView() {
-        return _imgRoomImg;
     }
 
     @Override
@@ -213,6 +211,7 @@ public class CreateRoomActivity extends SocketActivity {
 
     class CreateRoomTask extends SocketTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
+        private Room room;
 
         @Override
         protected void onPreExecute() {
@@ -223,7 +222,7 @@ public class CreateRoomActivity extends SocketActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Room room = new Room(rmName, pub, begin, end, desc);
+            room = new Room(rmName, pub, begin, end, desc);
             if (aBoolean) {
                 room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
             }
@@ -243,7 +242,12 @@ public class CreateRoomActivity extends SocketActivity {
                         break;
                     case INTERNET_DOWN:
                     case SERVER_DOWN:
-                        //TODO: save in local database
+                        LocalDatabase localDatabase = new LocalDatabase(CreateRoomActivity.this);
+                        if (localDatabase.saveRoom(room)) {
+                            //Successfully saved
+                        } else {
+                            //Error saving
+                        }
                         //TODO: notify user that it's saved locally and will be sent to server when it can
                         cancel(true);
                         break;

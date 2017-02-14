@@ -16,12 +16,13 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import GrexInterfaces.SocketTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.GrexSocket;
 import grexClasses.SocketActivity;
-import layout.ConnectivityFragment;
+import grexInterfaces.SocketTask;
+import grexLayout.ConnectivityFragment;
+import grexLayout.RoomFeedFragment;
 
 import static grexEnums.RET_STATUS.NONE;
 import static grexEnums.RET_STATUS.SUCCESS;
@@ -92,7 +93,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     }
 
     private void tabSelected(Tab selcted) {
-
         if (selcted.equals(_pastTab)) {
             System.out.println("PAST");
         } else if (selcted.equals(_liveTab)) {

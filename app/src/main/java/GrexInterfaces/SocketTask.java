@@ -1,4 +1,4 @@
-package GrexInterfaces;
+package grexInterfaces;
 
 import android.os.AsyncTask;
 

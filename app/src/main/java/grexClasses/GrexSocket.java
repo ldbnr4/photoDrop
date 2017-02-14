@@ -30,7 +30,8 @@ import static grexEnums.RET_STATUS.NONE;
  * Created by Lorenzo on 11/15/2016.
  *
  */
-public class GrexSocket{
+public final class GrexSocket {
+    public final static Gson gson = new Gson();
     public static CONNECTION_STATUS connection_status;
     public static RET_STATUS loggedIn = NONE;
     public static RET_STATUS sendRoom = NONE;
@@ -40,7 +41,6 @@ public class GrexSocket{
     private static GrexSocket grexSocket = new GrexSocket();
     private static User user = User.getUser();
     private static Socket mSocket;
-    private static Gson gson = GSON.getInstance();
     private static ConnectivityManager connectivityManager;
 
     //TODO: keep a local database of stuff that doesn't emmit successfully aka doesn't get ack'd
@@ -51,21 +51,19 @@ public class GrexSocket{
         return  grexSocket;
     }
 
-    public static void initConnection() {
-        try {
-            mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
-            while (!mSocket.connected())
-                Thread.sleep(500);
-            connection_status = CONNECTED;
-        } catch (URISyntaxException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    static void initConnection(Context applicationContext) {
+    public void initConnection(Context applicationContext) {
         if(connectivityManager == null) {
             connectivityManager = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            initConnection();
+            try {
+                mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
+                int timer = 0;
+                while (!hasConnection() || timer < 3) {
+                    Thread.sleep(1000);
+                    timer++;
+                }
+            } catch (URISyntaxException | InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

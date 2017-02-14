@@ -15,7 +15,7 @@ public abstract class SocketActivity extends FragmentActivity {
         super.onCreate(bundle);
         Runtime.getRuntime().gc();
         if(GrexSocket.getGrexSocket().getConnectivityManager() == null){
-            GrexSocket.initConnection(this);
+            GrexSocket.getGrexSocket().initConnection(this);
         }
     }
 

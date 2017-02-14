@@ -20,7 +20,7 @@ import static org.junit.Assert.fail;
 
 /**
  * Created by boyice on 1/24/2017.
- *
+ * TODO: THIS IS BROKEN :(
  */
 
 @RunWith(AndroidJUnit4.class)
@@ -28,7 +28,7 @@ public class CreateRoomTest {
 
     @Test
     public void testCreateRoom() {
-        GrexSocket.initConnection();
+        //GrexSocket.getGrexSocket().initConnection(new CreateRoomActivity().getApplicationContext());
         if (GrexSocket.connection_status == CONNECTION_STATUS.CONNECTED) {
             GrexSocket.getGrexSocket().tEmitGetRooms();
             while (GrexSocket.getRooms != RET_STATUS.SUCCESS) ;

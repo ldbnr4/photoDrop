@@ -1,4 +1,4 @@
-package layout;
+package grexLayout;
 
 import android.content.Context;
 import android.os.Bundle;
