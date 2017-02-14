@@ -145,18 +145,36 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
     class GetRoomsTask extends SocketTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
+        private boolean connectAttempted;
 
         @Override
         protected void onPreExecute() {
+            Runtime.getRuntime().gc();
             progressDialog = ProgressDialog.show(HomeActivity.this,
                     "Hold up!",
-                    "Updating your rooms...");
+                    "Connecting you to the flock...");
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            GrexSocket.getGrexSocket().emitGetRooms();
+            if (GrexSocket.getGrexSocket().getConnectivityManager() == null) {
+                GrexSocket.getGrexSocket().initConnection(HomeActivity.this);
+            }
+            connectAttempted = true;
+            try {
+                GrexSocket.getGrexSocket().emitGetRooms();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            if (connectAttempted) {
+                progressDialog.setMessage("Getting your swarms...");
+                connectAttempted = false;
+            }
         }
 
         @Override
@@ -164,6 +182,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             // execution of result of Long time consuming operation
             progressDialog.dismiss();
             if (GrexSocket.getRooms == SUCCESS) {
+                // TODO: sync local database with server
                 setFragment(RoomFeedFragment.newInstance());
             } else {
                 switch (GrexSocket.connection_status) {
@@ -181,6 +200,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                 }
             }
             GrexSocket.getRooms = NONE;
+            Runtime.getRuntime().gc();
         }
 
         private void setFragment(Fragment fragment) {

@@ -226,7 +226,11 @@ public class CreateRoomActivity extends SocketActivity {
             if (aBoolean) {
                 room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
             }
-            GrexSocket.getGrexSocket().emitRoom(room);
+            try {
+                GrexSocket.getGrexSocket().emitRoom(room);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
@@ -242,19 +246,24 @@ public class CreateRoomActivity extends SocketActivity {
                         break;
                     case INTERNET_DOWN:
                     case SERVER_DOWN:
-                        LocalDatabase localDatabase = new LocalDatabase(CreateRoomActivity.this);
-                        if (localDatabase.saveRoom(room)) {
+                        //TODO: notify user that it's saved locally and will be sent to server when it can
+                        if (LocalDatabase.getInstance(CreateRoomActivity.this.getApplicationContext()).saveRoom(room)) {
                             //Successfully saved
+                            showErrorToast("Room saved in local database");
                         } else {
                             //Error saving
+                            showErrorToast("Error saving room in local database");
                         }
-                        //TODO: notify user that it's saved locally and will be sent to server when it can
                         cancel(true);
                         break;
                 }
             }
             GrexSocket.sendRoom = NONE;
             finish();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
         }
     }
 }

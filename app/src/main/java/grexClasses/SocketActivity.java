@@ -14,9 +14,6 @@ public abstract class SocketActivity extends FragmentActivity {
     protected void onCreate(Bundle bundle){
         super.onCreate(bundle);
         Runtime.getRuntime().gc();
-        if(GrexSocket.getGrexSocket().getConnectivityManager() == null){
-            GrexSocket.getGrexSocket().initConnection(this);
-        }
     }
 
     @Override
@@ -25,7 +22,7 @@ public abstract class SocketActivity extends FragmentActivity {
         Runtime.getRuntime().gc();
     }
 
-    private void showErrorToast(String msg) {
+    public void showErrorToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 

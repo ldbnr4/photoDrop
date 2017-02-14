@@ -28,7 +28,10 @@ import static grexEnums.RET_STATUS.NONE;
 
 /**
  * Created by Lorenzo on 11/15/2016.
- *
+ * TODO: keep a local database of stuff that doesn't emmit successfully aka doesn't get ack'd
+ * TODO: when connection is successfully made sync local database with remote database
+ * TODO: use acks for all emits
+ * TODO: add else waitForConnection() in all emits
  */
 public final class GrexSocket {
     public final static Gson gson = new Gson();
@@ -43,10 +46,6 @@ public final class GrexSocket {
     private static Socket mSocket;
     private static ConnectivityManager connectivityManager;
 
-    //TODO: keep a local database of stuff that doesn't emmit successfully aka doesn't get ack'd
-    //TODO: when connection is successfully made sync local database with remote database
-    //TODO: use acks for all emits
-
     public static synchronized GrexSocket getGrexSocket(){
         return  grexSocket;
     }
@@ -56,14 +55,18 @@ public final class GrexSocket {
             connectivityManager = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
             try {
                 mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
-                int timer = 0;
-                while (!hasConnection() || timer < 3) {
-                    Thread.sleep(1000);
-                    timer++;
-                }
+                waitForConnection();
             } catch (URISyntaxException | InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void waitForConnection() throws InterruptedException {
+        int timer = 0;
+        while (!hasConnection() && timer < 3) {
+            Thread.sleep(1000);
+            timer++;
         }
     }
 
@@ -129,10 +132,11 @@ public final class GrexSocket {
             mSocket.emit("image_upload", username, photoName, image);
     }
 
-    public void emitRoom(Room room) {
+    public void emitRoom(Room room) throws InterruptedException {
         if(hasConnection()) {
             emitRoomCore(room);
-        }
+        } else
+            waitForConnection();
     }
 
     public void tEmitRoom(Room room) {
@@ -152,10 +156,11 @@ public final class GrexSocket {
         });
     }
 
-    public void emitGetRooms(){
+    public void emitGetRooms() throws InterruptedException {
         if(hasConnection()) {
             emitGetRoomsCore();
-        }
+        } else
+            waitForConnection();
     }
 
     public void tEmitGetRooms() {
