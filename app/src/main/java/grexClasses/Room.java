@@ -1,7 +1,10 @@
 package grexClasses;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.Objects;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -20,8 +23,10 @@ public class Room {
     private Set<User> guests;
     private Set<String> photoRoll;
     private Set<String> videoRoll;
+    private String id;
 
     public Room(String name, boolean isPub, String birth, String death, String description) {
+        id = new SimpleDateFormat("MMddyyyy_", Locale.US).format(new Date()) + Calendar.getInstance().getTimeInMillis() + "_" + User.getUser().getName();
         guests = new HashSet<>();
         photoRoll = new HashSet<>();
         videoRoll = new HashSet<>();
@@ -106,12 +111,10 @@ public class Room {
             return false;
         }
         final Room other = (Room) obj;
-        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.birth, other.birth)) {
-            return false;
-        }
-        return Objects.equals(this.death, other.death);
+        return other.id.equals(this.id);
+    }
+
+    public String getId() {
+        return id;
     }
 }

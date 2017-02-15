@@ -10,7 +10,9 @@ import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -36,6 +38,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     Button mBtnCreateRoom;
     @Bind(R.id.tab_layout)
     TabLayout mTabLayout;
+    @Bind(R.id.activity_home)
+    LinearLayout mHomeLayout;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -45,6 +49,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     private Tab _pastTab;
     private Tab _liveTab;
     private Tab _futureTab;
+    private SpinnerFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +66,16 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             }
         });
 
-        setUpTabs();
-
-        new GetRoomsTask().execute();
+        ViewTreeObserver vto = mHomeLayout.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mHomeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                new GetRoomsTask().execute();
+                setFragment(SpinnerFragment.newInstance());
+                setUpTabs();
+            }
+        });
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -153,6 +165,13 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         finish();
     }
 
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.home_feed_fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commitAllowingStateLoss();
+    }
+
     class GetRoomsTask extends SocketTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
         private boolean done = false;
@@ -187,31 +206,29 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
         @Override
         protected void onPostExecute(Void param) {
-            // execution of result of Long time consuming operation
-            while (GrexSocket.getGetRooms() == NONE) ;
             progressDialog.dismiss();
-            if (GrexSocket.getGetRooms() == SUCCESS) {
-                // TODO: sync local database with server
-                setFragment(SpinnerFragment.newInstance());
-                Cursor allRooms = LocalDatabase.getInstance(HomeActivity.this).getAllRooms();
-                if (allRooms.getCount() > 0) {
-                    allRooms.moveToFirst();
-                    while (!allRooms.isAfterLast()) {
-                        String roomString = allRooms.getString(0);
-                        try {
-                            grexSocket.emitRoom(roomString);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+            // execution of result of Long time consuming operation
+            switch (GrexSocket.connection_status) {
+                case CONNECTED:
+                    while (GrexSocket.getGetRooms() == NONE) ;
+                    if (GrexSocket.getGetRooms() == SUCCESS) {
+                        // TODO: sync local database with server
+                        Cursor allRooms = LocalDatabase.getInstance(HomeActivity.this).getAllRooms();
+                        if (allRooms.getCount() > 0) {
+                            allRooms.moveToFirst();
+                            while (!allRooms.isAfterLast()) {
+                                String roomString = allRooms.getString(0);
+                                try {
+                                    grexSocket.emitRoom(roomString);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                allRooms.moveToNext();
+                            }
                         }
-                        allRooms.moveToNext();
+                        setFragment(RoomFeedFragment.newInstance());
                     }
-                }
-                setFragment(RoomFeedFragment.newInstance());
-            } else {
-                switch (GrexSocket.connection_status) {
-                    case CONNECTED:
-                        //Need to do some investigating...
-                        break;
+                    break;
                     case INTERNET_DOWN:
                         setFragment(ConnectivityFragment.newInstance("Check your network connection"));
                         cancel(true);
@@ -220,16 +237,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                         setFragment(ConnectivityFragment.newInstance("Well this is awkward..."));
                         cancel(true);
                         break;
-                }
             }
             Runtime.getRuntime().gc();
-        }
-
-        private void setFragment(Fragment fragment) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.home_feed_fragment, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
         }
     }
 }

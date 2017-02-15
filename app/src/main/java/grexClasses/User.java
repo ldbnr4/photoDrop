@@ -3,6 +3,8 @@ package grexClasses;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Created by Lorenzo on 1/4/2017.
@@ -13,7 +15,7 @@ import java.util.Set;
 public final class User {
     private static final User user = new User();
     private String name = "GREX_ORPHAN";
-    private Set<Room> roomsIn = Collections.synchronizedSet(new HashSet<Room>());
+    private SortedMap<Object, Object> roomsIn = Collections.synchronizedSortedMap(new TreeMap<>());
     private Set<User> friends = Collections.synchronizedSet(new HashSet<User>());
 
     private User() {}
@@ -22,12 +24,12 @@ public final class User {
         return user;
     }
 
-    void addToRoomsIn(Room room){
-        if (!roomsIn.contains(room))
-            roomsIn.add(room);
+    public void addToRoomsIn(Room room) {
+        if (!roomsIn.containsKey(room.getId()))
+            roomsIn.put(room.getId(), room);
     }
 
-    public Set<Room> getRoomsIn() {
+    public SortedMap<Object, Object> getRoomsIn() {
         return roomsIn;
     }
 

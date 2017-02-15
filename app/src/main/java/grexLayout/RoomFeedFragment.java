@@ -20,7 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.text.ParseException;
-import java.util.Set;
+import java.util.SortedMap;
 
 import grexClasses.Room;
 import grexClasses.User;
@@ -72,7 +72,7 @@ public class RoomFeedFragment extends Fragment {
      * TODO: give cards a dropdown option
      */
     class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
-        Set<Room> mDataSet = User.getUser().getRoomsIn();
+        SortedMap<Object, Object> mDataSet = User.getUser().getRoomsIn();
 
         RoomAdapter() {
         }
@@ -94,7 +94,7 @@ public class RoomFeedFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            Room room = (Room) Array.get(mDataSet.toArray(), position);
+            Room room = (Room) Array.get(mDataSet.values().toArray(), position);
             String img = room.getImage();
             File file = null;
             if (img != null) {
@@ -115,6 +115,7 @@ public class RoomFeedFragment extends Fragment {
                         .error(R.drawable._xlarge_icons_100)
                         .placeholder(R.drawable._xlarge_icons_100)
                         .into(holder.mImage);
+                holder.mImage.setVisibility(View.VISIBLE);
             } else {
                 holder.mImage.setVisibility(View.GONE);
             }

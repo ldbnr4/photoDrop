@@ -35,9 +35,9 @@ public final class GrexSocket {
     public final static Gson gson = new Gson();
     public static CONNECTION_STATUS connection_status;
     public static RET_STATUS loggedIn = NONE;
-    public static RET_STATUS sendRoom = NONE;
     public static RET_STATUS signUpStatus = NONE;
     public static SimpleDateFormat DF = new SimpleDateFormat("EEE, MMM d\nh:mm aa z", Locale.US);
+    private static RET_STATUS sendRoom = NONE;
     private static RET_STATUS getRooms = NONE;
     private static GrexSocket grexSocket = new GrexSocket();
     private static User user = User.getUser();
@@ -50,6 +50,14 @@ public final class GrexSocket {
 
     private static synchronized void setGetRooms(RET_STATUS status) {
         getRooms = status;
+    }
+
+    public static synchronized RET_STATUS getSendRoom() {
+        return sendRoom;
+    }
+
+    private static synchronized void setSendRoom(RET_STATUS status) {
+        sendRoom = status;
     }
 
     public static synchronized GrexSocket getGrexSocket(Context applicationContext) {
@@ -160,7 +168,7 @@ public final class GrexSocket {
     }
 
     private void emitRoomInnerCore(String roomJSON) {
-        sendRoom = NONE;
+        setSendRoom(NONE);
         mSocket.emit("new_room", roomJSON, new Ack() {
             @Override
             public void call(Object... args) {

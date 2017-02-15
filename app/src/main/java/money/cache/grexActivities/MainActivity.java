@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         });
         startActivity(new Intent(this, HomeActivity.class));
         finish();
+        //LocalDatabase.getInstance(this.getApplicationContext()).deleteAllRooms();
     }
 
     @Override

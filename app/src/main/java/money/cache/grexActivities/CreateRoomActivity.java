@@ -32,9 +32,9 @@ import grexClasses.GrexSocket;
 import grexClasses.LocalDatabase;
 import grexClasses.Room;
 import grexClasses.SocketActivity;
+import grexClasses.User;
 import grexInterfaces.SocketTask;
 
-import static grexClasses.GrexSocket.RET_STATUS.NONE;
 import static grexClasses.GrexSocket.RET_STATUS.SUCCESS;
 
 public class CreateRoomActivity extends SocketActivity {
@@ -237,8 +237,9 @@ public class CreateRoomActivity extends SocketActivity {
         @Override
         protected void onPostExecute(Void param) {
             progressDialog.dismiss();
-            if (GrexSocket.sendRoom == SUCCESS) {
+            if (GrexSocket.getSendRoom() == SUCCESS) {
                 //TODO: Notify user of success with green check animation
+                User.getUser().addToRoomsIn(room);
             } else {
                 switch (GrexSocket.connection_status) {
                     case CONNECTED:
@@ -258,7 +259,6 @@ public class CreateRoomActivity extends SocketActivity {
                         break;
                 }
             }
-            GrexSocket.sendRoom = NONE;
             finish();
         }
 
