@@ -12,7 +12,7 @@ import java.util.Set;
 //TODO: Add image field
 public final class User {
     private static final User user = new User();
-    public String name;
+    private String name = "GREX_ORPHAN";
     private Set<Room> roomsIn = Collections.synchronizedSet(new HashSet<Room>());
     private Set<User> friends = Collections.synchronizedSet(new HashSet<User>());
 
@@ -23,7 +23,8 @@ public final class User {
     }
 
     void addToRoomsIn(Room room){
-        roomsIn.add(room);
+        if (!roomsIn.contains(room))
+            roomsIn.add(room);
     }
 
     public Set<Room> getRoomsIn() {
@@ -36,5 +37,13 @@ public final class User {
 
     void addToFriends(User user){
         friends.add(user);
+    }
+
+    String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -1,6 +1,7 @@
 package money.cache.grexActivities;
 
 //TODO: Allow third party login like Facebook, Instagram or Twitter
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +13,10 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import grexClasses.GrexSocket.RET_STATUS;
 import grexClasses.SocketActivity;
 import grexClasses.User;
-import grexEnums.RET_STATUS;
+
 
 /**
  * Created by Lorenzo on 1/4/2017.
@@ -88,7 +90,7 @@ public class LoginActivity extends SocketActivity {
     }
 
     public void onSuccess() {
-        User.getUser().name = _usernameText.getText().toString();
+        User.getUser().setName(_usernameText.getText().toString());
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         finish();
     }

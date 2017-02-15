@@ -1,6 +1,7 @@
 package grexClasses;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -20,13 +21,11 @@ public class Room {
     private Set<String> photoRoll;
     private Set<String> videoRoll;
 
-    public Room(){}
-
     public Room(String name, boolean isPub, String birth, String death, String description) {
         guests = new HashSet<>();
         photoRoll = new HashSet<>();
         videoRoll = new HashSet<>();
-        this.host = host = User.getUser().name;
+        this.host = User.getUser().getName();
         this.name = name;
         this.isPubic = isPub;
         this.birth = birth;
@@ -96,5 +95,23 @@ public class Room {
 
     public Set<String> getVideoRoll() {
         return videoRoll;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Room other = (Room) obj;
+        if (this.name == null ? other.name != null : !this.name.equals(other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.birth, other.birth)) {
+            return false;
+        }
+        return Objects.equals(this.death, other.death);
     }
 }

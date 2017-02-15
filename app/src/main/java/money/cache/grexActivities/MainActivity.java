@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                GrexSocket.getGrexSocket().disconnect();
+                GrexSocket.getGrexSocket(MainActivity.this.getApplicationContext()).disconnect();
             }
         });
         startActivity(new Intent(this, HomeActivity.class));

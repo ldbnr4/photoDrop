@@ -2,6 +2,7 @@ package money.cache.grexActivities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -19,13 +20,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.GrexSocket;
+import grexClasses.LocalDatabase;
 import grexClasses.SocketActivity;
 import grexInterfaces.SocketTask;
 import grexLayout.ConnectivityFragment;
 import grexLayout.RoomFeedFragment;
+import grexLayout.SpinnerFragment;
 
-import static grexEnums.RET_STATUS.NONE;
-import static grexEnums.RET_STATUS.SUCCESS;
+import static grexClasses.GrexSocket.RET_STATUS.NONE;
+import static grexClasses.GrexSocket.RET_STATUS.SUCCESS;
 
 public class HomeActivity extends SocketActivity implements ConnectivityFragment.OnFragmentInteractionListener {
 
@@ -122,6 +125,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     public void onStart() {
         super.onStart();
 
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
@@ -143,9 +147,16 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         new GetRoomsTask().execute();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
     class GetRoomsTask extends SocketTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
-        private boolean connectAttempted;
+        private boolean done = false;
+        private GrexSocket grexSocket = GrexSocket.getGrexSocket(HomeActivity.this);
 
         @Override
         protected void onPreExecute() {
@@ -157,12 +168,9 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (GrexSocket.getGrexSocket().getConnectivityManager() == null) {
-                GrexSocket.getGrexSocket().initConnection(HomeActivity.this);
-            }
-            connectAttempted = true;
             try {
-                GrexSocket.getGrexSocket().emitGetRooms();
+                grexSocket.emitGetRooms();
+                done = true;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -171,18 +179,33 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
         @Override
         protected void onProgressUpdate(Void... values) {
-            if (connectAttempted) {
+            if (done) {
                 progressDialog.setMessage("Getting your swarms...");
-                connectAttempted = false;
+                done = false;
             }
         }
 
         @Override
         protected void onPostExecute(Void param) {
             // execution of result of Long time consuming operation
+            while (GrexSocket.getGetRooms() == NONE) ;
             progressDialog.dismiss();
-            if (GrexSocket.getRooms == SUCCESS) {
+            if (GrexSocket.getGetRooms() == SUCCESS) {
                 // TODO: sync local database with server
+                setFragment(SpinnerFragment.newInstance());
+                Cursor allRooms = LocalDatabase.getInstance(HomeActivity.this).getAllRooms();
+                if (allRooms.getCount() > 0) {
+                    allRooms.moveToFirst();
+                    while (!allRooms.isAfterLast()) {
+                        String roomString = allRooms.getString(0);
+                        try {
+                            grexSocket.emitRoom(roomString);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        allRooms.moveToNext();
+                    }
+                }
                 setFragment(RoomFeedFragment.newInstance());
             } else {
                 switch (GrexSocket.connection_status) {
@@ -199,7 +222,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                         break;
                 }
             }
-            GrexSocket.getRooms = NONE;
             Runtime.getRuntime().gc();
         }
 

@@ -34,8 +34,8 @@ import grexClasses.Room;
 import grexClasses.SocketActivity;
 import grexInterfaces.SocketTask;
 
-import static grexEnums.RET_STATUS.NONE;
-import static grexEnums.RET_STATUS.SUCCESS;
+import static grexClasses.GrexSocket.RET_STATUS.NONE;
+import static grexClasses.GrexSocket.RET_STATUS.SUCCESS;
 
 public class CreateRoomActivity extends SocketActivity {
     private static final int PICK_IMAGE_REQUEST = 2;
@@ -227,7 +227,7 @@ public class CreateRoomActivity extends SocketActivity {
                 room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
             }
             try {
-                GrexSocket.getGrexSocket().emitRoom(room);
+                GrexSocket.getGrexSocket(CreateRoomActivity.this).emitRoom(room);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
