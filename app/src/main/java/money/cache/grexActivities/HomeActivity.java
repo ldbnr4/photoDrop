@@ -5,14 +5,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -35,11 +35,11 @@ import static grexClasses.GrexSocket.RET_STATUS.SUCCESS;
 public class HomeActivity extends SocketActivity implements ConnectivityFragment.OnFragmentInteractionListener {
 
     @Bind(R.id.btn_createRoom)
-    Button mBtnCreateRoom;
+    FloatingActionButton mBtnCreateRoom;
     @Bind(R.id.tab_layout)
     TabLayout mTabLayout;
     @Bind(R.id.activity_home)
-    LinearLayout mHomeLayout;
+    RelativeLayout mHomeLayout;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -49,7 +49,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     private Tab _pastTab;
     private Tab _liveTab;
     private Tab _futureTab;
-    private SpinnerFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

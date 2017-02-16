@@ -1,33 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/activity_home"
-              xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_home"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:paddingBottom="@dimen/activity_vertical_margin"
-              android:paddingLeft="@dimen/activity_horizontal_margin"
-              android:paddingRight="@dimen/activity_horizontal_margin"
-              android:paddingTop="@dimen/activity_vertical_margin"
-              tools:context="money.cache.grexActivities.HomeActivity"
-    >
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
-
-        <Button
-            android:id="@+id/btn_createRoom"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawableTop="@drawable/_create_room"
-            android:padding="10dp"
-            android:text="Open a New Room" />
-
-    </TableRow>
-
-    <View style="@style/Divider"/>
+    android:padding="0dp"
+    android:weightSum="1"
+    tools:context="money.cache.grexActivities.HomeActivity">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
@@ -51,10 +32,36 @@
     </android.support.design.widget.TabLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/home_feed_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/home_feed_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/menu_bar"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tab_layout"
+        android:layout_weight="0.94"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/menu_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@android:color/transparent"
+        android:padding="5dp">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_createRoom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/_continue" />
+    </RelativeLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

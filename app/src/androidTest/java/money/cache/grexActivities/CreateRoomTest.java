@@ -1,6 +1,7 @@
 package money.cache.grexActivities;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.test.InstrumentationRegistry;
@@ -52,7 +53,11 @@ public class CreateRoomTest {
                     Room room = new Room("Test event" + i, true, GrexSocket.DF.format(now), GrexSocket.DF.format(calendar.getTime()), "This is going to be the greatest celebration of all time!");
                     if (new Random().nextBoolean()) {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ((BitmapDrawable) applicationContext.getDrawable(R.drawable._xlarge_icons_100)).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        TypedArray imgs = applicationContext.getResources().obtainTypedArray(R.array.apptour);
+                        Random rand = new Random();
+                        int rndInt = rand.nextInt(imgs.length());
+                        int resID = imgs.getResourceId(rndInt, 0);
+                        ((BitmapDrawable) applicationContext.getDrawable(resID)).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos);
                         room.setImage(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
                     }
                     grexSocket.emitRoom(room);
