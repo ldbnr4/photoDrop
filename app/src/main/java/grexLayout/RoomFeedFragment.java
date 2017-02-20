@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.SortedMap;
 
+import grexClasses.EndlessRecyclerViewScrollListener;
 import grexClasses.Room;
 import grexClasses.User;
 import money.cache.grexActivities.R;
@@ -58,7 +59,14 @@ public class RoomFeedFragment extends Fragment {
 
         RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+
+            }
+        });
 
         mRecyclerView.setAdapter(new RoomAdapter());
 
