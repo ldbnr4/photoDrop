@@ -62,19 +62,24 @@ public final class GrexSocket {
 
     public static synchronized GrexSocket getGrexSocket(Context applicationContext) {
         if (connectivityManager == null) {
-            connectivityManager = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            try {
-                mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
-                if (!hasConnection())
-                    waitForConnection();
-            } catch (URISyntaxException | InterruptedException e) {
-                e.printStackTrace();
-            }
+            initConnection(applicationContext);
         }
         return grexSocket;
     }
 
-    private static void waitForConnection() throws InterruptedException {
+    private static void initConnection(Context applicationContext) {
+        connectivityManager = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
+            if (!hasConnection()) {
+                waitForConnection(applicationContext);
+            }
+        } catch (URISyntaxException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void waitForConnection(Context applicationContext) throws InterruptedException {
         int timer = 0;
         while (!hasConnection() && timer < 3) {
             Thread.sleep(1000);
@@ -115,6 +120,55 @@ public final class GrexSocket {
         return false;
     }
 
+    public static void emitRoom(String roomString, Context applicationContext) throws InterruptedException {
+        if (hasConnection())
+            emitRoomsCore(roomString);
+        else
+            waitForConnection(applicationContext);
+    }
+
+    private static void emitRoomsCore(String roomString) {
+        emitRoomInnerCore(roomString);
+    }
+
+    private static void emitRoomInnerCore(String roomJSON) {
+        setSendRoom(NONE);
+        mSocket.emit("new_room", roomJSON, new Ack() {
+            @Override
+            public void call(Object... args) {
+                sendRoom = RET_STATUS.valueOf((String) args[0]);
+            }
+        });
+    }
+
+    public static void emitGetRooms(Context applicationContext) throws InterruptedException {
+        initConnection(applicationContext);
+        if (hasConnection()) {
+            emitGetRoomsCore();
+        } else
+            waitForConnection(applicationContext);
+    }
+
+    private static void emitGetRoomsCore() {
+        setGetRooms(NONE);
+        mSocket.emit("get_rooms", User.getUser().getName(), new Ack() {
+            @Override
+            public void call(Object... args) {
+                JSONArray array = (JSONArray) args[1];
+                for (int i = 0; i < array.length(); i++) {
+                    try {
+                        JSONObject o = (JSONObject) array.get(i);
+                        String roomJSON = o.get("room").toString();
+                        user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                setGetRooms(RET_STATUS.valueOf((String) args[0]));
+            }
+        });
+    }
+
     public void emitLogin(String email, String password) {
         if (hasConnection())
             mSocket.emit("login", email.trim(), password.trim(), new Ack() {
@@ -140,22 +194,11 @@ public final class GrexSocket {
             mSocket.emit("image_upload", username, photoName, image);
     }
 
-    public void emitRoom(Room room) throws InterruptedException {
+    public void emitRoom(Room room, Context applicationContext) throws InterruptedException {
         if(hasConnection()) {
             emitRoomCore(room);
         } else
-            waitForConnection();
-    }
-
-    public void emitRoom(String roomString) throws InterruptedException {
-        if (hasConnection())
-            emitRoomsCore(roomString);
-        else
-            waitForConnection();
-    }
-
-    private void emitRoomsCore(String roomString) {
-        emitRoomInnerCore(roomString);
+            waitForConnection(applicationContext);
     }
 
     public void tEmitRoom(Room room) {
@@ -167,45 +210,8 @@ public final class GrexSocket {
         emitRoomInnerCore(roomJSON);
     }
 
-    private void emitRoomInnerCore(String roomJSON) {
-        setSendRoom(NONE);
-        mSocket.emit("new_room", roomJSON, new Ack() {
-            @Override
-            public void call(Object... args) {
-                sendRoom = RET_STATUS.valueOf((String) args[0]);
-            }
-        });
-    }
-
-    public void emitGetRooms() throws InterruptedException {
-        if(hasConnection()) {
-            emitGetRoomsCore();
-        } else
-            waitForConnection();
-    }
-
     public void tEmitGetRooms() {
         emitGetRoomsCore();
-    }
-
-    private void emitGetRoomsCore() {
-        setGetRooms(NONE);
-        mSocket.emit("get_rooms", User.getUser().getName(), new Ack() {
-            @Override
-            public void call(Object... args) {
-                JSONArray array = (JSONArray) args[1];
-                for (int i = 0; i < array.length(); i++) {
-                    try {
-                        JSONObject o = (JSONObject) array.get(i);
-                        String roomJSON = o.get("room").toString();
-                        user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                setGetRooms(RET_STATUS.valueOf((String) args[0]));
-            }
-        });
     }
 
     public void disconnect() {

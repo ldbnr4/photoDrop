@@ -42,9 +42,9 @@ public class CreateRoomTest {
             int before = 0;
             int after = 0;
             try {
-                grexSocket.emitGetRooms();
+                GrexSocket.emitGetRooms(applicationContext);
                 while (GrexSocket.getGetRooms() != SUCCESS) ;
-                before = User.getUser().getRoomsIn().size();
+                before = User.getUser().getRoomsInSize();
                 for (int i = 0; i < 100; i++) {
                     Calendar calendar = Calendar.getInstance();
                     Date now = new Date();
@@ -60,13 +60,13 @@ public class CreateRoomTest {
                         ((BitmapDrawable) applicationContext.getDrawable(resID)).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos);
                         room.setImage(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
                     }
-                    grexSocket.emitRoom(room);
+                    grexSocket.emitRoom(room, applicationContext);
                     while (GrexSocket.getSendRoom() != SUCCESS) ;
                 }
 
-                grexSocket.emitGetRooms();
+                GrexSocket.emitGetRooms(applicationContext);
                 while (GrexSocket.getGetRooms() != SUCCESS) ;
-                after = User.getUser().getRoomsIn().size();
+                after = User.getUser().getRoomsInSize();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

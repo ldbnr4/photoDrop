@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import grexClasses.GrexSocket;
-
 
 //TODO: set up network connection with Grex Socket
 
@@ -16,11 +14,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                GrexSocket.getGrexSocket(MainActivity.this.getApplicationContext()).disconnect();
-            }
-        });
         startActivity(new Intent(this, HomeActivity.class));
         finish();
         //LocalDatabase.getInstance(this.getApplicationContext()).deleteAllRooms();

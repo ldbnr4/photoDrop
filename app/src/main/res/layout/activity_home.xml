@@ -31,18 +31,6 @@
             android:text="Future"/>
     </android.support.design.widget.TabLayout>
 
-    <LinearLayout
-        android:id="@+id/home_feed_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/menu_bar"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tab_layout"
-        android:layout_weight="0.94"
-        android:orientation="vertical">
-
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/menu_bar"
         android:layout_width="match_parent"
@@ -62,6 +50,26 @@
             app:fabSize="normal"
             app:srcCompat="@drawable/_continue" />
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/home_feed_fragment"
+        android:name="grexLayout.SpinnerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/menu_bar"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tab_layout">
+
+        <ProgressBar
+            android:id="@+id/progressBar3"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="visible"
+            tools:visibility="visible" />
+    </FrameLayout>
 
 
 </RelativeLayout>

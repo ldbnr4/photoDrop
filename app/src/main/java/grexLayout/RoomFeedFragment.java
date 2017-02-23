@@ -20,7 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.text.ParseException;
-import java.util.SortedMap;
+import java.util.TreeMap;
 
 import grexClasses.EndlessRecyclerViewScrollListener;
 import grexClasses.Room;
@@ -36,6 +36,7 @@ import static grexClasses.GrexSocket.DF;
  * create an instance of this fragment.
  */
 public class RoomFeedFragment extends Fragment {
+    final TreeMap<String, Room> mDataSet = User.getUser().getRoomsIn(0);
 
     public RoomFeedFragment() {
         // Required empty public constructor
@@ -61,14 +62,18 @@ public class RoomFeedFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
+        final RoomAdapter roomAdapter = new RoomAdapter();
         mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
+                if (page < User.getUser().getRoomsInPageCount()) {
+                    mDataSet.putAll(User.getUser().getRoomsIn(page));
+                    roomAdapter.notifyDataSetChanged();
+                }
             }
         });
 
-        mRecyclerView.setAdapter(new RoomAdapter());
+        mRecyclerView.setAdapter(roomAdapter);
 
         // Inflate the layout for this fragment
         return view;
@@ -80,7 +85,6 @@ public class RoomFeedFragment extends Fragment {
      * TODO: give cards a dropdown option
      */
     class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.ViewHolder> {
-        SortedMap<Object, Object> mDataSet = User.getUser().getRoomsIn();
 
         RoomAdapter() {
         }

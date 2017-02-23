@@ -1,17 +1,17 @@
 package money.cache.grexActivities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.appindexing.Action;
@@ -27,7 +27,6 @@ import grexClasses.SocketActivity;
 import grexInterfaces.SocketTask;
 import grexLayout.ConnectivityFragment;
 import grexLayout.RoomFeedFragment;
-import grexLayout.SpinnerFragment;
 
 import static grexClasses.GrexSocket.RET_STATUS.NONE;
 import static grexClasses.GrexSocket.RET_STATUS.SUCCESS;
@@ -40,7 +39,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     TabLayout mTabLayout;
     @Bind(R.id.activity_home)
     RelativeLayout mHomeLayout;
-
+    @Bind(R.id.progressBar3)
+    ProgressBar mLoading;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -65,16 +65,15 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             }
         });
 
-        ViewTreeObserver vto = mHomeLayout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onGlobalLayout() {
-                mHomeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                new GetRoomsTask().execute();
-                setFragment(SpinnerFragment.newInstance());
-                setUpTabs();
+            public void run() {
+
             }
-        });
+        }, 1000);
+        setUpTabs();
+
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -155,7 +154,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
     @Override
     public void onFragmentInteraction() {
-        new GetRoomsTask().execute();
+        //new GetRoomsTask().execute();
     }
 
     @Override
@@ -168,26 +167,22 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.home_feed_fragment, fragment);
         transaction.addToBackStack(null);
-        transaction.commitAllowingStateLoss();
+        transaction.commit();
     }
 
+    //// TODO: 2/23/2017 Get rid of this task
     class GetRoomsTask extends SocketTask<Void, Void, Void> {
-        private ProgressDialog progressDialog;
         private boolean done = false;
-        private GrexSocket grexSocket = GrexSocket.getGrexSocket(HomeActivity.this);
 
         @Override
         protected void onPreExecute() {
             Runtime.getRuntime().gc();
-            progressDialog = ProgressDialog.show(HomeActivity.this,
-                    "Hold up!",
-                    "Connecting you to the flock...");
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                grexSocket.emitGetRooms();
+                GrexSocket.emitGetRooms(HomeActivity.this);
                 done = true;
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -198,17 +193,22 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         @Override
         protected void onProgressUpdate(Void... values) {
             if (done) {
-                progressDialog.setMessage("Getting your swarms...");
+                //progressDialog.setMessage("Getting your swarms...");
                 done = false;
             }
         }
 
         @Override
         protected void onPostExecute(Void param) {
-            progressDialog.dismiss();
             // execution of result of Long time consuming operation
+            try {
+                GrexSocket.emitGetRooms(HomeActivity.this);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             switch (GrexSocket.connection_status) {
                 case CONNECTED:
+                    //// TODO: 2/23/2017 Only wait for X amount of time
                     while (GrexSocket.getGetRooms() == NONE) ;
                     if (GrexSocket.getGetRooms() == SUCCESS) {
                         // TODO: sync local database with server
@@ -218,24 +218,26 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                             while (!allRooms.isAfterLast()) {
                                 String roomString = allRooms.getString(0);
                                 try {
-                                    grexSocket.emitRoom(roomString);
+                                    GrexSocket.emitRoom(roomString, HomeActivity.this);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
+                                LocalDatabase.getInstance(HomeActivity.this).deleteRoom(roomString);
                                 allRooms.moveToNext();
                             }
                         }
+                        mLoading.setVisibility(View.GONE);
                         setFragment(RoomFeedFragment.newInstance());
                     }
                     break;
-                    case INTERNET_DOWN:
-                        setFragment(ConnectivityFragment.newInstance("Check your network connection"));
-                        cancel(true);
-                        break;
-                    case SERVER_DOWN:
-                        setFragment(ConnectivityFragment.newInstance("Well this is awkward..."));
-                        cancel(true);
-                        break;
+                case INTERNET_DOWN:
+                    setFragment(ConnectivityFragment.newInstance("Check your network connection"));
+                    cancel(true);
+                    break;
+                case SERVER_DOWN:
+                    setFragment(ConnectivityFragment.newInstance("Well this is awkward..."));
+                    cancel(true);
+                    break;
             }
             Runtime.getRuntime().gc();
         }

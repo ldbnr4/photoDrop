@@ -227,7 +227,7 @@ public class CreateRoomActivity extends SocketActivity {
                 room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
             }
             try {
-                GrexSocket.getGrexSocket(CreateRoomActivity.this).emitRoom(room);
+                GrexSocket.getGrexSocket(CreateRoomActivity.this).emitRoom(room, CreateRoomActivity.this);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
