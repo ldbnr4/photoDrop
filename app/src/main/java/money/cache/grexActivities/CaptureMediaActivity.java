@@ -74,7 +74,7 @@ public class CaptureMediaActivity extends SocketActivity {
                 rotateBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] b = baos.toByteArray();
                 String encImage = Base64.encodeToString(b, Base64.DEFAULT);
-                GrexSocket.getGrexSocket(CaptureMediaActivity.this.getApplicationContext()).emitImage(username, mCurrentPhotoPath, encImage);
+                GrexSocket.emitImage(username, mCurrentPhotoPath, encImage);
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.

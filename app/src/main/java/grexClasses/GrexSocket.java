@@ -21,67 +21,62 @@ import io.socket.client.Socket;
 import static grexClasses.GrexSocket.CONNECTION_STATUS.CONNECTED;
 import static grexClasses.GrexSocket.CONNECTION_STATUS.INTERNET_DOWN;
 import static grexClasses.GrexSocket.CONNECTION_STATUS.SERVER_DOWN;
-import static grexClasses.GrexSocket.RET_STATUS.NONE;
 
 
 /**
  * Created by Lorenzo on 11/15/2016.
  * TODO: keep a local database of stuff that doesn't emmit successfully aka doesn't get ack'd
  * TODO: when connection is successfully made sync local database with remote database
- * TODO: use acks for all emits
- * TODO: add else waitForConnection() in all emits
+ * TODO: try not using acks for faster results for all emits
+ * TODO: model emit will be get rooms
  */
 public final class GrexSocket {
+
     public final static Gson gson = new Gson();
-    public static CONNECTION_STATUS connection_status;
-    public static RET_STATUS loggedIn = NONE;
-    public static RET_STATUS signUpStatus = NONE;
+    public static CONNECTION_STATUS connection_status = CONNECTION_STATUS.NONE;
+    public static RET_STATUS loggedIn = RET_STATUS.NONE;
+    public static RET_STATUS signUpStatus = RET_STATUS.NONE;
     public static SimpleDateFormat DF = new SimpleDateFormat("EEE, MMM d\nh:mm aa z", Locale.US);
-    private static RET_STATUS sendRoom = NONE;
-    private static RET_STATUS getRooms = NONE;
+    private static RET_STATUS sendRoom = RET_STATUS.NONE;
+    private static RET_STATUS getRooms = RET_STATUS.NONE;
     private static GrexSocket grexSocket = new GrexSocket();
     private static User user = User.getUser();
     private static Socket mSocket;
     private static ConnectivityManager connectivityManager;
 
-    public static synchronized RET_STATUS getGetRooms() {
+    public static RET_STATUS getGetRooms() {
         return getRooms;
     }
 
-    private static synchronized void setGetRooms(RET_STATUS status) {
+    private static void setGetRooms(RET_STATUS status) {
         getRooms = status;
     }
 
-    public static synchronized RET_STATUS getSendRoom() {
+    public static RET_STATUS getSendRoom() {
         return sendRoom;
     }
 
-    private static synchronized void setSendRoom(RET_STATUS status) {
+    private static void setSendRoom(RET_STATUS status) {
         sendRoom = status;
     }
 
-    public static synchronized GrexSocket getGrexSocket(Context applicationContext) {
-        if (connectivityManager == null) {
-            initConnection(applicationContext);
-        }
-        return grexSocket;
-    }
-
-    private static void initConnection(Context applicationContext) {
-        connectivityManager = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        try {
-            mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
-            if (!hasConnection()) {
-                waitForConnection(applicationContext);
+    private static void initConnection() {
+        if (mSocket == null) {
+            try {
+                mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
             }
-        } catch (URISyntaxException | InterruptedException e) {
-            e.printStackTrace();
+        }
+        if (!mSocket.connected()) {
+            mSocket.connect();
         }
     }
 
     private static void waitForConnection(Context applicationContext) throws InterruptedException {
         int timer = 0;
-        while (!hasConnection() && timer < 3) {
+        while (timer < 3) {
+            if (hasConnection(applicationContext)) break;
             Thread.sleep(1000);
             timer++;
         }
@@ -91,8 +86,9 @@ public final class GrexSocket {
         return (mSocket == null || mSocket.connected());
     }
 
-    private static boolean hasConnection() {
-        boolean network = isNetworkAvailable();
+    private static boolean hasConnection(Context applicationContext) {
+        initConnection();
+        boolean network = isNetworkAvailable(applicationContext);
         boolean server = isConnectedToServer();
         if(!network)
             connection_status = INTERNET_DOWN;
@@ -103,28 +99,30 @@ public final class GrexSocket {
         return network & server;
     }
 
-    private static boolean isNetworkAvailable() {
-        if(connectivityManager != null) {
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            if (activeNetworkInfo != null) {
-                //String answer;
-                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                }
-                //answer="You are connected to a WiFi Network";
-                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                }
-                //answer="You are connected to a Mobile Network";
-                return activeNetworkInfo.isConnected();
+    private static boolean isNetworkAvailable(Context applicationContext) {
+        if (connectivityManager == null) {
+            connectivityManager = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        }
+
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if (activeNetworkInfo != null) {
+            //String answer;
+            if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
             }
+            //answer="You are connected to a WiFi Network";
+            if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+            }
+            //answer="You are connected to a Mobile Network";
+            return activeNetworkInfo.isConnected();
         }
         return false;
     }
 
-    public static void emitRoom(String roomString, Context applicationContext) throws InterruptedException {
-        if (hasConnection())
+    public static void emitRoom(String roomString) throws InterruptedException {
+        //if (hasConnection(applicationContext))
             emitRoomsCore(roomString);
-        else
-            waitForConnection(applicationContext);
+        //else
+        //waitForConnection(applicationContext);
     }
 
     private static void emitRoomsCore(String roomString) {
@@ -132,7 +130,7 @@ public final class GrexSocket {
     }
 
     private static void emitRoomInnerCore(String roomJSON) {
-        setSendRoom(NONE);
+        setSendRoom(RET_STATUS.NONE);
         mSocket.emit("new_room", roomJSON, new Ack() {
             @Override
             public void call(Object... args) {
@@ -142,15 +140,14 @@ public final class GrexSocket {
     }
 
     public static void emitGetRooms(Context applicationContext) throws InterruptedException {
-        initConnection(applicationContext);
-        if (hasConnection()) {
-            emitGetRoomsCore();
-        } else
-            waitForConnection(applicationContext);
+        setGetRooms(RET_STATUS.NONE);
+        waitForConnection(applicationContext);
+        if (connection_status == CONNECTED) {
+            tryToGetRooms();
+        }
     }
 
-    private static void emitGetRoomsCore() {
-        setGetRooms(NONE);
+    private static void tryToGetRooms() {
         mSocket.emit("get_rooms", User.getUser().getName(), new Ack() {
             @Override
             public void call(Object... args) {
@@ -169,8 +166,25 @@ public final class GrexSocket {
         });
     }
 
+    public static void emitImage(String username, String photoName, String image) {
+        //if(hasConnection(applicationContext))
+        mSocket.emit("image_upload", username, photoName, image);
+    }
+
+    public static void emitRoom(Room room) throws InterruptedException {
+        //if(hasConnection(applicationContext))
+        emitRoomCore(room);
+        //else
+        //waitForConnection(applicationContext);
+    }
+
+    private static void emitRoomCore(Room room) {
+        String roomJSON = gson.toJson(room);
+        emitRoomInnerCore(roomJSON);
+    }
+
     public void emitLogin(String email, String password) {
-        if (hasConnection())
+        //if (hasConnection(applicationContext))
             mSocket.emit("login", email.trim(), password.trim(), new Ack() {
                 @Override
                 public void call(Object... args) {
@@ -180,7 +194,7 @@ public final class GrexSocket {
     }
 
     public void emitRegister(String username, String email, String mobile, String password) {
-        if(hasConnection())
+        //if(hasConnection(applicationContext))
             mSocket.emit("register", username.trim(), email.trim(), mobile.trim(), password.trim(), new Ack() {
                 @Override
                 public void call(Object... args) {
@@ -189,37 +203,13 @@ public final class GrexSocket {
             });
     }
 
-    public void emitImage(String username, String photoName, String image) {
-        if(hasConnection())
-            mSocket.emit("image_upload", username, photoName, image);
-    }
-
-    public void emitRoom(Room room, Context applicationContext) throws InterruptedException {
-        if(hasConnection()) {
-            emitRoomCore(room);
-        } else
-            waitForConnection(applicationContext);
-    }
-
-    public void tEmitRoom(Room room) {
-        emitRoomCore(room);
-    }
-
-    private void emitRoomCore(Room room) {
-        String roomJSON = gson.toJson(room);
-        emitRoomInnerCore(roomJSON);
-    }
-
-    public void tEmitGetRooms() {
-        emitGetRoomsCore();
-    }
-
     public void disconnect() {
         mSocket.emit("disconnect");
         mSocket.disconnect();
     }
 
     public enum CONNECTION_STATUS {
+        NONE,
         CONNECTED,
         SERVER_DOWN,
         INTERNET_DOWN

@@ -37,7 +37,7 @@ public class CreateRoomTest {
     @Test
     public void testCreateRoom() {
         Context applicationContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        GrexSocket grexSocket = GrexSocket.getGrexSocket(applicationContext);
+        //GrexSocket grexSocket = GrexSocket.getGrexSocket(applicationContext);
         if (GrexSocket.connection_status == CONNECTED) {
             int before = 0;
             int after = 0;
@@ -60,7 +60,7 @@ public class CreateRoomTest {
                         ((BitmapDrawable) applicationContext.getDrawable(resID)).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, baos);
                         room.setImage(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
                     }
-                    grexSocket.emitRoom(room, applicationContext);
+                    GrexSocket.emitRoom(room);
                     while (GrexSocket.getSendRoom() != SUCCESS) ;
                 }
 
@@ -75,6 +75,5 @@ public class CreateRoomTest {
         } else
             fail();
 
-        grexSocket.disconnect();
     }
 }
