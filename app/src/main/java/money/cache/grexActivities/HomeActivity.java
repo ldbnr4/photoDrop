@@ -12,6 +12,7 @@ import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.appindexing.Action;
@@ -28,7 +29,6 @@ import grexInterfaces.SocketTask;
 import grexLayout.ConnectivityFragment;
 import grexLayout.RoomFeedFragment;
 
-import static grexClasses.GrexSocket.RET_STATUS.NONE;
 import static grexClasses.GrexSocket.RET_STATUS.SUCCESS;
 
 // TODO: 2/23/2017 onPostExecute cant wait. move to another function.
@@ -40,6 +40,9 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     TabLayout mTabLayout;
     @Bind(R.id.activity_home)
     RelativeLayout mHomeLayout;
+    @Bind(R.id.home_feed_loading)
+    ProgressBar mfeedLoading;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -167,6 +170,33 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         transaction.replace(R.id.home_feed_fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mfeedLoading.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    void checkGetRoomsStatus() {
+        while (GrexSocket.getGetRooms() != SUCCESS) ;
+        // TODO: sync local database with server
+        Cursor allRooms = LocalDatabase.getInstance(HomeActivity.this).getAllRooms();
+        if (allRooms.getCount() > 0) {
+            allRooms.moveToFirst();
+            while (!allRooms.isAfterLast()) {
+                String roomString = allRooms.getString(0);
+                try {
+                    GrexSocket.emitRoom(roomString);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                LocalDatabase.getInstance(HomeActivity.this).deleteRoom(roomString);
+                allRooms.moveToNext();
+            }
+        }
+        setFragment(RoomFeedFragment.newInstance());
+        Runtime.getRuntime().gc();
     }
 
     //// TODO: 2/23/2017 Get rid of this task
@@ -196,28 +226,12 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         protected void onPostExecute(Void param) {
             switch (GrexSocket.connection_status) {
                 case CONNECTED:
-                    int time = 0;
-                    while (GrexSocket.getGetRooms() == NONE || time < 3) {
-
-                    }
-                    if (GrexSocket.getGetRooms() == SUCCESS) {
-                        // TODO: sync local database with server
-                        Cursor allRooms = LocalDatabase.getInstance(HomeActivity.this).getAllRooms();
-                        if (allRooms.getCount() > 0) {
-                            allRooms.moveToFirst();
-                            while (!allRooms.isAfterLast()) {
-                                String roomString = allRooms.getString(0);
-                                try {
-                                    GrexSocket.emitRoom(roomString);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                LocalDatabase.getInstance(HomeActivity.this).deleteRoom(roomString);
-                                allRooms.moveToNext();
-                            }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            checkGetRoomsStatus();
                         }
-                        setFragment(RoomFeedFragment.newInstance());
-                    }
+                    }).start();
                     break;
                 case INTERNET_DOWN:
                     setFragment(ConnectivityFragment.newInstance("Check your network connection"));
@@ -226,7 +240,9 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                     setFragment(ConnectivityFragment.newInstance("Well this is awkward..."));
                     break;
             }
-            show.dismiss();
+            if (show.isShowing()) {
+                show.dismiss();
+            }
             cancel(true);
             Runtime.getRuntime().gc();
         }

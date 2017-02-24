@@ -17,6 +17,7 @@ import java.util.Locale;
 import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 
 import static grexClasses.GrexSocket.CONNECTION_STATUS.CONNECTED;
 import static grexClasses.GrexSocket.CONNECTION_STATUS.INTERNET_DOWN;
@@ -27,8 +28,7 @@ import static grexClasses.GrexSocket.CONNECTION_STATUS.SERVER_DOWN;
  * Created by Lorenzo on 11/15/2016.
  * TODO: keep a local database of stuff that doesn't emmit successfully aka doesn't get ack'd
  * TODO: when connection is successfully made sync local database with remote database
- * TODO: try not using acks for faster results for all emits
- * TODO: model emit will be get rooms
+ * TODO: scrapt the socket idea and try a rest api
  */
 public final class GrexSocket {
 
@@ -39,7 +39,6 @@ public final class GrexSocket {
     public static SimpleDateFormat DF = new SimpleDateFormat("EEE, MMM d\nh:mm aa z", Locale.US);
     private static RET_STATUS sendRoom = RET_STATUS.NONE;
     private static RET_STATUS getRooms = RET_STATUS.NONE;
-    private static GrexSocket grexSocket = new GrexSocket();
     private static User user = User.getUser();
     private static Socket mSocket;
     private static ConnectivityManager connectivityManager;
@@ -64,6 +63,22 @@ public final class GrexSocket {
         if (mSocket == null) {
             try {
                 mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
+                mSocket.on("serv_rooms", new Emitter.Listener() {
+                    @Override
+                    public void call(Object... args) {
+                        JSONArray array = (JSONArray) args[0];
+                        for (int i = 0; i < array.length(); i++) {
+                            try {
+                                JSONObject o = (JSONObject) array.get(i);
+                                String roomJSON = o.get("room").toString();
+                                user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        setGetRooms(RET_STATUS.SUCCESS);
+                    }
+                });
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -143,27 +158,8 @@ public final class GrexSocket {
         setGetRooms(RET_STATUS.NONE);
         waitForConnection(applicationContext);
         if (connection_status == CONNECTED) {
-            tryToGetRooms();
+            mSocket.emit("get_rooms", User.getUser().getName());
         }
-    }
-
-    private static void tryToGetRooms() {
-        mSocket.emit("get_rooms", User.getUser().getName(), new Ack() {
-            @Override
-            public void call(Object... args) {
-                JSONArray array = (JSONArray) args[1];
-                for (int i = 0; i < array.length(); i++) {
-                    try {
-                        JSONObject o = (JSONObject) array.get(i);
-                        String roomJSON = o.get("room").toString();
-                        user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                setGetRooms(RET_STATUS.valueOf((String) args[0]));
-            }
-        });
     }
 
     public static void emitImage(String username, String photoName, String image) {

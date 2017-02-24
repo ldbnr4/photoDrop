@@ -61,7 +61,7 @@
         android:layout_below="@+id/tab_layout">
 
         <ProgressBar
-            android:id="@+id/progressBar3"
+            android:id="@+id/home_feed_loading"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
