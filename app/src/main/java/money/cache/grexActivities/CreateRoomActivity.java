@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
-import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,6 +31,7 @@ import grexClasses.GrexSocket;
 import grexClasses.LocalDatabase;
 import grexClasses.Room;
 import grexClasses.SocketActivity;
+import grexClasses.SocketCluster;
 import grexClasses.User;
 import grexInterfaces.SocketTask;
 
@@ -224,13 +224,9 @@ public class CreateRoomActivity extends SocketActivity {
         protected Void doInBackground(Void... params) {
             room = new Room(rmName, pub, begin, end, desc);
             if (aBoolean) {
-                room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
+                //room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
             }
-            try {
-                GrexSocket.emitRoom(room);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            SocketCluster.emitRoom(room);
             return null;
         }
 

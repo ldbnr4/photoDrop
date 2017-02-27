@@ -20,6 +20,7 @@ public class Room {
     private Set<String> photoRoll;
     private Set<String> videoRoll;
     private String _id;
+    private String id;
 
     public Room(String name, boolean isPub, String birth, String death, String description) {
         //_id = new SimpleDateFormat("MMddyyyy_", Locale.US).format(new Date()) + Calendar.getInstance().getTimeInMillis() + "_" + User.getUser().getName();
@@ -96,6 +97,10 @@ public class Room {
 
     public Set<String> getVideoRoll() {
         return videoRoll;
+    }
+
+    public String getId() {
+        return id;
     }
 
     /*@Override

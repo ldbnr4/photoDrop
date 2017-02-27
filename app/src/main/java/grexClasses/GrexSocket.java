@@ -55,7 +55,7 @@ public final class GrexSocket {
         return sendRoom;
     }
 
-    private static void setSendRoom(RET_STATUS status) {
+    static void setSendRoom(RET_STATUS status) {
         sendRoom = status;
     }
 
@@ -213,6 +213,7 @@ public final class GrexSocket {
 
     public enum RET_STATUS {
         NONE,
+        FAILED,
         VERIFIED,
         NO_ACCOUNT,
         WRONG_PASSWORD,

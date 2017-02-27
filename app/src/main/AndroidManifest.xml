@@ -71,7 +71,11 @@
             android:name=".HomeActivity"
             android:theme="@style/AppTheme" />
 
-        <activity android:name=".CreateRoomActivity" />
+        <activity android:name=".CreateRoomActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
