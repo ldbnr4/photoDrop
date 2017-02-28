@@ -15,7 +15,7 @@ import java.util.TreeSet;
 //TODO: Add image field
 public final class User {
     private static final User user = new User();
-    private String name = "GREX_ORPHAN";
+    private static String name = "GREX_ORPHAN";
     private SortedMap<Integer, TreeMap<String, Room>> pagedRoomsIn = Collections.synchronizedSortedMap(new TreeMap<Integer, TreeMap<String, Room>>());
     private SortedMap<String, Room> roomsIn = Collections.synchronizedSortedMap(new TreeMap<String, Room>());
     private Set<User> friends = Collections.synchronizedSet(new HashSet<User>());
@@ -26,6 +26,14 @@ public final class User {
 
     public static synchronized User getUser() {
         return user;
+    }
+
+    public static String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        User.name = name;
     }
 
     public void addToRoomsIn(Room room) {
@@ -84,13 +92,5 @@ public final class User {
 
     void addToFriends(User user){
         friends.add(user);
-    }
-
-    String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

@@ -158,7 +158,7 @@ public final class GrexSocket {
         setGetRooms(RET_STATUS.NONE);
         waitForConnection(applicationContext);
         if (connection_status == CONNECTED) {
-            mSocket.emit("get_rooms", User.getUser().getName());
+            mSocket.emit("get_rooms", User.getName());
         }
     }
 
@@ -213,6 +213,7 @@ public final class GrexSocket {
 
     public enum RET_STATUS {
         NONE,
+        DUPLICATE_USER,
         FAILED,
         VERIFIED,
         NO_ACCOUNT,
