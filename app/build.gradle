@@ -24,9 +24,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile('io.socket:socket.io-client:0.8.2', {
-        exclude group: 'org.json', module: 'json'
-    })
     compile('io.github.sac:SocketclusterClientJava:1.7.2') {
         exclude group: 'org.json', module: 'json'
     }

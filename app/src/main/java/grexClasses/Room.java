@@ -1,6 +1,10 @@
 package grexClasses;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -19,15 +23,14 @@ public class Room {
     private Set<User> guests;
     private Set<String> photoRoll;
     private Set<String> videoRoll;
-    private String _id;
     private String id;
 
     public Room(String name, boolean isPub, String birth, String death, String description) {
-        //_id = new SimpleDateFormat("MMddyyyy_", Locale.US).format(new Date()) + Calendar.getInstance().getTimeInMillis() + "_" + User.getUser().getName();
+        id = new SimpleDateFormat("MMddyyyy_", Locale.US).format(new Date()) + Calendar.getInstance().getTimeInMillis() + "_" + User.getName();
         guests = new HashSet<>();
         photoRoll = new HashSet<>();
         videoRoll = new HashSet<>();
-        this.host = User.getUser().getName();
+        this.host = User.getName();
         this.name = name;
         this.isPubic = isPub;
         this.birth = birth;

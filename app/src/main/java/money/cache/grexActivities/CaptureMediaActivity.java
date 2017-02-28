@@ -27,8 +27,8 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.GrexSocket;
 import grexClasses.SocketActivity;
+import grexClasses.SocketCluster;
 
 //TODO: maske task to emit
 public class CaptureMediaActivity extends SocketActivity {
@@ -74,7 +74,7 @@ public class CaptureMediaActivity extends SocketActivity {
                 rotateBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] b = baos.toByteArray();
                 String encImage = Base64.encodeToString(b, Base64.DEFAULT);
-                GrexSocket.emitImage(username, mCurrentPhotoPath, encImage);
+                SocketCluster.emitImage(mCurrentPhotoPath, encImage);
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.

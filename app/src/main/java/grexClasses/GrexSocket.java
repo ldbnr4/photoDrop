@@ -10,18 +10,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import grexEnums.CONNECTION_STATUS;
+import grexEnums.RET_STATUS;
+import io.github.sac.Ack;
+import io.github.sac.Emitter;
+import io.github.sac.Socket;
 
-import io.socket.client.Ack;
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
-
-import static grexClasses.GrexSocket.CONNECTION_STATUS.CONNECTED;
-import static grexClasses.GrexSocket.CONNECTION_STATUS.INTERNET_DOWN;
-import static grexClasses.GrexSocket.CONNECTION_STATUS.SERVER_DOWN;
+import static grexEnums.CONNECTION_STATUS.CONNECTED;
+import static grexEnums.CONNECTION_STATUS.INTERNET_DOWN;
+import static grexEnums.CONNECTION_STATUS.SERVER_DOWN;
 
 
 /**
@@ -32,18 +29,17 @@ import static grexClasses.GrexSocket.CONNECTION_STATUS.SERVER_DOWN;
  */
 public final class GrexSocket {
 
-    public final static Gson gson = new Gson();
-    public static CONNECTION_STATUS connection_status = CONNECTION_STATUS.NONE;
-    public static RET_STATUS loggedIn = RET_STATUS.NONE;
-    public static RET_STATUS signUpStatus = RET_STATUS.NONE;
-    public static SimpleDateFormat DF = new SimpleDateFormat("EEE, MMM d\nh:mm aa z", Locale.US);
+    private final static Gson gson = new Gson();
+    private static CONNECTION_STATUS connection_status = CONNECTION_STATUS.NONE;
+    private static RET_STATUS loggedIn = RET_STATUS.NONE;
+    private static RET_STATUS signUpStatus = RET_STATUS.NONE;
     private static RET_STATUS sendRoom = RET_STATUS.NONE;
     private static RET_STATUS getRooms = RET_STATUS.NONE;
     private static User user = User.getUser();
     private static Socket mSocket;
     private static ConnectivityManager connectivityManager;
 
-    public static RET_STATUS getGetRooms() {
+    private static RET_STATUS getGetRooms() {
         return getRooms;
     }
 
@@ -51,7 +47,7 @@ public final class GrexSocket {
         getRooms = status;
     }
 
-    public static RET_STATUS getSendRoom() {
+    private static RET_STATUS getSendRoom() {
         return sendRoom;
     }
 
@@ -61,29 +57,29 @@ public final class GrexSocket {
 
     private static void initConnection() {
         if (mSocket == null) {
-            try {
-                mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
-                mSocket.on("serv_rooms", new Emitter.Listener() {
-                    @Override
-                    public void call(Object... args) {
-                        JSONArray array = (JSONArray) args[0];
-                        for (int i = 0; i < array.length(); i++) {
-                            try {
-                                JSONObject o = (JSONObject) array.get(i);
-                                String roomJSON = o.get("room").toString();
-                                user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+            // mSocket = IO.socket("http://zotime.ddns.net:3000").connect();
+            mSocket.on("serv_rooms", new Emitter.Listener() {
+                @Override
+                public void call(String name, Object data) {
+
+                }
+
+                public void call(Object... args) {
+                    JSONArray array = (JSONArray) args[0];
+                    for (int i = 0; i < array.length(); i++) {
+                        try {
+                            JSONObject o = (JSONObject) array.get(i);
+                            String roomJSON = o.get("room").toString();
+                            user.addToRoomsIn(gson.fromJson(roomJSON, Room.class));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        setGetRooms(RET_STATUS.SUCCESS);
                     }
-                });
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
+                    setGetRooms(RET_STATUS.SUCCESS);
+                }
+            });
         }
-        if (!mSocket.connected()) {
+        if (!mSocket.isconnected()) {
             mSocket.connect();
         }
     }
@@ -98,7 +94,7 @@ public final class GrexSocket {
     }
 
     private static boolean isConnectedToServer() {
-        return (mSocket == null || mSocket.connected());
+        return (mSocket == null || mSocket.isconnected());
     }
 
     private static boolean hasConnection(Context applicationContext) {
@@ -133,7 +129,7 @@ public final class GrexSocket {
         return false;
     }
 
-    public static void emitRoom(String roomString) throws InterruptedException {
+    private static void emitRoom(String roomString) throws InterruptedException {
         //if (hasConnection(applicationContext))
             emitRoomsCore(roomString);
         //else
@@ -148,13 +144,17 @@ public final class GrexSocket {
         setSendRoom(RET_STATUS.NONE);
         mSocket.emit("new_room", roomJSON, new Ack() {
             @Override
+            public void call(String name, Object error, Object data) {
+
+            }
+
             public void call(Object... args) {
                 sendRoom = RET_STATUS.valueOf((String) args[0]);
             }
         });
     }
 
-    public static void emitGetRooms(Context applicationContext) throws InterruptedException {
+    private static void emitGetRooms(Context applicationContext) throws InterruptedException {
         setGetRooms(RET_STATUS.NONE);
         waitForConnection(applicationContext);
         if (connection_status == CONNECTED) {
@@ -162,12 +162,12 @@ public final class GrexSocket {
         }
     }
 
-    public static void emitImage(String username, String photoName, String image) {
+    private static void emitImage(String photoName, String image) {
         //if(hasConnection(applicationContext))
-        mSocket.emit("image_upload", username, photoName, image);
+        mSocket.emit("image_upload", new String[]{User.getName(), photoName, image});
     }
 
-    public static void emitRoom(Room room) throws InterruptedException {
+    private static void emitRoom(Room room) throws InterruptedException {
         //if(hasConnection(applicationContext))
         emitRoomCore(room);
         //else
@@ -179,46 +179,32 @@ public final class GrexSocket {
         emitRoomInnerCore(roomJSON);
     }
 
-    public void emitLogin(String email, String password) {
+    private void emitLogin(String email, String password) {
         //if (hasConnection(applicationContext))
-            mSocket.emit("login", email.trim(), password.trim(), new Ack() {
+        mSocket.emit("login", new String[]{email.trim(), password.trim()}, new Ack() {
                 @Override
+                public void call(String name, Object error, Object data) {
+
+                }
+
                 public void call(Object... args) {
                     loggedIn = RET_STATUS.valueOf((String) args[0]);
                 }
             });
     }
 
-    public void emitRegister(String username, String email, String mobile, String password) {
+    private void emitRegister(String username, String email, String mobile, String password) {
         //if(hasConnection(applicationContext))
-            mSocket.emit("register", username.trim(), email.trim(), mobile.trim(), password.trim(), new Ack() {
+        mSocket.emit("register", new String[]{username.trim(), email.trim(), mobile.trim(), password.trim()}, new Ack() {
                 @Override
+                public void call(String name, Object error, Object data) {
+
+                }
+
                 public void call(Object... args) {
                     signUpStatus = RET_STATUS.valueOf((String) args[0]);
                 }
             });
     }
 
-    public void disconnect() {
-        mSocket.emit("disconnect");
-        mSocket.disconnect();
-    }
-
-    public enum CONNECTION_STATUS {
-        NONE,
-        CONNECTED,
-        SERVER_DOWN,
-        INTERNET_DOWN
-    }
-
-    public enum RET_STATUS {
-        NONE,
-        DUPLICATE_USER,
-        FAILED,
-        VERIFIED,
-        NO_ACCOUNT,
-        WRONG_PASSWORD,
-        INSERTED,
-        SUCCESS
-    }
 }

@@ -27,7 +27,7 @@ import grexClasses.Room;
 import grexClasses.User;
 import money.cache.grexActivities.R;
 
-import static grexClasses.GrexSocket.DF;
+import static grexClasses.SocketCluster.DF;
 
 
 /**
@@ -36,7 +36,7 @@ import static grexClasses.GrexSocket.DF;
  * create an instance of this fragment.
  */
 public class RoomFeedFragment extends Fragment {
-    final TreeMap<String, Room> mDataSet = User.getUser().getRoomsIn(0);
+    TreeMap<String, Room> mDataSet = User.getUser().getRoomsIn(0);
 
     public RoomFeedFragment() {
         // Required empty public constructor

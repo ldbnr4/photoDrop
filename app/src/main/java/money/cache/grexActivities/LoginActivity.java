@@ -13,9 +13,9 @@ import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.GrexSocket.RET_STATUS;
 import grexClasses.SocketActivity;
 import grexClasses.User;
+import grexEnums.RET_STATUS;
 
 
 /**

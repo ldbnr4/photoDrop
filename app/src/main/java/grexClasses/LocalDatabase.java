@@ -44,7 +44,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
     }
 
     public boolean saveRoom(Room room) {
-        String roomString = GrexSocket.gson.toJson(room);
+        String roomString = SocketCluster.gson.toJson(room);
         Cursor cursor = getRoom(roomString);
 
         SQLiteDatabase db = this.getWritableDatabase();

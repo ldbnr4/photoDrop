@@ -1,18 +1,14 @@
 package money.cache.grexActivities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.Tab;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.appindexing.Action;
@@ -22,14 +18,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.GrexSocket;
-import grexClasses.LocalDatabase;
 import grexClasses.SocketActivity;
+import grexClasses.SocketCluster;
 import grexInterfaces.SocketTask;
 import grexLayout.ConnectivityFragment;
 import grexLayout.RoomFeedFragment;
+import grexLayout.SpinnerFragment;
 
-import static grexClasses.GrexSocket.RET_STATUS.SUCCESS;
+import static grexEnums.RET_STATUS.SUCCESS;
+
 
 // TODO: 2/23/2017 onPostExecute cant wait. move to another function.
 public class HomeActivity extends SocketActivity implements ConnectivityFragment.OnFragmentInteractionListener {
@@ -40,8 +37,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     TabLayout mTabLayout;
     @Bind(R.id.activity_home)
     RelativeLayout mHomeLayout;
-    @Bind(R.id.home_feed_loading)
-    ProgressBar mfeedLoading;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -67,13 +62,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             }
         });
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new GetRoomsTask().execute();
-            }
-        }, 1000);
+        new GetRoomsTask().execute();
         setUpTabs();
 
 
@@ -170,18 +159,12 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         transaction.replace(R.id.home_feed_fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mfeedLoading.setVisibility(View.GONE);
-            }
-        });
     }
 
     void checkGetRoomsStatus() {
-        while (GrexSocket.getGetRooms() != SUCCESS) ;
+        while (SocketCluster.getGetRooms() != SUCCESS) ;
         // TODO: sync local database with server
-        Cursor allRooms = LocalDatabase.getInstance(HomeActivity.this).getAllRooms();
+        /*Cursor allRooms = LocalDatabase.getInstance(HomeActivity.this).getAllRooms();
         if (allRooms.getCount() > 0) {
             allRooms.moveToFirst();
             while (!allRooms.isAfterLast()) {
@@ -194,37 +177,23 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                 LocalDatabase.getInstance(HomeActivity.this).deleteRoom(roomString);
                 allRooms.moveToNext();
             }
-        }
+        }*/
         setFragment(RoomFeedFragment.newInstance());
         Runtime.getRuntime().gc();
     }
 
     //// TODO: 2/23/2017 Get rid of this task
     class GetRoomsTask extends SocketTask<Void, Void, Void> {
-        private ProgressDialog show;
 
         @Override
         protected void onPreExecute() {
             Runtime.getRuntime().gc();
-            show = new ProgressDialog(HomeActivity.this);
-            show.setTitle("Hold up!");
-            show.setMessage("Flying you out to the flock...");
-            show.show();
+            setFragment(new SpinnerFragment());
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                GrexSocket.emitGetRooms(HomeActivity.this);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void param) {
-            switch (GrexSocket.connection_status) {
+            switch (SocketCluster.emitGetRooms()) {
                 case CONNECTED:
                     new Thread(new Runnable() {
                         @Override
@@ -240,10 +209,11 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                     setFragment(ConnectivityFragment.newInstance("Well this is awkward..."));
                     break;
             }
-            if (show.isShowing()) {
-                show.dismiss();
-            }
-            cancel(true);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param) {
             Runtime.getRuntime().gc();
         }
     }

@@ -1,6 +1,5 @@
 package grexClasses;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedMap;
@@ -16,9 +15,9 @@ import java.util.TreeSet;
 public final class User {
     private static final User user = new User();
     private static String name = "GREX_ORPHAN";
-    private SortedMap<Integer, TreeMap<String, Room>> pagedRoomsIn = Collections.synchronizedSortedMap(new TreeMap<Integer, TreeMap<String, Room>>());
-    private SortedMap<String, Room> roomsIn = Collections.synchronizedSortedMap(new TreeMap<String, Room>());
-    private Set<User> friends = Collections.synchronizedSet(new HashSet<User>());
+    private SortedMap<Integer, TreeMap<String, Room>> pagedRoomsIn = new TreeMap<>();
+    private SortedMap<String, Room> roomsIn = new TreeMap<>();
+    private Set<User> friends = new HashSet<>();
     private TreeSet<String> pagedRooms = new TreeSet<>();
     private boolean dirtyRooms = false;
 
@@ -51,7 +50,7 @@ public final class User {
         return pagedRoomsIn.size();
     }
 
-    private void paginateRooms() {
+    public void paginateRooms() {
         if (dirtyRooms) {
             int numRoomsIn = roomsIn.size();
             int currentPage = pagedRoomsIn.size();
@@ -69,7 +68,8 @@ public final class User {
                 cRoom = roomEntrySet[i];
                 if (count % 10 == 0 || cPageMap == null) {
                     cPageMap = new TreeMap<>();
-                    pagedRoomsIn.put(currentPage++, cPageMap);
+                    pagedRoomsIn.put(currentPage, cPageMap);
+                    currentPage++;
                 }
                 if (!pagedRooms.contains(cRoom.getId())) {
                     cPageMap.put(cRoom.getId(), cRoom);

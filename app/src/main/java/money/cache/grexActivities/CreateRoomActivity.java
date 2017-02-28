@@ -27,15 +27,13 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import grexClasses.GrexSocket;
-import grexClasses.LocalDatabase;
 import grexClasses.Room;
 import grexClasses.SocketActivity;
 import grexClasses.SocketCluster;
 import grexClasses.User;
+import grexEnums.RET_STATUS;
 import grexInterfaces.SocketTask;
 
-import static grexClasses.GrexSocket.RET_STATUS.SUCCESS;
 
 public class CreateRoomActivity extends SocketActivity {
     private static final int PICK_IMAGE_REQUEST = 2;
@@ -115,8 +113,8 @@ public class CreateRoomActivity extends SocketActivity {
                         .listener(new DoubleDateAndTimePickerDialog.Listener() {
                             @Override
                             public void onDateSelected(List<Date> dates) {
-                                _txtFrom.setText(GrexSocket.DF.format(dates.get(0)));
-                                _txtTill.setText(GrexSocket.DF.format(dates.get(1)));
+                                _txtFrom.setText(SocketCluster.DF.format(dates.get(0)));
+                                _txtTill.setText(SocketCluster.DF.format(dates.get(1)));
                             }
                         }).display();
             }
@@ -233,11 +231,11 @@ public class CreateRoomActivity extends SocketActivity {
         @Override
         protected void onPostExecute(Void param) {
             progressDialog.dismiss();
-            if (GrexSocket.getSendRoom() == SUCCESS) {
+            if (SocketCluster.getSendRoom() == RET_STATUS.SUCCESS) {
                 //TODO: Notify user of success with green check animation
                 User.getUser().addToRoomsIn(room);
             } else {
-                switch (GrexSocket.connection_status) {
+                /*switch (SocketCluster.connection_status) {
                     case CONNECTED:
                         //Need to do some investigating...
                         break;
@@ -253,7 +251,7 @@ public class CreateRoomActivity extends SocketActivity {
                         }
                         cancel(true);
                         break;
-                }
+                }*/
             }
             finish();
         }
