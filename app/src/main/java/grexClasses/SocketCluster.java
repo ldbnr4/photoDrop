@@ -175,6 +175,22 @@ public class SocketCluster {
         });
     }
 
+    public static CONNECTION_STATUS emitGPS() {
+        if (hasConnection()) {
+            actEmitGPS();
+        } else if (connection_status == SERVER_DOWN) {
+            ourInstance = init();
+            if (hasConnection()) {
+                actEmitGPS();
+            }
+        }
+        return connection_status;
+    }
+
+    private static void actEmitGPS() {
+        ourInstance.emit("user_gps", User.getName());
+    }
+
     public static RET_STATUS getSendUser() {
         return SEND_USER;
     }

@@ -16,6 +16,9 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import grexClasses.SocketActivity;
@@ -31,13 +34,14 @@ import static grexEnums.RET_STATUS.SUCCESS;
 // TODO: 2/23/2017 onPostExecute cant wait. move to another function.
 public class HomeActivity extends SocketActivity implements ConnectivityFragment.OnFragmentInteractionListener {
 
+    //Declare the timer
+    private final Timer t = new Timer();
     @Bind(R.id.btn_createRoom)
     FloatingActionButton mBtnCreateRoom;
     @Bind(R.id.tab_layout)
     TabLayout mTabLayout;
     @Bind(R.id.activity_home)
     RelativeLayout mHomeLayout;
-
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -61,6 +65,19 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
+        //Set the schedule function and rate
+        t.scheduleAtFixedRate(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        //Called each time when 5000 milliseconds (5 second) (the period parameter)
+                        SocketCluster.emitGPS();
+                    }
+                },
+                //Set how long before to start calling the TimerTask (in milliseconds)
+                0,
+                //Set the amount of time between each execution (in milliseconds)
+                5000);
 
         new GetRoomsTask().execute();
         setUpTabs();
@@ -151,6 +168,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        t.cancel();
         finish();
     }
 
@@ -158,11 +176,21 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.home_feed_fragment, fragment);
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
     void checkGetRoomsStatus() {
-        while (SocketCluster.getGetRooms() != SUCCESS) ;
+        int timer = 0;
+        int delay = 250;
+        while (timer < 12) {
+            if (SocketCluster.getGetRooms() == SUCCESS) break;
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            timer++;
+        }
         // TODO: sync local database with server
         /*Cursor allRooms = LocalDatabase.getInstance(HomeActivity.this).getAllRooms();
         if (allRooms.getCount() > 0) {
@@ -178,7 +206,21 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                 allRooms.moveToNext();
             }
         }*/
-        setFragment(RoomFeedFragment.newInstance());
+        if (SocketCluster.getGetRooms() == SUCCESS) {
+            setFragment(RoomFeedFragment.newInstance());
+        } else {
+            switch (SocketCluster.emitGetRooms()) {
+                case CONNECTED:
+                    setFragment(ConnectivityFragment.newInstance("Something really strange is happening..."));
+                    break;
+                case INTERNET_DOWN:
+                    setFragment(ConnectivityFragment.newInstance("Check your network connection"));
+                    break;
+                case SERVER_DOWN:
+                    setFragment(ConnectivityFragment.newInstance("Well this is awkward..."));
+                    break;
+            }
+        }
         Runtime.getRuntime().gc();
     }
 
