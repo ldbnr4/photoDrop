@@ -13,13 +13,13 @@ import java.util.TreeSet;
 
 //TODO: Add image field
 public final class User {
-    private static final User user = new User();
+    transient private static final User user = new User();
     private static String name = "GREX_ORPHAN";
-    private SortedMap<Integer, TreeMap<String, Room>> pagedRoomsIn = new TreeMap<>();
-    private SortedMap<String, Room> roomsIn = new TreeMap<>();
-    private Set<User> friends = new HashSet<>();
-    private TreeSet<String> pagedRooms = new TreeSet<>();
-    private boolean dirtyRooms = false;
+    transient private SortedMap<Integer, TreeMap<String, Room>> pagedRoomsIn = new TreeMap<>();
+    transient private SortedMap<String, Room> roomsIn = new TreeMap<>();
+    transient private Set<User> friends = new HashSet<>();
+    transient private TreeSet<String> pagedRooms = new TreeSet<>();
+    transient private boolean dirtyRooms = false;
 
     private User() {}
 
