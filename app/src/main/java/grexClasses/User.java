@@ -1,5 +1,7 @@
 package grexClasses;
 
+import android.location.Location;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedMap;
@@ -13,26 +15,21 @@ import java.util.TreeSet;
 
 //TODO: Add image field
 public final class User {
-    transient private static final User user = new User();
-    private static String name = "GREX_ORPHAN";
-    transient private SortedMap<Integer, TreeMap<String, Room>> pagedRoomsIn = new TreeMap<>();
-    transient private SortedMap<String, Room> roomsIn = new TreeMap<>();
-    transient private Set<User> friends = new HashSet<>();
-    transient private TreeSet<String> pagedRooms = new TreeSet<>();
-    transient private boolean dirtyRooms = false;
+    private static final User user = new User();
+    public String name = "GREX_ORPHAN";
+    public Location location;
+    public String lat;
+    public String lon;
+    private SortedMap<Integer, TreeMap<String, Room>> pagedRoomsIn = new TreeMap<>();
+    private SortedMap<String, Room> roomsIn = new TreeMap<>();
+    private Set<User> friends = new HashSet<>();
+    private TreeSet<String> pagedRooms = new TreeSet<>();
+    private boolean dirtyRooms = false;
 
     private User() {}
 
     public static synchronized User getUser() {
         return user;
-    }
-
-    public static String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        User.name = name;
     }
 
     public void addToRoomsIn(Room room) {
@@ -50,7 +47,7 @@ public final class User {
         return pagedRoomsIn.size();
     }
 
-    public void paginateRooms() {
+    private void paginateRooms() {
         if (dirtyRooms) {
             int numRoomsIn = roomsIn.size();
             int currentPage = pagedRoomsIn.size();

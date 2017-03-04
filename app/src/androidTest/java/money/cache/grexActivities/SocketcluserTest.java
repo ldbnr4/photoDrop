@@ -67,7 +67,7 @@ public class SocketcluserTest {
     @Test
     public void testGetRooms() {
         SocketCluster.emitGetRooms();
-        while (SocketCluster.getGetRooms() == RET_STATUS.NONE) ;
-        System.out.println(SocketCluster.getGetRooms());
+        while (SocketCluster.getGetRoomsStat() == RET_STATUS.NONE) ;
+        System.out.println(SocketCluster.getGetRoomsStat());
     }
 }

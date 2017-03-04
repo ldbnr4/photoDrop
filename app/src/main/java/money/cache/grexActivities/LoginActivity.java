@@ -90,7 +90,7 @@ public class LoginActivity extends SocketActivity {
     }
 
     public void onSuccess() {
-        User.getUser().setName(_usernameText.getText().toString());
+        User.getUser().name = _usernameText.getText().toString();
         startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         finish();
     }

@@ -25,12 +25,13 @@ public class Room {
     private Set<String> videoRoll;
     private String id;
 
+
     public Room(String name, boolean isPub, String birth, String death, String description) {
-        id = new SimpleDateFormat("MMddyyyy_", Locale.US).format(new Date()) + Calendar.getInstance().getTimeInMillis() + "_" + User.getName();
+        id = new SimpleDateFormat("MMddyyyy_", Locale.US).format(new Date()) + Calendar.getInstance().getTimeInMillis() + "_" + SocketCluster.user.name;
         guests = new HashSet<>();
         photoRoll = new HashSet<>();
         videoRoll = new HashSet<>();
-        this.host = User.getName();
+        this.host = SocketCluster.user.name;
         this.name = name;
         this.isPubic = isPub;
         this.birth = birth;

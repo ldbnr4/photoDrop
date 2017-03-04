@@ -1,6 +1,7 @@
 package grexClasses;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -30,12 +31,34 @@ import static grexEnums.CONNECTION_STATUS.SERVER_DOWN;
  */
 public class SocketCluster {
     public final static Gson gson = new Gson();
+    public static User user = User.getUser();
     public static SimpleDateFormat DF = new SimpleDateFormat("EEE, MMM d\nh:mm aa z", Locale.US);
     private static RET_STATUS SEND_USER;
     private static RET_STATUS SEND_ROOM;
     private static RET_STATUS GET_ROOMS;
     private static CONNECTION_STATUS connection_status;
     private static Socket ourInstance = init();
+
+    /*
+    //Declare the timer
+    private final Timer t = new Timer();
+    //Set the schedule function and rate
+        t.scheduleAtFixedRate(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        //Called each time when 5000 milliseconds (5 second) (the period parameter)
+                        SocketCluster.emitGPS();
+                    }
+                },
+                //Set how long before to start calling the TimerTask (in milliseconds)
+                0,
+                //Set the amount of time between each execution (in milliseconds)
+                5000);
+
+        t.cancel();
+
+    */
 
     private static boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) GrexApp.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -130,7 +153,7 @@ public class SocketCluster {
     }
 
     private static void actEmitUser() {
-        ourInstance.emit("add_user", User.getName(), new Ack() {
+        ourInstance.emit("add_user", user.name, new Ack() {
             @Override
             public void call(String name, Object error, Object data) {
                 setSendUser(RET_STATUS.valueOf((String) error));
@@ -139,20 +162,22 @@ public class SocketCluster {
     }
 
     public static CONNECTION_STATUS emitGetRooms() {
-        setGetRooms(RET_STATUS.NONE);
-        if (hasConnection()) {
-            actEmitGetRooms();
-        } else if (connection_status == SERVER_DOWN) {
-            ourInstance = init();
+        if (getGetRoomsStat() != RET_STATUS.NONE) {
+            setGetRooms(RET_STATUS.NONE);
             if (hasConnection()) {
                 actEmitGetRooms();
+            } else if (connection_status == SERVER_DOWN) {
+                ourInstance = init();
+                if (hasConnection()) {
+                    actEmitGetRooms();
+                }
             }
         }
         return connection_status;
     }
 
     private static void actEmitGetRooms() {
-        ourInstance.emit("get_rooms", User.getName(), new Ack() {
+        ourInstance.emit("get_rooms", user.name, new Ack() {
             @Override
             public void call(String name, Object error, Object data) {
                 if (error.equals("SUCCESS")) {
@@ -165,7 +190,6 @@ public class SocketCluster {
                                 e.printStackTrace();
                             }
                         }
-                        User.getUser().paginateRooms();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -175,20 +199,15 @@ public class SocketCluster {
         });
     }
 
-    public static CONNECTION_STATUS emitGPS() {
+    public static CONNECTION_STATUS emitGPS(Location location) {
         if (hasConnection()) {
-            actEmitGPS();
-        } else if (connection_status == SERVER_DOWN) {
-            ourInstance = init();
-            if (hasConnection()) {
-                actEmitGPS();
-            }
+            user.location = location;
+            user.lat = String.valueOf(location.getLatitude());
+            user.lon = String.valueOf(location.getLongitude());
+
+            ourInstance.emit("user_gps", gson.toJson(user));
         }
         return connection_status;
-    }
-
-    private static void actEmitGPS() {
-        ourInstance.emit("user_gps", User.getName());
     }
 
     public static RET_STATUS getSendUser() {
@@ -207,7 +226,7 @@ public class SocketCluster {
         SocketCluster.SEND_ROOM = ret_status;
     }
 
-    public static RET_STATUS getGetRooms() {
+    public static RET_STATUS getGetRoomsStat() {
         return GET_ROOMS;
     }
 
