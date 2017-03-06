@@ -19,15 +19,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.text.ParseException;
 import java.util.TreeMap;
 
 import grexClasses.EndlessRecyclerViewScrollListener;
 import grexClasses.Room;
 import grexClasses.User;
 import money.cache.grexActivities.R;
-
-import static grexClasses.SocketCluster.DF;
 
 
 /**
@@ -132,12 +129,8 @@ public class RoomFeedFragment extends Fragment {
                 holder.mImage.setVisibility(View.GONE);
             }
             holder.mName.setText(room.getName());
-            try {
-                holder.mEndTime.setText(DF.format(DF.parse(room.getDeath())));
-                holder.mStartTime.setText(DF.format(DF.parse(room.getBirth())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            //holder.mEndTime.setText(DF.format(DF.parse(room.getDeath())));
+            //holder.mStartTime.setText(DF.format(DF.parse(room.getBirth())));
             holder.mHost.setText("@" + room.getHost());
         }
 

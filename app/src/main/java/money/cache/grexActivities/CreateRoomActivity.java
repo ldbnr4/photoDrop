@@ -220,11 +220,11 @@ public class CreateRoomActivity extends SocketActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            room = new Room(rmName, pub, begin, end, desc);
+            room = new Room(rmName, pub, desc, 0, 0);
             if (aBoolean) {
                 //room.setImage(Base64.encodeToString(b, Base64.DEFAULT));
             }
-            SocketCluster.emitRoom(room);
+            SocketCluster.getInstance().emitRoom(room);
             return null;
         }
 

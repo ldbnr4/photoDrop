@@ -1,6 +1,6 @@
 package grexClasses;
 
-import android.location.Location;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,9 +17,7 @@ import java.util.TreeSet;
 public final class User {
     private static final User user = new User();
     public String name = "GREX_ORPHAN";
-    public Location location;
-    public String lat;
-    public String lon;
+    public LatLng location;
     private SortedMap<Integer, TreeMap<String, Room>> pagedRoomsIn = new TreeMap<>();
     private SortedMap<String, Room> roomsIn = new TreeMap<>();
     private Set<User> friends = new HashSet<>();

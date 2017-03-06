@@ -13,11 +13,11 @@ import java.util.Set;
  */
 
 public class Room {
+    double lat;
+    double lon;
     private String host;
     private String name;
     private boolean isPubic;
-    private String birth;
-    private String death;
     private String image;
     private String description;
     private Set<User> guests;
@@ -26,7 +26,7 @@ public class Room {
     private String id;
 
 
-    public Room(String name, boolean isPub, String birth, String death, String description) {
+    public Room(String name, boolean isPub, String description, double lat, double lon) {
         id = new SimpleDateFormat("MMddyyyy_", Locale.US).format(new Date()) + Calendar.getInstance().getTimeInMillis() + "_" + SocketCluster.user.name;
         guests = new HashSet<>();
         photoRoll = new HashSet<>();
@@ -34,9 +34,9 @@ public class Room {
         this.host = SocketCluster.user.name;
         this.name = name;
         this.isPubic = isPub;
-        this.birth = birth;
-        this.death = death;
         this.description = description;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     public String getImage() {
@@ -77,14 +77,6 @@ public class Room {
 
     public boolean isPubic() {
         return isPubic;
-    }
-
-    public String getBirth() {
-        return birth;
-    }
-
-    public String getDeath() {
-        return death;
     }
 
     public String getDescription() {

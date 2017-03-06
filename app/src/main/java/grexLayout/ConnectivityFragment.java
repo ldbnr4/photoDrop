@@ -66,7 +66,9 @@ public class ConnectivityFragment extends Fragment {
         mRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mRetryButton.setEnabled(false);
                 onButtonPressed();
+                mRetryButton.setEnabled(true);
             }
         });
 
