@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import money.cache.grexActivities.R;
+import money.cache.grex.R;
 
 /**
  * A fragment with a Google +1 button.

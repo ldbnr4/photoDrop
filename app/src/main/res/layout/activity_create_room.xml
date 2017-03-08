@@ -10,7 +10,7 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="money.cache.grexActivities.CreateRoomActivity">
+    tools:context="money.cache.grex.CreateRoomActivity">
 
 
     <TableRow

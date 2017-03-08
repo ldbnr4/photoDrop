@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import grexClasses.EndlessRecyclerViewScrollListener;
 import grexClasses.Room;
 import grexClasses.User;
-import money.cache.grexActivities.R;
+import money.cache.grex.R;
 
 
 /**

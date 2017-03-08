@@ -35,3 +35,4 @@ Thumbs.db
 gen/
 /.idea/gradle.xml
 build
+/captures

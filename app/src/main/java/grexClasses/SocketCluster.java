@@ -17,7 +17,7 @@ import grexEnums.RET_STATUS;
 import grexEnums.ROOM_CATEGORY;
 import io.github.sac.Ack;
 import io.github.sac.Socket;
-import money.cache.grexActivities.GrexApp;
+import money.cache.grex.GrexApp;
 
 import static grexEnums.RET_STATUS.NONE;
 

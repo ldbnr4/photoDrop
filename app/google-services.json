@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "546695662536",
+    "firebase_url": "https://grex-17f6d.firebaseio.com",
+    "project_id": "grex-17f6d",
+    "storage_bucket": "grex-17f6d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546695662536:android:107be2913d7c1699",
+        "android_client_info": {
+          "package_name": "money.cache.grex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546695662536-5ktscua3jevm696p255cikn7btjem699.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSoorNU7ONJt1p4dTKF4_126lDe0GYiH0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

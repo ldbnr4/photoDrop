@@ -8,7 +8,7 @@
                 android:orientation="vertical"
                 android:padding="0dp"
                 android:weightSum="1"
-                tools:context="money.cache.grexActivities.HomeActivity">
+                tools:context="money.cache.grex.HomeActivity">
 
     <RelativeLayout
         android:id="@+id/menu_bar"

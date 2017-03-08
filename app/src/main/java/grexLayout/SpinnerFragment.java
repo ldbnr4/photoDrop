@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import money.cache.grexActivities.R;
+import money.cache.grex.R;
 
 /**
  * A simple {@link Fragment} subclass.

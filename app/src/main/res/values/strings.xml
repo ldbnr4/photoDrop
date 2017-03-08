@@ -8,4 +8,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="public_switch_image">Public switch image.</string>
     <string name="google_maps_key">AIzaSyCfnUo0uXNapdCIcOQZmkb-cR6Tf4vKXDI</string>
+    <string name="facebook_app_id">1468053556539683</string>
+    <string name="fb_login_protocol_scheme">fb1468053556539683</string>
 </resources>
