@@ -1,122 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+    tools:context="grexLayout.RoomCardFragment">
+
+    <!-- TODO: Update blank fragment layout -->
 
     <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="10dp">
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/room_card_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/room_card_name"
+                android:padding="2.5dp"
+                app:srcCompat="@drawable/_image_file_150" />
 
             <TextView
-                android:id="@+id/txt_feed_event_name"
+                android:id="@+id/room_card_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:text="TextView"
-                android:textSize="24sp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                >
-
-                <ImageView
-                    android:id="@+id/img_feed_event"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/_xlarge_icons_100"
-                    android:maxHeight="50dp"
-                    android:maxWidth="50dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView7"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="From"
-                            />
-
-                        <TextView
-                            android:id="@+id/txt_feed_from"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="18sp"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView6"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="Till"
-                            />
-
-                        <TextView
-                            android:id="@+id/txt_feed_till"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="18sp"/>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            </LinearLayout>
+                android:paddingBottom="10dp"
+                android:text="(ROOM_NAME)"
+                android:textAlignment="center"
+                android:textSize="36sp" />
 
             <TextView
-                android:id="@+id/txt_feed_host"
-                android:layout_width="match_parent"
+                android:id="@+id/room_card_descrip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textSize="12sp"/>
+                android:layout_alignBottom="@+id/room_card_image"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/room_card_name"
+                android:padding="2.5dp"
+                android:text="(ROOM_DESCRIPTION)"
+                android:textAlignment="center"
+                android:textSize="16sp" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/room_card_host"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/room_card_image"
+                android:paddingTop="10dp"
+                android:text="(ROOM_HOST)" />
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
-</LinearLayout>
+</FrameLayout>

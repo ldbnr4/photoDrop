@@ -18,4 +18,5 @@
   <color name="faded_black">#d0282828</color>
   <color name="icon_background">#2d4452</color>
   <color name="dark_background">#FF303030</color>
+    <color name="light_red">#ff0000</color>
 </resources>

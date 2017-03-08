@@ -145,16 +145,14 @@ public class RoomFeedFragment extends Fragment {
         class ViewHolder extends RecyclerView.ViewHolder {
 
             // each data item is just a string in this case
-            TextView mStartTime, mEndTime, mName, mHost;
+            TextView mName, mHost;
             ImageView mImage;
 
             ViewHolder(View itemView) {
                 super(itemView);
-                this.mImage = (ImageView) itemView.findViewById(R.id.img_feed_event);
-                this.mHost = (TextView) itemView.findViewById(R.id.txt_feed_host);
-                this.mStartTime = (TextView) itemView.findViewById(R.id.txt_feed_from);
-                this.mEndTime = (TextView) itemView.findViewById(R.id.txt_feed_till);
-                this.mName = (TextView) itemView.findViewById(R.id.txt_feed_event_name);
+                this.mImage = (ImageView) itemView.findViewById(R.id.room_card_image);
+                this.mHost = (TextView) itemView.findViewById(R.id.room_card_host);
+                this.mName = (TextView) itemView.findViewById(R.id.room_card_name);
             }
 
         }
