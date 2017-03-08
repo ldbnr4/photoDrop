@@ -1,0 +1,67 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="grexLayout.LrgRoomCardFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/room_card_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/room_card_host"
+                android:padding="2.5dp"
+                app:srcCompat="@drawable/_image_file_150"/>
+
+            <TextView
+                android:id="@+id/room_card_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/room_card_image"
+                android:padding="2.5dp"
+                android:text="(ROOM_NAME)"
+                android:textAlignment="center"
+                android:textSize="36sp"/>
+
+            <TextView
+                android:id="@+id/room_card_host"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="12dp"
+                android:padding="2.5dp"
+                android:text="(ROOM_HOST)"/>
+
+            <TextView
+                android:id="@+id/room_card_descrip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/room_card_name"
+                android:layout_centerHorizontal="true"
+                android:padding="2.5dp"
+                android:text="(ROOM_DESCRIPTION)"
+                android:textAlignment="center"
+                android:textSize="16sp"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>

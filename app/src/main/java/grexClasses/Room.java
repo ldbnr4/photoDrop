@@ -10,11 +10,12 @@ import java.util.Set;
 /**
  * Created by Lorenzo on 1/4/2017.
  *
+ * TODO: Make combined fields lat and lon
  */
 
 public class Room {
-    double lat;
-    double lon;
+    public double lat;
+    public double lon;
     private String host;
     private String name;
     private boolean isPubic;
@@ -25,13 +26,12 @@ public class Room {
     private Set<String> videoRoll;
     private String id;
 
-
     public Room(String name, boolean isPub, String description, double lat, double lon) {
-        id = new SimpleDateFormat("MMddyyyy_", Locale.US).format(new Date()) + Calendar.getInstance().getTimeInMillis() + "_" + SocketCluster.user.name;
+        id = new SimpleDateFormat("MMddyyyy_", Locale.US).format(new Date()) + Calendar.getInstance().getTimeInMillis() + "_" + User.getUser().name;
         guests = new HashSet<>();
         photoRoll = new HashSet<>();
         videoRoll = new HashSet<>();
-        this.host = SocketCluster.user.name;
+        this.host = User.getUser().name;
         this.name = name;
         this.isPubic = isPub;
         this.description = description;
