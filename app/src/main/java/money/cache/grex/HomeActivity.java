@@ -438,6 +438,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
+
             }
             return;
         }
