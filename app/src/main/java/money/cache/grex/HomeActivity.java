@@ -73,6 +73,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     RelativeLayout mRoomCardFrame;
     @Bind(R.id.close_room_card_btn)
     ImageButton mBtnCloseRmCard;
+    @Bind(R.id.btn_enterRoom)
+    FloatingActionButton mBtnEnterRoom;
     SupportMapFragment mapFragment;
     GoogleMap mGoogleMap;
     Room focusedRoom = null;
@@ -180,6 +182,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             public void onClick(View v) {
                 mRoomCardFrame.setVisibility(View.GONE);
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 0));
+                mBtnEnterRoom.setVisibility(View.GONE);
+                mBtnCreateRoom.setVisibility(View.VISIBLE);
             }
         });
 
@@ -387,6 +391,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                         tBuilder.include(corners[0]);
                         tBuilder.include(corners[1]);
                         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(tBuilder.build(), 0));
+                        mBtnCreateRoom.setVisibility(View.GONE);
+                        mBtnEnterRoom.setVisibility(View.VISIBLE);
                         break;
                     }
                 }

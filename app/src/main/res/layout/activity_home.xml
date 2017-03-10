@@ -74,6 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:clickable="true"
+            android:visibility="gone"
             app:fabSize="normal"
             app:srcCompat="@drawable/_front_gate_open_48"/>
 
@@ -83,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:clickable="true"
-            android:visibility="gone"
+            android:visibility="visible"
             app:elevation="11dp"
             app:fabSize="normal"
             app:srcCompat="@drawable/_continue"/>
