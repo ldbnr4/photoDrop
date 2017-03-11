@@ -40,6 +40,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:10.2.0'
     compile 'com.google.android.gms:play-services-location:10.2.0'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+    compile 'com.android.support.constraint:constraint-layout:+'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support:animated-vector-drawable:25.2.0'
     androidTestCompile 'com.android.support.test:runner:0.5'

@@ -66,7 +66,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     private static final String LAST_UPDATED_TIME_STRING_KEY = "LAST_UPDT_TIME_KEY";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private static final String TAG = "HOME_ACTIVITY";
-    private final LatLngBounds.Builder builder = new LatLngBounds.Builder();
     @Bind(R.id.btn_createRoom)
     FloatingActionButton mBtnCreateRoom;
     @Bind(R.id.room_card_frame)
@@ -79,6 +78,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     GoogleMap mGoogleMap;
     Room focusedRoom = null;
     ArrayList<Room> list = new ArrayList<>();
+    private LatLngBounds allRoomBounds;
+    private LatLngBounds userRangeBounds;
     private ConnectivityFragment internetDownFrag = ConnectivityFragment.newInstance("Check your network connection");
     private ConnectivityFragment serverDownFrag = ConnectivityFragment.newInstance("Well this is awkward...");
     private SpinnerFragment spinnerFragment = new SpinnerFragment();
@@ -181,9 +182,11 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             @Override
             public void onClick(View v) {
                 mRoomCardFrame.setVisibility(View.GONE);
-                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 0));
-                mBtnEnterRoom.setVisibility(View.GONE);
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(allRoomBounds, 0));
+                mBtnEnterRoom.setVisibility(View.INVISIBLE);
+                mBtnEnterRoom.setClickable(false);
                 mBtnCreateRoom.setVisibility(View.VISIBLE);
+                mBtnCreateRoom.setClickable(true);
             }
         });
 
@@ -391,8 +394,10 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                         tBuilder.include(corners[0]);
                         tBuilder.include(corners[1]);
                         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(tBuilder.build(), 0));
-                        mBtnCreateRoom.setVisibility(View.GONE);
+                        mBtnCreateRoom.setVisibility(View.INVISIBLE);
+                        mBtnCreateRoom.setClickable(false);
                         mBtnEnterRoom.setVisibility(View.VISIBLE);
+                        mBtnEnterRoom.setClickable(true);
                         break;
                     }
                 }
@@ -489,6 +494,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             double lonLowerBound = location.getLongitude() - lonOffset;
             double lonUpperBound = location.getLongitude() + lonOffset;
             int plots = 20;
+            LatLngBounds.Builder allRoomsBuilder = new LatLngBounds.Builder();
             for (int i = 0; i < plots; i++) {
                 double aDouble1 = getDouble(latLowerBound, latUpperBound);
                 double aDouble2 = getDouble(lonLowerBound, lonUpperBound);
@@ -506,8 +512,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
                 }
                 LatLng[] corners = getCorners(randomRoomLocation, ROOM_RANGE);
-                builder.include(corners[0]);
-                builder.include(corners[1]);
+                allRoomsBuilder.include(corners[0]);
+                allRoomsBuilder.include(corners[1]);
             }
 
 
@@ -530,9 +536,11 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                                         .strokeWidth(2)
                                         .strokeColor(Color.WHITE));
                                 LatLng[] corners = getCorners(user1.location, USER_RANGE);
-                                builder.include(corners[0]);
-                                builder.include(corners[1]);
-                                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 0));
+                                LatLngBounds.Builder userRangeBuilder = new LatLngBounds.Builder();
+                                userRangeBuilder.include(corners[0]);
+                                userRangeBuilder.include(corners[1]);
+                                userRangeBounds = userRangeBuilder.build();
+                                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(userRangeBounds, 0));
                             }
                         });
                     } else {
@@ -543,7 +551,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             //builder.include(new LatLng(location.getLatitude(), location.getLongitude()));
 
             //animate camera
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 0));
+            allRoomBounds = allRoomsBuilder.build();
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(allRoomBounds, 0));
             first = false;
         }
 
