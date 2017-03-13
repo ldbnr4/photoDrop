@@ -4,6 +4,8 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:colorForeground">?android:attr/colorForegroundInverse</item>
+        <item name="colorPrimary">@color/icon_background</item>
+        <item name="colorPrimaryDark">@color/oil</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">

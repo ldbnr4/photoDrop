@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/activity_home"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_home"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -10,24 +10,54 @@
                 android:weightSum="1"
                 tools:context="money.cache.grex.HomeActivity">
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/gradient_to_bottom"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Grex"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="?android:attr/colorAccent"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </android.support.constraint.ConstraintLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/menu_bar"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/relativeLayout"
         android:orientation="vertical"
         android:weightSum="1">
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        <fragment android:id="@+id/home_map_view"
+                  android:name="com.google.android.gms.maps.SupportMapFragment"
+                  xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/home_map_view"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:layout_weight=".5"
                   android:visibility="visible"
-                  tools:context=".HomeActivity" />
+                  tools:context=".HomeActivity"
+                  tools:layout="@layout/fragment_spinner"/>
 
         <RelativeLayout
             android:id="@+id/room_card_frame"
@@ -45,7 +75,7 @@
                 android:cropToPadding="false"
                 android:elevation="12dp"
                 android:visibility="visible"
-                app:srcCompat="@android:drawable/arrow_down_float" />
+                app:srcCompat="@android:drawable/arrow_down_float"/>
 
             <FrameLayout
                 android:id="@+id/home_feed_fragment"
@@ -69,6 +99,7 @@
         android:layout_alignParentStart="true"
         android:background="@android:color/transparent"
         android:orientation="horizontal"
+        android:translationZ="-1dp"
         android:visibility="visible"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="1dp">
@@ -78,8 +109,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
             app:fabSize="normal"
@@ -87,18 +120,16 @@
             app:layout_constraintLeft_toRightOf="@+id/btn_createRoom"
             app:layout_constraintRight_toLeftOf="@+id/btn_home_room_list"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/_meeting_50"
-            tools:layout_conversion_absoluteHeight="56dp"
-            tools:layout_conversion_absoluteWidth="56dp"
-            tools:layout_conversion_absoluteX="0dp"
-            tools:layout_conversion_absoluteY="492dp" />
+            app:srcCompat="@drawable/_meeting_50"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_enterRoom"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="false"
             android:visibility="invisible"
@@ -106,19 +137,17 @@
             app:layout_constraintLeft_toRightOf="@+id/btn_home_user"
             app:layout_constraintRight_toLeftOf="@+id/btn_home_friends"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/_front_gate_open_48"
-            tools:layout_conversion_absoluteHeight="0dp"
-            tools:layout_conversion_absoluteWidth="0dp"
-            tools:layout_conversion_absoluteX="0dp"
-            tools:layout_conversion_absoluteY="492dp" />
+            app:srcCompat="@drawable/_front_gate_open_48"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_createRoom"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
             android:visibility="visible"
@@ -128,11 +157,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/_room_100"
-            tools:layout_conversion_absoluteHeight="75dp"
-            tools:layout_conversion_absoluteWidth="75dp"
-            tools:layout_conversion_absoluteX="56dp"
-            tools:layout_conversion_absoluteY="492dp" />
+            app:srcCompat="@drawable/_add_room_100"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_home_home"
@@ -140,25 +165,24 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/_home_64"
-            tools:layout_conversion_absoluteHeight="56dp"
-            tools:layout_conversion_absoluteWidth="56dp"
-            tools:layout_conversion_absoluteX="131dp"
-            tools:layout_conversion_absoluteY="492dp" />
+            app:srcCompat="@drawable/_map_marker_104"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_home_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
             app:fabSize="normal"
@@ -167,17 +191,14 @@
             app:layout_constraintLeft_toRightOf="@+id/btn_home_home"
             app:layout_constraintRight_toLeftOf="@+id/btn_createRoom"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/_user_64"
-            tools:layout_conversion_absoluteHeight="56dp"
-            tools:layout_conversion_absoluteWidth="56dp"
-            tools:layout_conversion_absoluteX="187dp"
-            tools:layout_conversion_absoluteY="492dp" />
+            app:srcCompat="@drawable/_user_64"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_home_room_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
@@ -185,10 +206,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/_bulleted_list_50" />
+            app:srcCompat="@drawable/_bulleted_list_50"/>
 
 
     </android.support.constraint.ConstraintLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gradient"
+        android:translationZ="-100000dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="336dp">
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

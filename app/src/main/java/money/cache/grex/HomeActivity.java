@@ -1,7 +1,6 @@
 package money.cache.grex;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,7 +19,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -28,6 +26,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -43,6 +42,7 @@ import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import grexClasses.Room;
 import grexClasses.SocketActivity;
 import grexClasses.SocketCluster;
@@ -70,15 +70,12 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     FloatingActionButton mBtnCreateRoom;
     @Bind(R.id.room_card_frame)
     RelativeLayout mRoomCardFrame;
-    @Bind(R.id.close_room_card_btn)
-    ImageButton mBtnCloseRmCard;
     @Bind(R.id.btn_enterRoom)
     FloatingActionButton mBtnEnterRoom;
     SupportMapFragment mapFragment;
     GoogleMap mGoogleMap;
     Room focusedRoom = null;
     ArrayList<Room> list = new ArrayList<>();
-    private LatLngBounds allRoomBounds;
     private LatLngBounds userRangeBounds;
     private ConnectivityFragment internetDownFrag = ConnectivityFragment.newInstance("Check your network connection");
     private ConnectivityFragment serverDownFrag = ConnectivityFragment.newInstance("Well this is awkward...");
@@ -112,33 +109,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     private String mLastUpdateTime;
     private boolean mRequestingLocationUpdates = true;
     private boolean first = true;
-
-
-    public static void displayPromptForEnablingGPS(
-            final Activity activity) {
-        final AlertDialog.Builder builder =
-                new AlertDialog.Builder(activity);
-        final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-        final String message = "Enable either GPS or any other location"
-                + " service to find current location.  Click OK to go to"
-                + " location services settings to let you do so.";
-
-        builder.setMessage(message)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int id) {
-                                activity.startActivity(new Intent(action));
-                                d.dismiss();
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int id) {
-                                d.cancel();
-                            }
-                        });
-        builder.create().show();
-    }
+    private CameraUpdate userRangeCam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,14 +117,34 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        updateValuesFromBundle(savedInstanceState);
-
         if (mRoomCardFrame.getVisibility() == View.VISIBLE)
             mRoomCardFrame.setVisibility(View.GONE);
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            displayPromptForEnablingGPS(this);
+            final AlertDialog.Builder builder =
+                    new AlertDialog.Builder(this);
+            final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+            final String message = "Enable either GPS or any other location"
+                    + " service to find current location.  Click OK to go to"
+                    + " location services settings to let you do so.";
+
+            builder.setMessage(message)
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface d, int id) {
+                                    startActivity(new Intent(action));
+                                    d.dismiss();
+                                }
+                            })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface d, int id) {
+                                    //TODO: GPS offiline mode or something
+                                    d.cancel();
+                                }
+                            });
+            builder.create().show();
         }
 
         // First we need to check availability of play services
@@ -178,30 +169,28 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                 .connectedPollFrequency(60)
                 .disconnectedPollFrequency(1);
 
-        mBtnCloseRmCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRoomCardFrame.setVisibility(View.GONE);
-                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(allRoomBounds, 0));
-                mBtnEnterRoom.setVisibility(View.INVISIBLE);
-                mBtnEnterRoom.setClickable(false);
-                mBtnCreateRoom.setVisibility(View.VISIBLE);
-                mBtnCreateRoom.setClickable(true);
-            }
-        });
-
-
-        mBtnCreateRoom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-        });
-
-
+        updateValuesFromBundle(savedInstanceState);
     }
+
+    @OnClick({R.id.close_room_card_btn, R.id.btn_home_home})
+    void setMapToUserRange() {
+        mRoomCardFrame.setVisibility(View.GONE);
+        if (userRangeCam != null) {
+            mGoogleMap.animateCamera(userRangeCam);
+        }
+        mBtnEnterRoom.setVisibility(View.INVISIBLE);
+        mBtnEnterRoom.setClickable(false);
+        mBtnCreateRoom.setVisibility(View.VISIBLE);
+        mBtnCreateRoom.setClickable(true);
+    }
+
+    @OnClick(R.id.btn_createRoom)
+    void goToCreateRoomPage() {
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
+        startActivity(intent);
+    }
+
 
     /**
      * Method to verify google play services on the device
@@ -540,7 +529,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                                 userRangeBuilder.include(corners[0]);
                                 userRangeBuilder.include(corners[1]);
                                 userRangeBounds = userRangeBuilder.build();
-                                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(userRangeBounds, 0));
+                                userRangeCam = CameraUpdateFactory.newLatLngBounds(userRangeBounds, 0);
+                                mGoogleMap.animateCamera(userRangeCam);
                             }
                         });
                     } else {
@@ -551,8 +541,9 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             //builder.include(new LatLng(location.getLatitude(), location.getLongitude()));
 
             //animate camera
-            allRoomBounds = allRoomsBuilder.build();
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(allRoomBounds, 0));
+            LatLngBounds allRoomBounds = allRoomsBuilder.build();
+            userRangeCam = CameraUpdateFactory.newLatLngBounds(allRoomBounds, 0);
+            mGoogleMap.animateCamera(userRangeCam);
             first = false;
         }
 

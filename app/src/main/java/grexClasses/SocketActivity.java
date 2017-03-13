@@ -1,14 +1,14 @@
 package grexClasses;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 /**
  * Created by Lorenzo on 1/29/2017.
  *
  */
-public abstract class SocketActivity extends FragmentActivity {
+public abstract class SocketActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle bundle){
