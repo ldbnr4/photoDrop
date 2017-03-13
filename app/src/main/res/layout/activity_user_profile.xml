@@ -28,9 +28,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/relativeLayout2"
-        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="40dp">
 
@@ -44,14 +43,14 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="55dp"
             android:background="@color/accent"
             android:outlineProvider="background"
             android:padding="1dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/_contacts_96"/>
+            app:srcCompat="@drawable/_contacts_96" />
 
         <LinearLayout
             android:layout_width="250dp"
@@ -82,7 +81,7 @@
                 app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                tools:layout_editor_absoluteY="220dp"/>
+                tools:layout_editor_absoluteY="220dp" />
 
             <EditText
                 android:id="@+id/editText4"
@@ -101,7 +100,7 @@
                 app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText"/>
+                app:layout_constraintTop_toBottomOf="@+id/editText" />
 
             <EditText
                 android:id="@+id/editText2"
@@ -121,7 +120,7 @@
                 app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText"/>
+                app:layout_constraintTop_toBottomOf="@+id/editText" />
 
             <EditText
                 android:id="@+id/editText3"
@@ -139,26 +138,25 @@
                 android:textAlignment="center"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText2"/>
+                app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/floatingActionButton2"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
-                    android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginEnd="60dp"
+                    android:layout_centerHorizontal="true"
                     android:clickable="true"
+                    android:visibility="gone"
                     app:backgroundTint="@color/checked_green"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/_thumb_up_48"
                     tools:layout_editor_absoluteX="191dp"
-                    tools:layout_editor_absoluteY="354dp"/>
+                    tools:layout_editor_absoluteY="354dp" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/floatingActionButton3"
@@ -168,30 +166,21 @@
                     android:layout_marginEnd="51dp"
                     android:layout_toStartOf="@+id/floatingActionButton2"
                     android:clickable="true"
+                    android:visibility="gone"
                     app:backgroundTint="@color/my_red"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/_thumbs_down_48"
                     tools:layout_editor_absoluteX="101dp"
-                    tools:layout_editor_absoluteY="354dp"/>
+                    tools:layout_editor_absoluteY="354dp" />
+
             </RelativeLayout>
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="65dp"
-            android:background="@drawable/gradient"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-        </RelativeLayout>
-
     </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/btn_user_profile_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -201,6 +190,40 @@
         android:clickable="true"
         app:elevation="5dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/_back_26"/>
+        app:srcCompat="@drawable/_back_26" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/gradient"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+    </RelativeLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButton4"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="5dp"
+            android:clickable="true"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/_save_as_80" />
+    </android.support.constraint.ConstraintLayout>
 
 </RelativeLayout>

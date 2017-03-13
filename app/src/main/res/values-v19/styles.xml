@@ -3,8 +3,10 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:colorForeground">?android:attr/colorForegroundInverse</item>
+        <item name="android:colorForeground">?attr/colorPrimaryDark</item>
         <item name="colorPrimary">@color/icon_background</item>
         <item name="colorPrimaryDark">@color/oil</item>
+        <item name="android:colorBackground">@color/black</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
     </style>
 </resources>

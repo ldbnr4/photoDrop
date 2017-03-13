@@ -12,180 +12,148 @@
     android:orientation="vertical"
     tools:context="money.cache.grex.CreateRoomActivity">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_create_rm_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/_back_26"
+        tools:layout_editor_absoluteX="13dp"
+        tools:layout_editor_absoluteY="-6dp" />
 
-    <TableRow
-        android:id="@+id/tRow"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="40dp"
+        android:background="@drawable/gradient_to_bottom"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
-        <EditText
-            android:id="@+id/txt_mom_name"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:gravity="center"
-            android:hint="Event name"
-            android:inputType="textUri|textPersonName"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:textSize="30sp"/>
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="10dp"
+            android:text="Build-a-Room"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="?android:attr/colorAccent"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1" />
 
-    </TableRow>
+    </android.support.constraint.ConstraintLayout>
+
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tableRow"
-        android:layout_below="@+id/tRow">
+        android:layout_below="@+id/btn_create_rm_back"
+        android:layout_marginTop="30dp">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/border"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/tr_createRm_rmImg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    app:srcCompat="@drawable/_edit_image"/>
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/create_event_img"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:foregroundGravity="center"
-                    android:paddingBottom="10dp"
-                    app:srcCompat="@drawable/_xlarge_icons_100"/>
-
-            </RelativeLayout>
-
-            <View style="@style/Divider"/>
-
-            <TableRow
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/txt_mom_name"
+                android:layout_width="268dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp">
+                android:layout_weight=".5"
+                android:gravity="center"
+                android:hint="Title"
+                android:inputType="textUri|textPersonName"
+                android:textSize="30sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/img_createRm_vis"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/_vis"/>
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/create_event_img"
+                android:layout_width="wrap_content"
+                android:layout_height="104dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_mom_name"
+                app:srcCompat="@drawable/_xlarge_icons_100" />
 
-                <Switch
-                    android:id="@+id/switch_public"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".5"
-                    android:checked="true"
-                    android:gravity="center"
-                    android:text="Public"
-                    android:textOff="Private"
-                    android:textOn="Public"/>
 
-            </TableRow>
+            <View
+                android:id="@+id/div_img_pub"
+                style="@style/Divider"
+                android:layout_width="0dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_event_img" />
 
-            <View style="@style/Divider"/>
 
-            <TableRow
-                android:id="@+id/table_row_createRm_dates"
-                android:layout_width="match_parent"
+            <Switch
+                android:id="@+id/switch_public"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp">
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="9dp"
+                android:checked="true"
+                android:gravity="center"
+                android:text="Public"
+                android:textOff="Private"
+                android:textOn="Public"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/div_img_pub" />
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/_dt"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
+            <View
+                android:id="@+id/div_pub_details"
+                style="@style/Divider"
+                android:layout_width="0dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/switch_public" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="From"/>
-
-                        <TextView
-                            android:id="@+id/txt_createRm_from"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="TextView"/>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Till"/>
-
-                    <TextView
-                        android:id="@+id/txt_createRm_till"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="TextView"/>
-                </LinearLayout>
-
-            </TableRow>
-
-            <View style="@style/Divider"/>
-
-            <TableRow
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/txt_details"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp">
+                android:layout_marginEnd="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="9dp"
+                android:ems="10"
+                android:hint="Details"
+                android:inputType="textMultiLine"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/div_pub_details" />
 
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/_edit"/>
 
-                <EditText
-                    android:id="@+id/txt_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:gravity="top|left"
-                    android:hint="Details\n\n"
-                    android:inputType="textMultiLine"/>
-
-            </TableRow>
-
-        </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
     <TableRow
@@ -199,12 +167,24 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_mom_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:clickable="true"
             app:fabSize="normal"
-            app:srcCompat="@drawable/_checked" />
+            app:srcCompat="@drawable/_ok" />
 
     </TableRow>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gradient"
+        android:translationZ="-2dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="336dp">
+
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -9,24 +9,18 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.TableRow;
-import android.widget.TextView;
-
-import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePickerDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import grexClasses.Room;
 import grexClasses.SocketActivity;
 import grexClasses.SocketCluster;
@@ -54,18 +48,8 @@ public class CreateRoomActivity extends SocketActivity {
     Switch _switchPublic;
     @Bind(R.id.create_event_img)
     ImageView _imgRoomImg;
-    @Bind(R.id.img_createRm_vis)
-    ImageView _imgVis;
-    @Bind(R.id.txt_createRm_from)
-    TextView _txtFrom;
-    @Bind(R.id.txt_createRm_till)
-    TextView _txtTill;
-    @Bind(R.id.table_row_createRm_dates)
-    TableRow _tblRw_dates;
     private String rmName;
     private boolean pub;
-    private String begin;
-    private String end;
     private String desc;
     private byte[] b;
     private boolean aBoolean;
@@ -89,37 +73,6 @@ public class CreateRoomActivity extends SocketActivity {
             }
         });
 
-        _imgVis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _switchPublic.setChecked(!_switchPublic.isChecked());
-                _switchPublic.callOnClick();
-            }
-        });
-
-        _tblRw_dates.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DoubleDateAndTimePickerDialog.Builder(CreateRoomActivity.this)
-                        //.bottomSheet()
-                        .curved()
-                        //.minutesStep(15)
-                        .mainColor(ContextCompat.getColor(CreateRoomActivity.this,R.color.accent))
-                        .backgroundColor(ContextCompat.getColor(CreateRoomActivity.this, R.color.dark_background))
-                        .title("Event times")
-                        .tab0Text("From")
-                        .tab1Text("Till")
-                        .mustBeOnFuture()
-                        .listener(new DoubleDateAndTimePickerDialog.Listener() {
-                            @Override
-                            public void onDateSelected(List<Date> dates) {
-                                _txtFrom.setText(SocketCluster.DF.format(dates.get(0)));
-                                _txtTill.setText(SocketCluster.DF.format(dates.get(1)));
-                            }
-                        }).display();
-            }
-        });
-
         _btnMomDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,8 +82,6 @@ public class CreateRoomActivity extends SocketActivity {
                 //TODO: only send rooms to db if they are live...maybe?
                 rmName = _txtMomName.getText().toString();
                 pub = _switchPublic.isChecked();
-                begin = _txtFrom.getText().toString();
-                end = _txtTill.getText().toString();
                 desc = _txtMomDetails.getText().toString();
 
                 aBoolean = !_imgRoomImg.getDrawable().equals(getDrawable(R.drawable._xlarge_icons_100));
@@ -157,6 +108,11 @@ public class CreateRoomActivity extends SocketActivity {
             }
         });
 
+    }
+
+    @OnClick(R.id.btn_create_rm_back)
+    void goBack() {
+        finish();
     }
 
     @Override
@@ -208,7 +164,7 @@ public class CreateRoomActivity extends SocketActivity {
         }
     }
 
-    class CreateRoomTask extends SocketTask<Void, Void, Void> {
+    private class CreateRoomTask extends SocketTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
         private Room room;
 

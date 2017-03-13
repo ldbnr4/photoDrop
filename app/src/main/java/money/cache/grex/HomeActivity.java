@@ -187,8 +187,23 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     @OnClick(R.id.btn_createRoom)
     void goToCreateRoomPage() {
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-        Intent intent = new Intent(getApplicationContext(), CreateRoomActivity.class);
+        Intent intent = new Intent(this, CreateRoomActivity.class);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_enterRoom)
+    void goToInsideRoom() {
+        startActivity(new Intent(this, InsideRooomActivity.class));
+    }
+
+    @OnClick(R.id.btn_home_user)
+    void goToUserProfile() {
+        startActivity(new Intent(this, UserProfileActivity.class));
+    }
+
+    @OnClick(R.id.btn_home_friends)
+    void goToUserFriends() {
+        startActivity(new Intent(this, UserFriendsActivity.class));
     }
 
 
