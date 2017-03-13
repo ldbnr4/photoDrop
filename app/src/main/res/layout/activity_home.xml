@@ -46,6 +46,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/relativeLayout"
         android:orientation="vertical"
+        android:translationZ="-5dp"
         android:weightSum="1">
 
         <fragment android:id="@+id/home_map_view"
@@ -212,11 +213,12 @@
     </android.support.constraint.ConstraintLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout3"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/gradient"
-        android:translationZ="-100000dp"
+        android:translationZ="-2dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="336dp">
 
