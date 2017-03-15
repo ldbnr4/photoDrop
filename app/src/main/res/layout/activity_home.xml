@@ -11,10 +11,10 @@
                 tools:context="money.cache.grex.HomeActivity">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/relativeLayout"
+        android:id="@+id/layout_top_theme"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/gradient_to_bottom"
+        android:layout_height="@dimen/layout_top_bar_height"
+        android:background="@drawable/gradient"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
@@ -35,7 +35,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 
@@ -44,15 +44,15 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/menu_bar"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/relativeLayout"
+        android:layout_below="@+id/layout_top_theme"
         android:orientation="vertical"
         android:translationZ="-5dp"
         android:weightSum="1">
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        <fragment android:id="@+id/home_map_view"
+                  android:name="com.google.android.gms.maps.SupportMapFragment"
+                  xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/home_map_view"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:layout_weight=".5"
@@ -60,45 +60,38 @@
                   tools:context=".HomeActivity"
                   tools:layout="@layout/fragment_spinner"/>
 
-        <RelativeLayout
-            android:id="@+id/room_card_frame"
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btn_close_room_window"
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/colorAccent"
+            android:cropToPadding="false"
+            android:elevation="12dp"
+            android:visibility="visible"
+            app:srcCompat="@android:drawable/arrow_down_float"/>
+
+
+        <FrameLayout
+            android:id="@+id/home_feed_fragment"
+            android:name="grexLayout.SpinnerFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".5"
             android:visibility="visible">
 
-            <android.support.v7.widget.AppCompatImageButton
-                android:id="@+id/close_room_card_btn"
-                android:layout_width="match_parent"
-                android:layout_height="22dp"
-                android:layout_alignParentEnd="true"
-                android:background="?attr/colorAccent"
-                android:cropToPadding="false"
-                android:elevation="12dp"
-                android:visibility="visible"
-                app:srcCompat="@android:drawable/arrow_down_float"/>
+        </FrameLayout>
 
-            <FrameLayout
-                android:id="@+id/home_feed_fragment"
-                android:name="grexLayout.SpinnerFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/close_room_card_btn"
-                android:visibility="visible">
-
-            </FrameLayout>
-
-        </RelativeLayout>
 
     </LinearLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/menu_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/layout_bottom_bar_height"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:background="@drawable/gradient"
+        android:background="@drawable/gradient_to_bottom"
         android:orientation="horizontal"
         android:translationZ="-1dp"
         android:visibility="visible"
@@ -116,6 +109,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
+            app:elevation="5dp"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/btn_createRoom"
@@ -131,9 +125,11 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="5dp"
             android:clickable="false"
             android:visibility="invisible"
+            app:elevation="11dp"
             app:fabSize="normal"
             app:layout_constraintLeft_toRightOf="@+id/btn_home_user"
             app:layout_constraintRight_toLeftOf="@+id/btn_home_friends"
@@ -144,15 +140,16 @@
             android:id="@+id/btn_createRoom"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="0dp"
             android:clickable="true"
+            android:translationZ="1dp"
             android:visibility="visible"
-            app:elevation="11dp"
+            app:elevation="10dp"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
@@ -160,7 +157,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/_add_room_100" />
+            app:srcCompat="@drawable/_add_room_100"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_home_home"
@@ -171,6 +168,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
+            app:elevation="5dp"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -188,6 +186,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
+            app:elevation="5dp"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.526"
@@ -205,6 +204,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
+            app:elevation="5dp"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"

@@ -41,13 +41,12 @@
                 android:id="@+id/room_card_descrip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/room_card_image"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/room_card_name"
                 android:padding="2.5dp"
                 android:text="(ROOM_DESCRIPTION)"
                 android:textAlignment="center"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_below="@+id/room_card_name"
+                android:layout_alignParentEnd="true"/>
 
             <TextView
                 android:id="@+id/room_card_host"

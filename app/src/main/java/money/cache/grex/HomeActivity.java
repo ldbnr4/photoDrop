@@ -19,7 +19,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -68,10 +69,12 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     private static final String TAG = "HOME_ACTIVITY";
     @Bind(R.id.btn_createRoom)
     FloatingActionButton mBtnCreateRoom;
-    @Bind(R.id.room_card_frame)
-    RelativeLayout mRoomCardFrame;
     @Bind(R.id.btn_enterRoom)
     FloatingActionButton mBtnEnterRoom;
+    @Bind(R.id.btn_close_room_window)
+    ImageButton mCloseRmBar;
+    @Bind(R.id.home_feed_fragment)
+    FrameLayout mRoomWindow;
     SupportMapFragment mapFragment;
     GoogleMap mGoogleMap;
     Room focusedRoom = null;
@@ -117,8 +120,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        if (mRoomCardFrame.getVisibility() == View.VISIBLE)
-            mRoomCardFrame.setVisibility(View.GONE);
+        mCloseRmBar.setVisibility(View.GONE);
+        mRoomWindow.setVisibility(View.GONE);
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -155,7 +158,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         }
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.home_map_view);
-
         mapFragment.getMapAsync(this);
 
         NoNet.monitor(this)
@@ -172,9 +174,10 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         updateValuesFromBundle(savedInstanceState);
     }
 
-    @OnClick({R.id.close_room_card_btn, R.id.btn_home_home})
+    @OnClick({R.id.btn_close_room_window, R.id.btn_home_home})
     void setMapToUserRange() {
-        mRoomCardFrame.setVisibility(View.GONE);
+        mRoomWindow.setVisibility(View.GONE);
+        mCloseRmBar.setVisibility(View.GONE);
         if (userRangeCam != null) {
             mGoogleMap.animateCamera(userRangeCam);
         }
@@ -313,9 +316,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     }
 
     private void setFragment(Fragment fragment) {
-        if (mRoomCardFrame.getVisibility() != View.VISIBLE) {
-            mRoomCardFrame.setVisibility(View.VISIBLE);
-        }
         if (fragment != currentFrag) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.home_feed_fragment, fragment);
@@ -398,6 +398,8 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
                         tBuilder.include(corners[0]);
                         tBuilder.include(corners[1]);
                         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(tBuilder.build(), 0));
+                        mCloseRmBar.setVisibility(View.VISIBLE);
+                        mRoomWindow.setVisibility(View.VISIBLE);
                         mBtnCreateRoom.setVisibility(View.INVISIBLE);
                         mBtnCreateRoom.setClickable(false);
                         mBtnEnterRoom.setVisibility(View.VISIBLE);

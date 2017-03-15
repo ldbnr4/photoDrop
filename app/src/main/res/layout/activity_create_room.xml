@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--TODO: convert submit button to be a forward facing arrow-->
-<RelativeLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,154 +16,168 @@
         android:id="@+id/btn_create_rm_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         android:clickable="true"
         app:fabSize="mini"
         app:srcCompat="@drawable/_back_26"
-        tools:layout_editor_absoluteX="13dp"
-        tools:layout_editor_absoluteY="-6dp" />
+        tools:layout_constraintTop_creator="1"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Build-a-Room"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:drawable/screen_background_light_transparent"
+        android:textSize="24sp"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_top_theme"
+        tools:layout_constraintTop_creator="1"/>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/gradient_to_bottom"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="10dp"
-            android:text="Build-a-Room"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textColor="?android:attr/colorAccent"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintRight_creator="1" />
+        android:id="@+id/layout_top_theme"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:background="@drawable/gradient"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1">
 
     </android.support.constraint.ConstraintLayout>
 
 
     <ScrollView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tableRow"
-        android:layout_below="@+id/btn_create_rm_back"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/layout_top_theme"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp">
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1">
+
+
+        <EditText
+            android:id="@+id/txt_mom_name"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@drawable/border"
-            android:orientation="horizontal"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp">
+            android:layout_weight=".5"
+            android:gravity="center"
+            android:hint="Title"
+            android:inputType="textUri|textPersonName"
+            android:textSize="30sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/create_event_img"
+            android:layout_width="wrap_content"
+            android:layout_height="104dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_mom_name"
+            app:srcCompat="@drawable/_xlarge_icons_100"/>
 
 
-            <EditText
-                android:id="@+id/txt_mom_name"
-                android:layout_width="268dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:gravity="center"
-                android:hint="Title"
-                android:inputType="textUri|textPersonName"
-                android:textSize="30sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/create_event_img"
-                android:layout_width="wrap_content"
-                android:layout_height="104dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_mom_name"
-                app:srcCompat="@drawable/_xlarge_icons_100" />
+        <View
+            android:id="@+id/div_img_pub"
+            style="@style/Divider"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_marginTop="10dp"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/create_event_img"/>
 
 
-            <View
-                android:id="@+id/div_img_pub"
-                style="@style/Divider"
-                android:layout_width="0dp"
-                android:layout_height="3dp"
-                android:layout_marginTop="10dp"
-                android:visibility="visible"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/create_event_img" />
+        <Switch
+            android:id="@+id/switch_public"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="9dp"
+            android:checked="true"
+            android:gravity="center"
+            android:text="Public"
+            android:textOff="Private"
+            android:textOn="Public"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/div_img_pub"/>
 
 
-            <Switch
-                android:id="@+id/switch_public"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="9dp"
-                android:checked="true"
-                android:gravity="center"
-                android:text="Public"
-                android:textOff="Private"
-                android:textOn="Public"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/div_img_pub" />
+        <View
+            android:id="@+id/div_pub_details"
+            style="@style/Divider"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_marginTop="10dp"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_public"/>
 
+        <EditText
+            android:id="@+id/txt_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="80dp"
+            android:ems="10"
+            android:hint="Details"
+            android:inputType="textMultiLine"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/div_pub_details"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintTop_creator="1"
+            />
 
-            <View
-                android:id="@+id/div_pub_details"
-                style="@style/Divider"
-                android:layout_width="0dp"
-                android:layout_height="3dp"
-                android:layout_marginTop="10dp"
-                android:visibility="visible"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switch_public" />
+    </android.support.constraint.ConstraintLayout>
 
-            <EditText
-                android:id="@+id/txt_details"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="9dp"
-                android:ems="10"
-                android:hint="Details"
-                android:inputType="textMultiLine"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/div_pub_details" />
-
-
-        </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
     <TableRow
-        android:id="@id/tableRow"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
         android:gravity="center"
-        android:padding="5dp">
+        android:padding="5dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/layout_top_theme"
+        android:layout_marginTop="422dp"
+        app:layout_constraintTop_toBottomOf="@+id/layout_top_theme"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/layout_top_theme">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/btn_mom_done"
@@ -171,20 +185,24 @@
             android:layout_height="75dp"
             android:clickable="true"
             app:fabSize="normal"
-            app:srcCompat="@drawable/_ok" />
+            app:srcCompat="@drawable/_ok"/>
 
     </TableRow>
 
     <RelativeLayout
         android:id="@+id/relativeLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/gradient"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@drawable/gradient_to_bottom"
         android:translationZ="-2dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="336dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        >
 
     </RelativeLayout>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
