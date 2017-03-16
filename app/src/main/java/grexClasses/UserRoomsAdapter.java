@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -12,43 +11,39 @@ import butterknife.ButterKnife;
 import money.cache.grex.R;
 
 /**
- * Created by Lorenzo on 3/14/2017.
+ * Created by boyice on 3/16/2017.
  *
  */
 
-public class UserFriendsAdapter extends RecyclerView.Adapter<UserFriendsAdapter.ViewHodler> {
-    private User[] mDataSet;
+public class UserRoomsAdapter extends RecyclerView.Adapter<UserRoomsAdapter.ViewHodler>{
+    private Room[] mDataSet;
 
     class ViewHodler extends RecyclerView.ViewHolder {
-        @Bind(R.id.IV_room_item_image)
-        ImageView mFreindImage;
-        @Bind(R.id.TV_friend_item_name)
+        @Bind(R.id.TV_room_item_name)
         TextView mFriendName;
-        ViewHodler(View itemView) {
+
+        public ViewHodler(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public ImageView getmFreindImage() {
-            return mFreindImage;
-        }
-        TextView getmFriendName() {
-            return mFriendName;
-        }
+        TextView getmFriendName(){return mFriendName;}
+
     }
 
-    public UserFriendsAdapter(User[] dataSet){
-        mDataSet = dataSet;
+    public UserRoomsAdapter(Room[] mDataSet) {
+        this.mDataSet = mDataSet;
     }
+
     @Override
     public ViewHodler onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.room_item, parent, false);
         return new ViewHodler(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHodler holder, int position) {
-        holder.getmFriendName().setText(mDataSet[position].name);
+        holder.getmFriendName().setText(mDataSet[position].getName());
     }
 
     @Override

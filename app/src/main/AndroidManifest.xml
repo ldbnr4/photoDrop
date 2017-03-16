@@ -80,8 +80,9 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity android:name=".InsideRooomActivity" />
-        <activity android:name=".UserProfileActivity"></activity>
-        <activity android:name=".UserFriendsActivity"></activity>
+        <activity android:name=".UserProfileActivity" />
+        <activity android:name=".UserFriendsActivity" />
+        <activity android:name=".UserRoomsActivity"></activity>
     </application>
 
 </manifest>

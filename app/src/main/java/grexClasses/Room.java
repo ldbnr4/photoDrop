@@ -39,6 +39,10 @@ public class Room {
         this.lon = lon;
     }
 
+    public Room(String roomName) {
+        this.name = roomName;
+    }
+
     public String getImage() {
         return image;
     }

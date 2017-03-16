@@ -26,6 +26,10 @@ public final class User {
 
     private User() {}
 
+    public User(String name) {
+        this.name = name;
+    }
+
     public static synchronized User getUser() {
         return user;
     }

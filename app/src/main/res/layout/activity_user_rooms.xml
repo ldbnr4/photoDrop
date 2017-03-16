@@ -4,22 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="money.cache.grex.UserFriendsActivity">
+    tools:context="money.cache.grex.UserRoomsActivity">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/app_top_bar"
+    <RelativeLayout
+        android:id="@+id/app_bottom_bar"
         android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:background="@drawable/gradient"
+        android:layout_height="@dimen/layout_bottom_bar_thin_height"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-14dp"
+        android:background="@drawable/gradient_to_bottom"
+        android:translationZ="-2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintRight_toRightOf="parent">
 
-    </android.support.constraint.ConstraintLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_user_friends_back"
+        android:id="@+id/btn_user_rooms_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -32,22 +35,21 @@
         app:srcCompat="@drawable/_back_26" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Your Friends"
+        android:layout_marginTop="10dp"
+        android:text="Your Rooms"
         android:textColor="@android:drawable/screen_background_light_transparent"
         android:textSize="24sp"
         android:translationZ="1dp"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_friends"
-        app:layout_constraintHorizontal_bias="0.502" />
-
+        app:layout_constraintTop_toBottomOf="@id/app_top_bar" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/grid_user_friends"
+        android:id="@+id/list_user_rooms"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="10dp"
@@ -60,38 +62,21 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_friends"
+        app:layout_constraintTop_toBottomOf="@+id/app_top_bar"
         app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/friend_item"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp">
+        tools:listitem="@layout/room_item">
 
     </android.support.v7.widget.RecyclerView>
 
-    <RelativeLayout
-        android:id="@+id/app_bottom_bar"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/app_top_bar"
         android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/gradient_to_bottom"
-        android:translationZ="-2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-
-    </RelativeLayout>
-
-    <SearchView
-        android:id="@+id/search_friends"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="@dimen/layout_top_bar_height"
+        android:background="@drawable/gradient"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_top_bar"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent">
 
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

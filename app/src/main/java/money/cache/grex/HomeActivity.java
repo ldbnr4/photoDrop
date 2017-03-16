@@ -209,6 +209,10 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         startActivity(new Intent(this, UserFriendsActivity.class));
     }
 
+    @OnClick(R.id.btn_home_rooms)
+    void goToUserRooms(){
+        startActivity(new Intent(this, UserRoomsActivity.class));
+    }
 
     /**
      * Method to verify google play services on the device
