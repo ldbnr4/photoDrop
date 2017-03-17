@@ -113,7 +113,7 @@
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/btn_createRoom"
-            app:layout_constraintRight_toLeftOf="@+id/btn_home_rooms"
+            app:layout_constraintRight_toLeftOf="@+id/btn_home_user"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/_meeting_50"/>
 
@@ -128,10 +128,10 @@
             android:layout_marginTop="0dp"
             android:layout_marginBottom="5dp"
             android:clickable="false"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:elevation="11dp"
             app:fabSize="normal"
-            app:layout_constraintLeft_toRightOf="@+id/btn_home_user"
+            app:layout_constraintLeft_toRightOf="@+id/btn_home_rooms"
             app:layout_constraintRight_toLeftOf="@+id/btn_home_friends"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/_front_gate_open_48"/>
@@ -189,9 +189,8 @@
             app:elevation="5dp"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.526"
-            app:layout_constraintLeft_toRightOf="@+id/btn_home_home"
-            app:layout_constraintRight_toLeftOf="@+id/btn_createRoom"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/_user_64"/>
 
@@ -199,15 +198,14 @@
             android:id="@+id/btn_home_rooms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
             android:clickable="true"
             app:elevation="5dp"
             app:fabSize="normal"
+            app:layout_constraintRight_toLeftOf="@id/btn_createRoom"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/btn_home_home"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/_bulleted_list_50"/>
 

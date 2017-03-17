@@ -5,20 +5,28 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.google.gson.Gson;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFrame;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import grexEnums.RET_STATUS;
 import grexEnums.ROOM_CATEGORY;
 import io.github.sac.Ack;
+import io.github.sac.BasicListener;
+import io.github.sac.ReconnectStrategy;
 import io.github.sac.Socket;
 import money.cache.grex.GrexApp;
 
+import static grexEnums.RET_STATUS.CONNECTED;
+import static grexEnums.RET_STATUS.DISCONNECTED;
 import static grexEnums.RET_STATUS.NONE;
 
 
@@ -33,11 +41,44 @@ public class SocketCluster {
     private static RET_STATUS SEND_USER;
     private static RET_STATUS SEND_ROOM;
     private static SocketCluster ourInstance = new SocketCluster();
-    private static Socket socket;
+    private static final Socket socket = initSocket();
     private RET_STATUS GET_ROOMS = NONE;
 
+    private static RET_STATUS connection_status = NONE;
+
     private SocketCluster() {
-        initSocket();
+        connectToServer();
+    }
+
+    private static Socket initSocket(){
+        Socket socket = new Socket("ws://zotime.ddns.net:3000/socketcluster/");
+        socket.setListener(new BasicListener() {
+            @Override
+            public void onConnected(Socket socket, Map<String, List<String>> headers) {
+                connection_status = CONNECTED;
+            }
+
+            @Override
+            public void onDisconnected(Socket socket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) {
+                connection_status = DISCONNECTED;
+            }
+
+            @Override
+            public void onConnectError(Socket socket, WebSocketException exception) {
+                connection_status = DISCONNECTED;
+            }
+
+            @Override
+            public void onAuthentication(Socket socket, Boolean status) {
+
+            }
+
+            @Override
+            public void onSetAuthToken(String token, Socket socket) {
+
+            }
+        });
+        return socket;
     }
 
     public static SocketCluster getInstance() {
@@ -118,12 +159,15 @@ public class SocketCluster {
 
     }
 
-    private void initSocket() {
-        socket = new Socket("ws://zotime.ddns.net:3000/socketcluster/");
+    private boolean connectToServer() {
         try {
+            if(!socket.isconnected())
+            //This will set automatic-reconnection to server with delay of 2 seconds and repeating it for 30 times
+            socket.setReconnection(new ReconnectStrategy().setDelay(2000).setMaxAttempts(30));
             socket.connect();
+            return socket.isconnected();
         } catch (NullPointerException e) {
-            socket = null;
+            throw new NullPointerException();
         }
     }
 
@@ -141,7 +185,7 @@ public class SocketCluster {
 
     public RET_STATUS emitRoom(Room room) {
         if (socket == null) {
-            initSocket();
+            connectToServer();
         }
         RET_STATUS status = hasConnection();
         if (status == RET_STATUS.CONNECTED) {
@@ -180,7 +224,7 @@ public class SocketCluster {
 
     public RET_STATUS emitGetRooms(ROOM_CATEGORY category, int page) {
         if (socket == null) {
-            initSocket();
+            connectToServer();
         }
         RET_STATUS status = hasConnection();
         if (status == RET_STATUS.CONNECTED) {
@@ -218,9 +262,30 @@ public class SocketCluster {
         }
     }
 
+    // TODO: 3/16/2017 Ideal emission workflow ...ish
     public RET_STATUS emitGPS() {
-        if (socket == null) {
-            initSocket();
+        if(connection_status == CONNECTED){
+            JSONObject object = new JSONObject();
+            try {
+                object.put("name", user.name);
+                object.put("lat", user.location.latitude);
+                object.put("lon", user.location.longitude);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            socket.emit("user_gps", object.toString(), new Ack() {
+                @Override
+                public void call(String name, Object error, Object data) {
+                    System.out.println(data);
+                    GET_ROOMS = RET_STATUS.valueOf((String) error);
+                }
+            });
+            while(GET_ROOMS == NONE);
+            GET_ROOMS = NONE;
+        }
+        return connection_status;
+        /*if (socket == null) {
+            connectToServer();
         }
         RET_STATUS status = hasConnection();
         if (status == RET_STATUS.CONNECTED) {
@@ -249,6 +314,6 @@ public class SocketCluster {
             GET_ROOMS = NONE;
             return ret_val;
         } else
-            return status;
+            return status;*/
     }
 }
