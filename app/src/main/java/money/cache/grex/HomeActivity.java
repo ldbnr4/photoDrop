@@ -36,6 +36,8 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.keiferstone.nonet.ConnectionStatus;
+import com.keiferstone.nonet.Monitor;
 import com.keiferstone.nonet.NoNet;
 
 import java.util.ArrayList;
@@ -84,12 +86,13 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     private ConnectivityFragment serverDownFrag = ConnectivityFragment.newInstance("Well this is awkward...");
     private SpinnerFragment spinnerFragment = new SpinnerFragment();
     private Fragment currentFrag;
+    private SocketCluster socketCluster;
     private Runnable getRmRunnable = new Runnable() {
         @Override
         public void run() {
             Runtime.getRuntime().gc();
             setFragment(spinnerFragment);
-            switch (SocketCluster.getInstance().emitGetRooms(ROOM_CATEGORY.LIVE, 0)) {
+            switch (socketCluster.emitGetRooms(ROOM_CATEGORY.LIVE, 0)) {
                 case SUCCESS:
                     setFragment(new RoomFeedFragment());
                     break;
@@ -113,6 +116,9 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
     private boolean mRequestingLocationUpdates = true;
     private boolean first = true;
     private CameraUpdate userRangeCam;
+    private User user = User.getUser();
+    private boolean boolAllowEmit = false;
+    private boolean boolMapReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,17 +165,6 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.home_map_view);
         mapFragment.getMapAsync(this);
-
-        NoNet.monitor(this)
-                .poll()
-                .banner("No network connection.")
-                .start();
-
-        NoNet.configure()
-                .endpoint("https://google.com")
-                .timeout(5)
-                .connectedPollFrequency(60)
-                .disconnectedPollFrequency(1);
 
         updateValuesFromBundle(savedInstanceState);
     }
@@ -386,6 +381,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        boolMapReady = true;
         googleMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
             @Override
             public void onCircleClick(Circle circle) {
@@ -465,6 +461,7 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
+        user.location = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
     }
 
     @Override
@@ -530,8 +527,11 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    if (SocketCluster.getInstance().emitGPS() == SUCCESS) {
-                        while (mGoogleMap == null) ;
+                    if(socketCluster == null){
+                        socketCluster = SocketCluster.getInstance();
+                    }
+                    if (boolAllowEmit && socketCluster.emitGPS() == SUCCESS) {
+                        while (!boolMapReady);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -567,7 +567,34 @@ public class HomeActivity extends SocketActivity implements ConnectivityFragment
             mGoogleMap.animateCamera(userRangeCam);
             first = false;
         }
-
-
     }
+
+    @Override
+    protected void setUpNoNet(){
+        NoNet.configure()
+                .endpoint("https://google.com")
+                .timeout(5)
+                .connectedPollFrequency(60)
+                .disconnectedPollFrequency(1);
+
+        NoNet.monitor(this)
+                .poll()
+                .banner("No internet connection.")
+                .callback(new Monitor.Callback() {
+                    @Override
+                    public void onConnectionEvent(int connectionStatus) {
+                        switch (connectionStatus){
+                            case ConnectionStatus.CONNECTED:
+                                boolAllowEmit = true;
+                                break;
+                            case ConnectionStatus.DISCONNECTED:
+                            case ConnectionStatus.UNKNOWN:
+                                boolAllowEmit = false;
+                                break;
+                        }
+                    }
+                })
+                .start();
+    }
+
 }

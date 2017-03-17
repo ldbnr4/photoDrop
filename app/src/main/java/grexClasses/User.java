@@ -18,6 +18,8 @@ public final class User {
     private static final User user = new User();
     public String name = "GREX_ORPHAN";
     public LatLng location;
+    public Set<Room> roomsHosting = new HashSet<>();
+    public Set<Room> rommsGeo = new HashSet<>();
     private SortedMap<Integer, TreeMap<String, Room>> pagedRoomsIn = new TreeMap<>();
     private SortedMap<String, Room> roomsIn = new TreeMap<>();
     private Set<User> friends = new HashSet<>();

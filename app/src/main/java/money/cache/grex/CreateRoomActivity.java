@@ -110,6 +110,11 @@ public class CreateRoomActivity extends SocketActivity {
 
     }
 
+    @Override
+    protected void setUpNoNet() {
+        // TODO: 3/17/2017 Implement this function
+    }
+
     @OnClick(R.id.btn_create_rm_back)
     void goBack() {
         finish();

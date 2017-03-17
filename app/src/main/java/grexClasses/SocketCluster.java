@@ -1,14 +1,9 @@
 package grexClasses;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
 import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +18,6 @@ import io.github.sac.Ack;
 import io.github.sac.BasicListener;
 import io.github.sac.ReconnectStrategy;
 import io.github.sac.Socket;
-import money.cache.grex.GrexApp;
 
 import static grexEnums.RET_STATUS.CONNECTED;
 import static grexEnums.RET_STATUS.DISCONNECTED;
@@ -40,15 +34,13 @@ public class SocketCluster {
     public static SimpleDateFormat DF = new SimpleDateFormat("EEE, MMM d\nh:mm aa z", Locale.US);
     private static RET_STATUS SEND_USER;
     private static RET_STATUS SEND_ROOM;
-    private static SocketCluster ourInstance = new SocketCluster();
     private static final Socket socket = initSocket();
+    private static SocketCluster ourInstance = new SocketCluster();
     private RET_STATUS GET_ROOMS = NONE;
 
     private static RET_STATUS connection_status = NONE;
 
-    private SocketCluster() {
-        connectToServer();
-    }
+    private SocketCluster() {}
 
     private static Socket initSocket(){
         Socket socket = new Socket("ws://zotime.ddns.net:3000/socketcluster/");
@@ -78,28 +70,13 @@ public class SocketCluster {
 
             }
         });
+        socket.setReconnection(new ReconnectStrategy().setDelay(2000).setMaxAttempts(30));
+        socket.connect();
         return socket;
     }
 
     public static SocketCluster getInstance() {
         return ourInstance;
-    }
-
-    private static boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) GrexApp.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        if (activeNetworkInfo != null) {
-            //String answer;
-            if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-            }
-            //answer="You are connected to a WiFi Network";
-            if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-            }
-            //answer="You are connected to a Mobile Network";
-            return activeNetworkInfo.isConnected();
-        }
-        return false;
     }
     //init();
 
@@ -159,45 +136,30 @@ public class SocketCluster {
 
     }
 
-    private boolean connectToServer() {
-        try {
-            if(!socket.isconnected())
-            //This will set automatic-reconnection to server with delay of 2 seconds and repeating it for 30 times
-            socket.setReconnection(new ReconnectStrategy().setDelay(2000).setMaxAttempts(30));
+    private static void connectToServer() {
+        if(!socket.isconnected()){
             socket.connect();
-            return socket.isconnected();
-        } catch (NullPointerException e) {
-            throw new NullPointerException();
         }
-    }
 
-    private RET_STATUS hasConnection() {
-        if (isNetworkAvailable()) {
-            if (socket == null) {
-                return RET_STATUS.SERVER_DOWN;
-            } else if (socket.isconnected()) {
-                return RET_STATUS.CONNECTED;
-            }
-            return NONE;
-        } else
-            return RET_STATUS.NO_INTERNET;
+        /*NoNet.check(GrexApp.getContext())
+                    .callback(new Monitor.Callback() {
+                        @Override
+                        public void onConnectionEvent(int connectionStatus) {
+                            if (connectionStatus == ConnectionStatus.DISCONNECTED) {
+                                connection_status = NO_INTERNET;
+                            }
+                        }
+                    }).start();*/
     }
 
     public RET_STATUS emitRoom(Room room) {
-        if (socket == null) {
-            connectToServer();
-        }
-        RET_STATUS status = hasConnection();
-        if (status == RET_STATUS.CONNECTED) {
-            socket.emit("add_room", gson.toJson(room), new Ack() {
+            /*socket.emit("add_room", gson.toJson(room), new Ack() {
                 @Override
                 public void call(String name, Object error, Object data) {
                     setSendRoom(RET_STATUS.valueOf((String) error));
                 }
-            });
+            });*/
             return SEND_ROOM;
-        } else
-            return status;
     }
 
     /*
@@ -223,17 +185,7 @@ public class SocketCluster {
     }
 
     public RET_STATUS emitGetRooms(ROOM_CATEGORY category, int page) {
-        if (socket == null) {
-            connectToServer();
-        }
-        RET_STATUS status = hasConnection();
-        if (status == RET_STATUS.CONNECTED) {
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            socket.emit("get_rooms", new Object[]{user.name, category, page}, new Ack() {
+            /*socket.emit("get_rooms", new Object[]{user.name, category, page}, new Ack() {
                 @Override
                 public void call(String name, Object error, Object data) {
                     if (error.equals("SUCCESS")) {
@@ -252,19 +204,16 @@ public class SocketCluster {
                     }
                     GET_ROOMS = RET_STATUS.valueOf((String) error);
                 }
-            });
-            while (GET_ROOMS == NONE) ;
-            RET_STATUS ret_val = GET_ROOMS;
-            GET_ROOMS = NONE;
-            return ret_val;
-        } else {
-            return status;
-        }
+            });*/
+            return DISCONNECTED;
     }
 
     // TODO: 3/16/2017 Ideal emission workflow ...ish
-    public RET_STATUS emitGPS() {
-        if(connection_status == CONNECTED){
+    public boolean emitGPS() {
+        if(!socket.isconnected()){
+            socket.connect();
+        }
+        if(socket.isconnected()){
             JSONObject object = new JSONObject();
             try {
                 object.put("name", user.name);
@@ -282,38 +231,9 @@ public class SocketCluster {
             });
             while(GET_ROOMS == NONE);
             GET_ROOMS = NONE;
+            return true;
         }
-        return connection_status;
-        /*if (socket == null) {
-            connectToServer();
-        }
-        RET_STATUS status = hasConnection();
-        if (status == RET_STATUS.CONNECTED) {
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            JSONObject object = new JSONObject();
-            try {
-                object.put("name", user.name);
-                object.put("lat", user.location.latitude);
-                object.put("lon", user.location.longitude);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            socket.emit("user_gps", object.toString(), new Ack() {
-                @Override
-                public void call(String name, Object error, Object data) {
-                    System.out.println(data);
-                    GET_ROOMS = RET_STATUS.valueOf((String) error);
-                }
-            });
-            while (GET_ROOMS == NONE) ;
-            RET_STATUS ret_val = GET_ROOMS;
-            GET_ROOMS = NONE;
-            return ret_val;
-        } else
-            return status;*/
+        else
+            return false;
     }
 }
